@@ -6,10 +6,11 @@ extends CharacterBody2D
 @export var healthpoints: int = 10
 @export var coins: int = 0
 @export var player_type: String
-@export var display_name: String
+@export var display_text: String
 
 @export var main_node: Node2D
 @export var peer_id: int
+@export var user_record_id: String
 
 @export var synced_position: Vector2
 @export var is_idle: bool
@@ -18,9 +19,14 @@ extends CharacterBody2D
 func _ready():
 	if multiplayer.is_server():
 		$IdleTimer.start()
-		await reload_profile()
+		await load_profile_data()
 
 func _process(_delta):
+	if multiplayer.is_server():
+		display_text = "[center][color=white]%s " % main_node.server.players[user_record_id]["user_username"]
+		if is_idle:
+			display_text += "[color=darkgray][AFK][/color]"
+	
 	match player_type:
 		"square":
 			$CollisionAnimationPlayer.play("collision_square")
@@ -53,13 +59,9 @@ func _process(_delta):
 			$AnimationPlayer.play("triangle")
 	
 	
-	$RichTextLabel.text = "[center][color=white]%s " % display_name
-	
-	if is_idle:
-		$RichTextLabel.text += "[color=darkgray][AFK][/color]"
-	
+	$RichTextLabel.text = display_text
 	$RichTextLabel2.text = "[center]  %d[color=red]♥ " % healthpoints
-
+	
 
 
 
@@ -72,7 +74,7 @@ func _physics_process(_delta):
 			is_idle = true
 	
 	else:
-		if multiplayer.get_unique_id() == peer_id:
+		if main_node.client.user_record_id == user_record_id:
 			var move_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 			var move_direction_signed = move_direction.sign()
 			
@@ -96,7 +98,7 @@ func _physics_process(_delta):
 					"set_main_node": true,
 					"properties": {
 						"auto_despawn": true,
-						"attackowner": peer_id,
+						"user_record_id": user_record_id,
 						"position": position + get_local_mouse_position().normalized()  * 80,
 						"rotation": get_local_mouse_position().angle() + PI / 2,
 						"velocity": get_local_mouse_position().normalized() * 1000,
@@ -114,10 +116,10 @@ func _physics_process(_delta):
 	
 
 
-func reload_profile():
+func load_profile_data():
 	assert(multiplayer.is_server())
 	
-	var profile_data = await main_node.server.get_profile_data(main_node.server.players[peer_id]["profile_record_id"])
+	var profile_data = await main_node.server.get_profile_data(main_node.server.players[user_record_id]["profile_record_id"])
 	coins = profile_data["coins"]
 	healthpoints_max = profile_data["hp"]
 	player_type = profile_data["player_type"]
@@ -138,10 +140,5 @@ func set_player_velocity(_velocity):
 func set_player_facing_direction(_facing_direction):
 	assert(multiplayer.is_server())
 	facing_direction = _facing_direction
-
-func award_coins(amount):
-	assert(multiplayer.is_server())
-	await main_node.server.update_profile_entry(peer_id, "coins", func(value): return value + amount)
-	await reload_profile()
 	
 

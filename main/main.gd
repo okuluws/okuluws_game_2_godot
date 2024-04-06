@@ -49,8 +49,6 @@ func _ready():
 	if OS.get_cmdline_args().has("serve"):
 		var args = parse_os_arguments()
 		$"Server".call("start", int(args["port"]), args["username"], args["password"])
-	
-	print("test123456")
 
 
 # NOTE: DELETE BEFORE RELEASE!

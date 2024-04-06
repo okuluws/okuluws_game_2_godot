@@ -3,7 +3,7 @@ extends CharacterBody2D
 
 @export var main_node: Node2D
 
-@export var attackowner: int
+@export var user_record_id: String
 @export var timer: Timer
 @export var auto_despawn: bool
 @export var synced_position: Vector2
@@ -30,5 +30,5 @@ func _on_timer_timeout():
 
 func _on_area_2d_body_entered(body: Node2D):
 	if multiplayer.is_server():
-		if body.name != str(attackowner):
-			body.take_damage(3, attackowner)
+		if body.name != str(user_record_id) and body.has_method("take_damage"):
+			body.take_damage(3, $".")

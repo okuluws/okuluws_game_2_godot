@@ -165,8 +165,8 @@ func _on_server_disconnected():
 	client_print("disconnected from server")
 
 @rpc
-func assign_player(player_id: String):
-	player = main_node.world.get_node("%s" % player_id)
+func assign_player(node_path: NodePath):
+	player = get_node(node_path)
 	main_node.camera.reparent(player)
 	gui.player = player
 

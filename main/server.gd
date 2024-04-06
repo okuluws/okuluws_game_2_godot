@@ -77,31 +77,38 @@ func _on_client_disconnected(peer_id):
 
 @rpc("any_peer")
 func connect_player(peer_id: int, username: String, password: String, profile_id: String):
-	var user = await database.authenticate("users", username, password)
+	var user = await database.authenticate("users", username, password, "?expand=player_profiles_via_user")
+	#print(user)
 	if not user:
 		print_debug("djahjha, you thought")
 		return
 	
-	var profile = await database.get_record("player_profiles", profile_id)
+	if not user["record"].has("expand"):
+		print_debug("player doesnt have any profiles?")
+		return
 	
-	server_print("connected user %s, profile: %s" % [user["record"]["username"], profile["name"]])
+	var profile = user["record"]["expand"]["player_profiles_via_user"].filter(func(p): return p.id == profile_id)[0]
+	if not profile:
+		print_debug("player profile not found")
+		return
 	
-	players[peer_id] = {
-		"user_record_id": user["record"]["id"],
-		"profile_record_id": profile["id"],
+	players[user["record"]["id"]] = {
+		"peer_id": peer_id,
+		"user_username": user["record"]["username"],
+		"profile_record_id": profile["id"]
 	}
 	
-	main_node.entity_spawner.spawn({
+	var player = main_node.entity_spawner.spawn({
 		"entity": "player",
 		"set_main_node": true,
 		"properties": {
-			"peer_id": peer_id,
-			"name": str(peer_id),
-			"display_name": user["record"]["username"],
+			"user_record_id": user["record"]["id"],
+			"name": user["record"]["id"],
 		}
 	})
 	
-	main_node.client.assign_player.rpc_id(peer_id, str(peer_id))
+	server_print("connected user %s, profile: %s" % [user["record"]["username"], profile["name"]])
+	main_node.client.assign_player.rpc_id(peer_id, player.get_path())
 
 
 @rpc("any_peer")
@@ -118,19 +125,16 @@ func get_profile_data(profile_record_id: String):
 	return (await database.get_record("player_profiles", profile_record_id))["json"]
 
 
-func update_profile_entry(peer_id: int, entry: String, callable: Callable):
+func update_profile_entry(profile_record_id: String, entry: String, callable: Callable):
 	assert(multiplayer.is_server())
-	var profile_data = await get_profile_data(players[peer_id]["profile_record_id"])
+	var profile_data = await get_profile_data(profile_record_id)
 	profile_data[entry] = callable.call(profile_data[entry])
-	await database.update_record("player_profiles", players[peer_id]["profile_record_id"], { "json": profile_data }, host_authtoken)
+	await database.update_record("player_profiles", profile_record_id, { "json": profile_data }, host_authtoken)
+	
 
-
-func _on_save_pressed():
+func _on_print_profiles_pressed():
 	assert(multiplayer.is_server())
 	print(players)
-
-
-
 
 
 

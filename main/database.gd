@@ -29,13 +29,13 @@ func get_records(collection_name: String, query_params: String = "") -> Array:
 		return []
 
 
-func authenticate(authcollection_name: String, identity: String, password: String) -> Dictionary:
+func authenticate(authcollection_name: String, identity: String, password: String, query_params: String = "") -> Dictionary:
 	var body = JSON.stringify({
 		"identity": identity,
 		"password": password,
 	})
 	var headers = ["Content-Type: application/json"]
-	http_node.request("%s/api/collections/%s/auth-with-password" % [url, authcollection_name], headers, HTTPClient.METHOD_POST, body)
+	http_node.request("%s/api/collections/%s/auth-with-password%s" % [url, authcollection_name, query_params], headers, HTTPClient.METHOD_POST, body)
 	
 	var res = await http_node.request_completed
 	if res[1] == 200:
