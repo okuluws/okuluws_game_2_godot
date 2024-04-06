@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://3rcj1hsbqpvc"]
+
+[ext_resource type="Script" path="res://squareenemy/squareenemy.gd" id="1_hgl2n"]
+[ext_resource type="Texture2D" uid="uid://c32brgefmkhb5" path="res://squareenemy/squareenemy.png" id="1_r3ses"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="3_gqxut"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_snuj2"]
+size = Vector2(104, 104)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_50bw6"]
+properties/0/path = NodePath(".:healthpoints")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:healthpoints_max")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:position")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[node name="Squareenemy" type="CharacterBody2D"]
+script = ExtResource("1_hgl2n")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_snuj2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_r3ses")
+
+[node name="Health" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+offset_left = -175.0
+offset_top = -81.0
+offset_right = 175.0
+offset_bottom = -41.0
+theme = ExtResource("3_gqxut")
+bbcode_enabled = true
+text = "[center]Squareneemy [color=green]69/420[color=red]♥"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_50bw6")

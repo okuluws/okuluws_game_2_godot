@@ -1,0 +1,423 @@
+[gd_scene load_steps=10 format=3 uid="uid://daqf55ce8040q"]
+
+[ext_resource type="Script" path="res://main/main.gd" id="1_hpu5m"]
+[ext_resource type="Script" path="res://main/AccountNProfileManagment.gd" id="2_2n4gd"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="2_ow1ux"]
+[ext_resource type="Script" path="res://main/EntitySpawner.gd" id="3_sudlc"]
+[ext_resource type="Texture2D" uid="uid://cltejvdgwha2" path="res://gui/itemslot.png" id="4_ade7y"]
+[ext_resource type="Script" path="res://main/server.gd" id="4_or8wb"]
+[ext_resource type="Script" path="res://main/client.gd" id="5_8shxp"]
+[ext_resource type="Script" path="res://gui/Itemgrid.gd" id="5_w2qex"]
+[ext_resource type="Script" path="res://main/database.gd" id="6_p5f4e"]
+
+[node name="main" type="Node2D" node_paths=PackedStringArray("entity_spawner", "world", "camera", "server", "client")]
+script = ExtResource("1_hpu5m")
+entity_spawner = NodePath("EntitySpawner")
+world = NodePath("World")
+camera = NodePath("Camera")
+server = NodePath("Server")
+client = NodePath("Client")
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="AccountNProfileManagment" type="ColorRect" parent="GUI" node_paths=PackedStringArray("input_username", "input_password", "label_user", "label_profile", "itemlist_profiles", "input_new_profile_name")]
+offset_left = 287.0
+offset_top = 123.0
+offset_right = 853.0
+offset_bottom = 479.0
+color = Color(0.203922, 0.203922, 0.203922, 1)
+script = ExtResource("2_2n4gd")
+input_username = NodePath("Username")
+input_password = NodePath("Password")
+label_user = NodePath("RichTextLabel2")
+label_profile = NodePath("SelectedProfile")
+itemlist_profiles = NodePath("ProfileList")
+input_new_profile_name = NodePath("Profile")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/AccountNProfileManagment"]
+layout_mode = 1
+offset_top = 117.0
+offset_right = 288.0
+offset_bottom = 140.0
+theme = ExtResource("2_ow1ux")
+text = "Switch User:"
+
+[node name="Username" type="LineEdit" parent="GUI/AccountNProfileManagment"]
+layout_mode = 0
+offset_top = 140.0
+offset_right = 161.0
+offset_bottom = 171.0
+text = "okuluws22"
+placeholder_text = "Username"
+
+[node name="Password" type="LineEdit" parent="GUI/AccountNProfileManagment"]
+layout_mode = 0
+offset_top = 171.0
+offset_right = 161.0
+offset_bottom = 202.0
+text = "diggida,113"
+placeholder_text = "Password"
+secret = true
+
+[node name="Login" type="Button" parent="GUI/AccountNProfileManagment"]
+layout_mode = 0
+offset_top = 202.0
+offset_right = 64.0
+offset_bottom = 233.0
+theme = ExtResource("2_ow1ux")
+text = "Login"
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="GUI/AccountNProfileManagment"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -167.0
+offset_right = 167.0
+offset_bottom = 27.0
+grow_horizontal = 2
+theme = ExtResource("2_ow1ux")
+bbcode_enabled = true
+text = "[center]Logged in as joe"
+
+[node name="SelectedProfile" type="RichTextLabel" parent="GUI/AccountNProfileManagment"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -167.0
+offset_top = 27.0
+offset_right = 167.0
+offset_bottom = 54.0
+grow_horizontal = 2
+theme = ExtResource("2_ow1ux")
+bbcode_enabled = true
+text = "[center]Current Profile: damn"
+
+[node name="Join" type="Button" parent="GUI/AccountNProfileManagment"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -53.0
+offset_top = 54.0
+offset_right = 59.0
+offset_bottom = 85.0
+grow_horizontal = 2
+theme = ExtResource("2_ow1ux")
+text = "Join Game"
+
+[node name="Error" type="RichTextLabel" parent="GUI/AccountNProfileManagment"]
+layout_mode = 0
+offset_top = 233.0
+offset_right = 349.0
+offset_bottom = 293.0
+fit_content = true
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="GUI/AccountNProfileManagment"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -226.0
+offset_top = 117.0
+offset_bottom = 143.0
+grow_horizontal = 0
+theme = ExtResource("2_ow1ux")
+text = "Profiles:"
+
+[node name="ProfileList" type="ItemList" parent="GUI/AccountNProfileManagment"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -226.0
+offset_top = 143.0
+offset_bottom = 280.0
+grow_horizontal = 0
+theme = ExtResource("2_ow1ux")
+item_count = 2
+item_0/text = "ayo sus??"
+item_1/text = "what da hell"
+
+[node name="Profile" type="LineEdit" parent="GUI/AccountNProfileManagment"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -226.0
+offset_top = 293.0
+offset_bottom = 324.0
+grow_horizontal = 0
+placeholder_text = "Profile name"
+
+[node name="CreateProfile" type="Button" parent="GUI/AccountNProfileManagment"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -226.0
+offset_top = 324.0
+offset_bottom = 355.0
+grow_horizontal = 0
+theme = ExtResource("2_ow1ux")
+text = "Create New Profile"
+
+[node name="Host" type="Button" parent="GUI/AccountNProfileManagment" groups=["disable before release"]]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 51.0
+grow_vertical = 0
+text = "Host
+"
+
+[node name="ServerPannel" type="ColorRect" parent="GUI" groups=["disable before release"]]
+visible = false
+offset_right = 182.0
+offset_bottom = 648.0
+color = Color(0.203922, 0.203922, 0.203922, 1)
+
+[node name="Save" type="Button" parent="GUI/ServerPannel"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Save Profiles"
+
+[node name="Hotbar" type="GridContainer" parent="GUI"]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -112.0
+offset_top = -101.0
+offset_right = 112.0
+offset_bottom = -29.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/h_separation = -4
+columns = 8
+script = ExtResource("5_w2qex")
+
+[node name="TextureButton" type="TextureButton" parent="GUI/Hotbar"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton2" type="TextureButton" parent="GUI/Hotbar"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton3" type="TextureButton" parent="GUI/Hotbar"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton4" type="TextureButton" parent="GUI/Hotbar"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton5" type="TextureButton" parent="GUI/Hotbar"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton6" type="TextureButton" parent="GUI/Hotbar"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton7" type="TextureButton" parent="GUI/Hotbar"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton8" type="TextureButton" parent="GUI/Hotbar"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="Inventory" type="GridContainer" parent="GUI"]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -274.0
+offset_top = -419.0
+offset_right = 274.0
+offset_bottom = -143.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/h_separation = -4
+theme_override_constants/v_separation = -4
+columns = 8
+script = ExtResource("5_w2qex")
+
+[node name="TextureButton" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton2" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton3" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton4" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton5" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton6" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton7" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton8" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton9" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton10" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton11" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton12" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton13" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton14" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton15" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton16" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton17" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton18" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton19" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton20" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton21" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton22" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton23" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton24" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton25" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton26" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton27" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton28" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton29" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton30" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton31" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="TextureButton32" type="TextureButton" parent="GUI/Inventory"]
+layout_mode = 2
+texture_normal = ExtResource("4_ade7y")
+
+[node name="Camera" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="World" type="Node2D" parent="."]
+z_index = 1
+
+[node name="EntitySpawner" type="MultiplayerSpawner" parent="." node_paths=PackedStringArray("main_node")]
+spawn_path = NodePath("../World")
+script = ExtResource("3_sudlc")
+main_node = NodePath("..")
+
+[node name="Server" type="Node2D" parent="." node_paths=PackedStringArray("main_node", "database", "account_n_profile_gui", "server_pannel")]
+script = ExtResource("4_or8wb")
+main_node = NodePath("..")
+database = NodePath("../Database")
+account_n_profile_gui = NodePath("../GUI/AccountNProfileManagment")
+server_pannel = NodePath("../GUI/ServerPannel")
+
+[node name="Client" type="Node2D" parent="." node_paths=PackedStringArray("main_node", "account_n_profile_gui", "inventory_gui", "database")]
+script = ExtResource("5_8shxp")
+main_node = NodePath("..")
+account_n_profile_gui = NodePath("../GUI/AccountNProfileManagment")
+inventory_gui = NodePath("../GUI/Inventory")
+database = NodePath("../Database")
+
+[node name="Database" type="Node" parent="." node_paths=PackedStringArray("http_node")]
+script = ExtResource("6_p5f4e")
+url = "http://127.0.0.1:8090"
+http_node = NodePath("HTTPRequest")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="Database"]
+timeout = 2.0
+
+[connection signal="pressed" from="GUI/AccountNProfileManagment/Login" to="Client" method="_on_login_pressed"]
+[connection signal="pressed" from="GUI/AccountNProfileManagment/Join" to="Client" method="_on_join_pressed"]
+[connection signal="item_selected" from="GUI/AccountNProfileManagment/ProfileList" to="Client" method="_on_profile_list_item_selected"]
+[connection signal="pressed" from="GUI/AccountNProfileManagment/CreateProfile" to="Client" method="_on_create_profile_pressed"]
+[connection signal="pressed" from="GUI/AccountNProfileManagment/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="GUI/ServerPannel/Save" to="Server" method="_on_save_pressed"]

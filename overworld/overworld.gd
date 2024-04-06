@@ -1,0 +1,15 @@
+extends Node2D
+
+
+@export var main_node: Node2D
+
+
+func _ready():
+	if multiplayer.is_server():
+		main_node.entity_spawner.spawn({
+			"entity": "squareenemy",
+			"set_main_node": true,
+			"properties": {
+				"position": Vector2(300, 500)
+			},
+		})
