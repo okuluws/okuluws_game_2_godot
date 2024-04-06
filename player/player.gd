@@ -142,3 +142,7 @@ func set_player_facing_direction(_facing_direction):
 	facing_direction = _facing_direction
 	
 
+func award_coins(amount):
+	pass
+
+
