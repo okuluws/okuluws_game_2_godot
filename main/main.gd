@@ -50,7 +50,7 @@ func _ready():
 		var args = parse_os_arguments()
 		$"Server".call("start", int(args["port"]), args["username"], args["password"])
 	
-	print("test1234")
+	print("test12345")
 
 
 # NOTE: DELETE BEFORE RELEASE!
