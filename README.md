@@ -1,3 +1,3 @@
 # okuluws_game_2_godot
 
-sup man you kinda suck lol
+sup man you're awesome ;)
