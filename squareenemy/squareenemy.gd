@@ -16,14 +16,14 @@ func _process(_delta):
 	else:
 		%Health.text = "[center]Squareenemy [color=red]%d/%d[color=red]♥" % [healthpoints, healthpoints_max]
 
-func take_damage(damagepoints, damagesource):
+func take_damage(damagepoints, rewards_user_record_id = ""):
 	assert(multiplayer.is_server())
 	healthpoints = clampi(healthpoints - damagepoints, 0, healthpoints_max)
 	if healthpoints <= 0 and not already_dead:
 		already_dead = true
 		
-		if "user_record_id" in damagesource:
-			await main_node.server.update_profile_entry(main_node.server.players[damagesource["user_record_id"]]["profile_record_id"], "coins", func(value): return value + 3)
+		if rewards_user_record_id:
+			await main_node.world.get_node(rewards_user_record_id).award_coins(3)
 		await get_tree().create_timer(1).timeout
 		main_node.entity_spawner.spawn({
 			"entity": "squareenemy",

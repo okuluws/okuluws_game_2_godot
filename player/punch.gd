@@ -30,5 +30,8 @@ func _on_timer_timeout():
 
 func _on_area_2d_body_entered(body: Node2D):
 	if multiplayer.is_server():
-		if body.name != str(user_record_id) and body.has_method("take_damage"):
-			body.take_damage(3, $".")
+		if body.name != str(user_record_id):
+			if body.has_method("take_damage"):
+				body.take_damage(3, user_record_id)
+			
+			#despawn

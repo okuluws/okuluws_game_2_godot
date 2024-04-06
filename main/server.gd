@@ -130,7 +130,11 @@ func update_profile_entry(profile_record_id: String, entry: String, callable: Ca
 	var profile_data = await get_profile_data(profile_record_id)
 	profile_data[entry] = callable.call(profile_data[entry])
 	await database.update_record("player_profiles", profile_record_id, { "json": profile_data }, host_authtoken)
-	
+
+
+func get_player_node(user_record_id: String):
+	return main_node.world.get_node(user_record_id)
+
 
 func _on_print_profiles_pressed():
 	assert(multiplayer.is_server())
