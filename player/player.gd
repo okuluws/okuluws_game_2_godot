@@ -14,12 +14,28 @@ extends CharacterBody2D
 
 @export var synced_position: Vector2
 @export var is_idle: bool
+@export var inventory: Array
+
+
+func load_profile_data():
+	assert(multiplayer.is_server())
+	
+	var profile_data = await main_node.server.get_profile_data(main_node.server.players[user_record_id]["profile_record_id"])
+	coins = profile_data["coins"]
+	healthpoints_max = profile_data["hp"]
+	player_type = profile_data["player_type"]
+	inventory = profile_data["inventory"]
 
 
 func _ready():
 	if multiplayer.is_server():
-		$IdleTimer.start()
+		set_process(false)
+		set_physics_process(false)
 		await load_profile_data()
+		$IdleTimer.start()
+		set_process(true)
+		set_physics_process(true)
+
 
 func _process(_delta):
 	if multiplayer.is_server():
@@ -114,15 +130,6 @@ func _physics_process(_delta):
 		
 		
 	
-
-
-func load_profile_data():
-	assert(multiplayer.is_server())
-	
-	var profile_data = await main_node.server.get_profile_data(main_node.server.players[user_record_id]["profile_record_id"])
-	coins = profile_data["coins"]
-	healthpoints_max = profile_data["hp"]
-	player_type = profile_data["player_type"]
 
 
 @rpc("any_peer")
