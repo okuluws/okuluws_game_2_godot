@@ -26,7 +26,7 @@ func take_damage(damagepoints, rewards_user_record_id = ""):
 			await main_node.server.get_player_node(rewards_user_record_id).award_coins(3)
 		await get_tree().create_timer(1).timeout
 		main_node.entity_spawner.spawn({
-			"entity": "squareenemy",
+			"entity_name": "squareenemy",
 			"set_main_node": true,
 			"properties": {
 				"position": Vector2(300, 500)

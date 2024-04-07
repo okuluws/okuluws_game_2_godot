@@ -98,7 +98,7 @@ func connect_player(peer_id: int, username: String, password: String, profile_id
 	}
 	
 	var player = main_node.entity_spawner.spawn({
-		"entity": "player",
+		"entity_name": "player",
 		"set_main_node": true,
 		"properties": {
 			"user_record_id": user["record"]["id"],
