@@ -56,10 +56,9 @@ func start(port: int, username: String, password: String):
 	server_pannel.visible = true
 	
 	main_node.entity_spawner.spawn({
-		"entity": "overworld",
+		"entity_name": "overworld",
 		"set_main_node": true,
 	})
-	
 	
 	main_node.camera.zoom = Vector2(0.4, 0.4)
 	
@@ -95,7 +94,7 @@ func connect_player(peer_id: int, username: String, password: String, profile_id
 	players[user["record"]["id"]] = {
 		"peer_id": peer_id,
 		"user_username": user["record"]["username"],
-		"profile_record_id": profile["id"]
+		"profile_record_id": profile["id"],
 	}
 	
 	var player = main_node.entity_spawner.spawn({
@@ -104,7 +103,7 @@ func connect_player(peer_id: int, username: String, password: String, profile_id
 		"properties": {
 			"user_record_id": user["record"]["id"],
 			"name": user["record"]["id"],
-		}
+		},
 	})
 	
 	server_print("connected user %s, profile: %s" % [user["record"]["username"], profile["name"]])
