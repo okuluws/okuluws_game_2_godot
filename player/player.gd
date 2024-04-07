@@ -152,4 +152,7 @@ func award_coins(amount):
 	await main_node.server.update_profile_entry(main_node.server.players[user_record_id]["profile_record_id"], "coins", func(value): return value + amount)
 	await load_profile_data()
 
+func pickup_item(item):
+	print(item)
+
 

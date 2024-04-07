@@ -1,10 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bpvydjhn5m0h4"]
+[gd_scene load_steps=8 format=3 uid="uid://bpvydjhn5m0h4"]
 
 [ext_resource type="Script" path="res://item/item.gd" id="1_8ocdb"]
 [ext_resource type="Texture2D" uid="uid://bykgrqjr5gp2v" path="res://squareenemy/squareenemy_fragment.png" id="2_ma8ms"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_otak4"]
-size = Vector2(64, 62)
+[sub_resource type="CircleShape2D" id="CircleShape2D_nhs88"]
+radius = 48.8774
 
 [sub_resource type="Animation" id="Animation_2p0pi"]
 resource_name = "squareenemy_fragment"
@@ -43,12 +43,17 @@ _data = {
 "squareenemy_fragment": SubResource("Animation_2p0pi")
 }
 
-[node name="Item" type="Area2D" node_paths=PackedStringArray("texture_animator")]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8kqaq"]
+properties/0/path = NodePath(".:current_texture")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Item" type="Area2D"]
+collision_mask = 3
 script = ExtResource("1_8ocdb")
-texture_animator = NodePath("TextureAnimator")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_otak4")
+shape = SubResource("CircleShape2D_nhs88")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 
@@ -56,5 +61,8 @@ shape = SubResource("RectangleShape2D_otak4")
 libraries = {
 "": SubResource("AnimationLibrary_5qtcc")
 }
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_8kqaq")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

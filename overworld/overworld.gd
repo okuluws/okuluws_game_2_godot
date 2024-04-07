@@ -18,6 +18,7 @@ func _ready():
 			"entity_name": "item",
 			"set_main_node": true,
 			"properties": {
-				"position": Vector2(500, 500)
+				"position": Vector2(500, 500),
+				"current_texture": "squareenemy_fragment",
 			},
-		}).texture_animator.play("squareenemy_fragment")
+		})
