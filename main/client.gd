@@ -23,6 +23,7 @@ var config = ConfigFile.new()
 
 
 func _ready():
+	return
 	var err = config.load("user://config.cfg")
 	if err != OK:
 		config.save("user://config.cfg")

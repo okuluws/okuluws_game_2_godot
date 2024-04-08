@@ -25,6 +25,7 @@ func load_profile_data():
 	healthpoints_max = profile_data["hp"]
 	player_type = profile_data["player_type"]
 	inventory = profile_data["inventory"]
+	
 
 
 func _ready():
@@ -150,9 +151,9 @@ func set_player_facing_direction(_facing_direction):
 
 func award_coins(amount):
 	await main_node.server.update_profile_entry(main_node.server.players[user_record_id]["profile_record_id"], "coins", func(value): return value + amount)
-	await load_profile_data()
+	load_profile_data()
 
-func pickup_item(item):
+func pickup_item(_item):
 	#print("%s picked up item: %s" % [main_node.server.players[user_record_id]["user_username"], item.item_type])
 	pass
 
