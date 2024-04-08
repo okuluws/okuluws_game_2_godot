@@ -8,28 +8,29 @@ extends Node
 func parse_res_body(res):
 	return JSON.parse_string(res[3].get_string_from_utf8())
 
+# helper
+func _fetch(fetch_url, http_method = HTTPClient.METHOD_GET, data = {}, headers = ["Content-Type: application/json"], should_log_on_non_200_code = true):
+	var http_requester = HTTPRequest.new()
+	add_child(http_requester)
+	http_requester.request(fetch_url, headers, http_method, JSON.stringify(data))
+	var res = await http_requester.request_completed
+	if not res[1] == 200 and should_log_on_non_200_code:
+		print_debug("fetch >>%s<< has response >>%s<<" % [fetch_url, JSON.parse_string(res[3].get_string_from_utf8()) if res[3] else null])
+	
+	remove_child(http_requester)
+	return JSON.parse_string(res[3].get_string_from_utf8()) if res[3] else null
 
-func get_record(collection_name: String, record_id: String) -> Dictionary:
-	http_node.request("%s/api/collections/%s/records/%s" % [url, collection_name, record_id])
-	var res = await http_node.request_completed
-	if res[1] == 200:
-		return parse_res_body(res)
-	else:
-		print_debug(parse_res_body(res))
-		return {}
+
+func get_record(collection_name: String, record_id: String):
+	return await _fetch("%s/api/collections/%s/records/%s" % [url, collection_name, record_id])
 
 
 func get_records(collection_name: String, query_params: String = "") -> Array:
-	http_node.request("%s/api/collections/%s/records%s" % [url, collection_name, query_params])
-	var res = await http_node.request_completed
-	if res[1] == 200:
-		return parse_res_body(res)["items"]
-	else:
-		print_debug(parse_res_body(res))
-		return []
+	var res = await _fetch("%s/api/collections/%s/records%s" % [url, collection_name, query_params])
+	return res["items"] if res else null
 
 
-func authenticate(authcollection_name: String, identity: String, password: String, query_params: String = "") -> Dictionary:
+func authenticate(authcollection_name: String, identity: String, password: String, query_params: String = ""):
 	var body = JSON.stringify({
 		"identity": identity,
 		"password": password,
@@ -168,12 +169,8 @@ func _ready():
 	var initial_response = await _read_stream_response(tcp)
 	var client_id = _parse_response_event_data(initial_response)[0]["clientId"]
 	
-	
-	http_node.request("%s/api/realtime" % url, ["Content-Type: application/json"], HTTPClient.METHOD_POST, JSON.stringify({
-		"clientId": client_id,
-		"subscriptions": ["player_profiles"],
-	}))
-	var res = await http_node.request_completed
+	var res = await _fetch("%s/api/realtime" % url, HTTPClient.METHOD_POST, { "clientId": client_id, "subscriptions": ["player_profiles"] }, ["Content-Type: application/json"], false)
+	print(res)
 	
 	while true:
 		var response = await _read_stream_response(tcp)
