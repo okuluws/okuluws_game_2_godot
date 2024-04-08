@@ -153,6 +153,7 @@ func award_coins(amount):
 	await load_profile_data()
 
 func pickup_item(item):
-	print(item)
+	#print("%s picked up item: %s" % [main_node.server.players[user_record_id]["user_username"], item.item_type])
+	pass
 
 

@@ -19,6 +19,6 @@ func _ready():
 			"set_main_node": true,
 			"properties": {
 				"position": Vector2(500, 500),
-				"current_texture": "squareenemy_fragment",
+				"item_type": "squareenemy_fragment",
 			},
 		})

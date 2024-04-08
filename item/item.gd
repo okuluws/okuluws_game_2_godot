@@ -2,10 +2,11 @@ extends Area2D
 
 
 @export var main_node: Node
-@export var current_texture: String
+@export var item_type: String
+
 
 func _process(_delta):
-	$"TextureAnimator".play(current_texture)
+	$"TextureAnimator".play(item_type)
 
 func _on_body_entered(body: Node2D):
 	if not multiplayer.is_server():

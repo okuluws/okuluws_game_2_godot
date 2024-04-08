@@ -1,26 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpvydjhn5m0h4"]
+[gd_scene load_steps=7 format=3 uid="uid://bpvydjhn5m0h4"]
 
 [ext_resource type="Script" path="res://item/item.gd" id="1_8ocdb"]
-[ext_resource type="Texture2D" uid="uid://bykgrqjr5gp2v" path="res://squareenemy/squareenemy_fragment.png" id="2_ma8ms"]
+[ext_resource type="Animation" uid="uid://cswcqcoah7bhu" path="res://squareenemy/squareenemy_fragment.res" id="2_xe5sp"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nhs88"]
 radius = 48.8774
-
-[sub_resource type="Animation" id="Animation_2p0pi"]
-resource_name = "squareenemy_fragment"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_ma8ms")]
-}
 
 [sub_resource type="Animation" id="Animation_oi3jw"]
 length = 0.001
@@ -40,11 +24,11 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5qtcc"]
 _data = {
 "RESET": SubResource("Animation_oi3jw"),
-"squareenemy_fragment": SubResource("Animation_2p0pi")
+"squareenemy_fragment": ExtResource("2_xe5sp")
 }
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8kqaq"]
-properties/0/path = NodePath(".:current_texture")
+properties/0/path = NodePath(".:item_type")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
