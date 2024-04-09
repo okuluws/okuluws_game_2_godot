@@ -57,6 +57,11 @@ func subscribe(collection_name: String, action: String, callback: Callable):
 	
 	await _fetch("%s/api/realtime" % url, HTTPClient.METHOD_POST, { "clientId": sse_client_id, "subscriptions": subscriptions.keys() }, ["Content-Type: application/json"], false)
 
+func unsubscribe(collection_name):
+	subscriptions.erase(collection_name)
+	await _fetch("%s/api/realtime" % url, HTTPClient.METHOD_POST, { "clientId": sse_client_id, "subscriptions": subscriptions.keys() }, ["Content-Type: application/json"], false)
+
+
 # TRYING TO DO SSE, DEFINETLY NOT COPIED CODE
 # EDIT: IT WORKS OMFG HOW?
 func _setup_sse_tcp() -> StreamPeerTCP:
