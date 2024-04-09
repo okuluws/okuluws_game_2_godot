@@ -2,13 +2,15 @@ extends Node
 
 
 @export var url: String
-@export var http_node: HTTPRequest
+
 
 var subscriptions = {}
 var sse_client_id = null
 
-func parse_res_body(res):
-	return JSON.parse_string(res[3].get_string_from_utf8())
+
+func _ready():
+	await _start_realtime()
+
 
 # helper
 func _fetch(fetch_url, http_method = HTTPClient.METHOD_GET, data = {}, headers = ["Content-Type: application/json"], should_log_on_non_200_code = true):
@@ -102,7 +104,7 @@ func _get_sse_stream_data(stream: StreamPeer):
 	return JSON.parse_string(Array((await _read_stream(stream)).replace("\r", "").split("\n")).filter(func(s): return s.begins_with("data:"))[0].trim_prefix("data:"))
 
 
-func _ready():
+func _start_realtime():
 	var tcp = await _setup_sse_tcp()
 	_start_sse_stream(tcp)
 	#var stream = await _setup_tls_stream(tcp)
@@ -116,5 +118,3 @@ func _ready():
 			for s in subscriptions[event["record"]["collectionName"]]:
 				if s["action"] == event["action"] or s["action"] == "*":
 					s["callback"].call(event["record"])
-		
-

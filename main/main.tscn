@@ -407,13 +407,9 @@ account_n_profile_gui = NodePath("../GUI/AccountNProfileManagment")
 inventory_gui = NodePath("../GUI/Inventory")
 database = NodePath("../Database")
 
-[node name="Database" type="Node" parent="." node_paths=PackedStringArray("http_node")]
+[node name="Database" type="Node" parent="."]
 script = ExtResource("6_p5f4e")
 url = "http://127.0.0.1:8090"
-http_node = NodePath("HTTPRequest")
-
-[node name="HTTPRequest" type="HTTPRequest" parent="Database"]
-timeout = 1.0
 
 [connection signal="pressed" from="GUI/AccountNProfileManagment/Login" to="Client" method="_on_login_pressed"]
 [connection signal="pressed" from="GUI/AccountNProfileManagment/Join" to="Client" method="_on_join_pressed"]
