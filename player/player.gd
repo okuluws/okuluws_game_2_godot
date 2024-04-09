@@ -150,8 +150,4 @@ func set_player_facing_direction(_facing_direction):
 	assert(multiplayer.is_server())
 	facing_direction = _facing_direction
 
-func pickup_item(_item):
-	#print("%s picked up item: %s" % [main_node.server.players[user_record_id]["user_username"], item.item_type])
-	pass
-
 

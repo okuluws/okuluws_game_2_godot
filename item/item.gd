@@ -12,6 +12,7 @@ func _on_body_entered(body: Node2D):
 	if not multiplayer.is_server():
 		return
 	
-	if body.has_method("pickup_item"):
-		body.pickup_item($".")
-		queue_free()
+	# do sth?
+	#if body.has_method("pickup_item"):
+	#	body.pickup_item($".")
+	#	queue_free()

@@ -14,7 +14,6 @@ func _ready():
 
 # helper
 func _fetch(fetch_url, http_method = HTTPClient.METHOD_GET, data = {}, headers = ["Content-Type: application/json"], should_log_on_non_200_code = true):
-	#print("fetching %s" % fetch_url)
 	var http_requester = HTTPRequest.new()
 	add_child(http_requester)
 	http_requester.request(fetch_url, headers, http_method, JSON.stringify(data))
