@@ -9,6 +9,7 @@ var player: CharacterBody2D
 
 @export var account_n_profile_gui: ColorRect
 @export var inventory_gui: GridContainer
+@export var hotbar_gui: GridContainer
 
 @export var database: Node
 var user_record_id: String
@@ -43,7 +44,7 @@ func _ready():
 			account_n_profile_gui.itemlist_profiles.add_item(p["name"])
 			account_n_profile_gui.itemlist_profiles_data.append(p["id"])
 	
-	inventory_gui.connect("itemslot_selected", func(index): print(index))
+
 
 
 
@@ -156,6 +157,9 @@ func start(address: String, port: int):
 	client_print("joining world")
 	
 	account_n_profile_gui.visible = false
+	
+	hotbar_gui.connect("itemslot_selected", func(index): print(index))
+	hotbar_gui.visible = true
 	
 	gui = preload("res://gui/gui.tscn").instantiate()
 	main_node.add_child(gui)

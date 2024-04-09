@@ -401,11 +401,12 @@ database = NodePath("../Database")
 account_n_profile_gui = NodePath("../GUI/AccountNProfileManagment")
 server_pannel = NodePath("../GUI/ServerPannel")
 
-[node name="Client" type="Node2D" parent="." node_paths=PackedStringArray("main_node", "account_n_profile_gui", "inventory_gui", "database")]
+[node name="Client" type="Node2D" parent="." node_paths=PackedStringArray("main_node", "account_n_profile_gui", "inventory_gui", "hotbar_gui", "database")]
 script = ExtResource("5_8shxp")
 main_node = NodePath("..")
 account_n_profile_gui = NodePath("../GUI/AccountNProfileManagment")
 inventory_gui = NodePath("../GUI/Inventory")
+hotbar_gui = NodePath("../GUI/Hotbar")
 database = NodePath("../Database")
 
 [node name="Database" type="Node" parent="."]
