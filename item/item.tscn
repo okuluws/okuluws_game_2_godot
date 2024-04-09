@@ -28,9 +28,6 @@ _data = {
 }
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8kqaq"]
-properties/0/path = NodePath(".:item_type")
-properties/0/spawn = true
-properties/0/replication_mode = 1
 
 [node name="Item" type="Area2D"]
 collision_mask = 3
