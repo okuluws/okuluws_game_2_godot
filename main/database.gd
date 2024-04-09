@@ -14,6 +14,7 @@ func _ready():
 
 # helper
 func _fetch(fetch_url, http_method = HTTPClient.METHOD_GET, data = {}, headers = ["Content-Type: application/json"], should_log_on_non_200_code = true):
+	#print("fetching %s" % fetch_url)
 	var http_requester = HTTPRequest.new()
 	add_child(http_requester)
 	http_requester.request(fetch_url, headers, http_method, JSON.stringify(data))
@@ -115,11 +116,16 @@ func _start_realtime():
 	#var stream = await _setup_tls_stream(tcp)
 	
 	sse_client_id = (await _get_sse_stream_data(tcp))["clientId"]
-	await subscribe("player_profiles", "*", func(r): print(r))
+	#await subscribe("player_profiles", "*", func(r): print(r))
 	#await _fetch("%s/api/realtime" % url, HTTPClient.METHOD_POST, { "clientId": sse_client_id, "subscriptions": ["player_profiles"] }, ["Content-Type: application/json"], false)
 	while true:
 		var event = await _get_sse_stream_data(tcp)
-		if subscriptions.has(event["record"]["collectionName"]):
-			for s in subscriptions[event["record"]["collectionName"]]:
-				if s["action"] == event["action"] or s["action"] == "*":
-					s["callback"].call(event["record"])
+		for k in subscriptions:
+			if not k.begins_with(event["record"]["collectionName"]): continue
+			
+			if k.contains("/"):
+				if k.get_slice("/", 1) != event["record"]["id"]: continue
+			
+			for s in subscriptions[k]:
+				if s["action"] != event["action"] and s["action"] != "*": continue
+				s["callback"].call(event["record"])

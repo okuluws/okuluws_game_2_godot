@@ -6,7 +6,7 @@ extends Node2D
 @export var camera: Camera2D
 @export var server: Node2D
 @export var client: Node2D
-
+@export var database: Node
 
 
 # TODO:

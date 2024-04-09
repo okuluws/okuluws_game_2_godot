@@ -23,7 +23,7 @@ func take_damage(damagepoints, rewards_user_record_id = ""):
 		already_dead = true
 		
 		if rewards_user_record_id:
-			main_node.server.get_player_node(rewards_user_record_id).award_coins(3)
+			main_node.server.update_profile_entry(main_node.server.players[rewards_user_record_id]["profile_record_id"], "coins", func(value): return value + 1)
 		await get_tree().create_timer(1).timeout
 		main_node.entity_spawner.spawn({
 			"entity_name": "squareenemy",

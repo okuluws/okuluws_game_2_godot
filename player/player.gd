@@ -32,6 +32,7 @@ func _ready():
 	if multiplayer.is_server():
 		set_process(false)
 		set_physics_process(false)
+		await main_node.database.subscribe("player_profiles/%s" % main_node.server.players[user_record_id]["profile_record_id"], "*", func(_r): load_profile_data())
 		await load_profile_data()
 		$IdleTimer.start()
 		set_process(true)
@@ -148,10 +149,6 @@ func set_player_velocity(_velocity):
 func set_player_facing_direction(_facing_direction):
 	assert(multiplayer.is_server())
 	facing_direction = _facing_direction
-
-func award_coins(amount):
-	await main_node.server.update_profile_entry(main_node.server.players[user_record_id]["profile_record_id"], "coins", func(value): return value + amount)
-	load_profile_data()
 
 func pickup_item(_item):
 	#print("%s picked up item: %s" % [main_node.server.players[user_record_id]["user_username"], item.item_type])

@@ -10,13 +10,14 @@
 [ext_resource type="Script" path="res://gui/Itemgrid.gd" id="5_w2qex"]
 [ext_resource type="Script" path="res://main/database.gd" id="6_p5f4e"]
 
-[node name="main" type="Node2D" node_paths=PackedStringArray("entity_spawner", "world", "camera", "server", "client")]
+[node name="main" type="Node2D" node_paths=PackedStringArray("entity_spawner", "world", "camera", "server", "client", "database")]
 script = ExtResource("1_hpu5m")
 entity_spawner = NodePath("EntitySpawner")
 world = NodePath("World")
 camera = NodePath("Camera")
 server = NodePath("Server")
 client = NodePath("Client")
+database = NodePath("Database")
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
