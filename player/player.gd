@@ -149,3 +149,16 @@ func set_player_facing_direction(_facing_direction):
 	facing_direction = _facing_direction
 
 
+func pickup_item(item_data):
+	assert(multiplayer.is_server())
+	await main_node.server.update_profile_entry(main_node.server.players[user_record_id]["profile_record_id"], "items", func(items):
+		items.append({
+			"item_data": item_data,
+			"inventoy_name": "hotbar",
+			"slot": 0
+		})
+		return items
+	)
+	
+
+
