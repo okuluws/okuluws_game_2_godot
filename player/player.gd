@@ -14,7 +14,6 @@ extends CharacterBody2D
 
 @export var synced_position: Vector2
 @export var is_idle: bool
-@export var inventory: Array
 
 
 func load_profile_data():
@@ -24,7 +23,6 @@ func load_profile_data():
 	coins = profile_data["coins"]
 	healthpoints_max = profile_data["hp"]
 	player_type = profile_data["player_type"]
-	inventory = profile_data["inventory"]
 	
 
 
