@@ -32,11 +32,13 @@ func _fetch(fetch_url, http_method = HTTPClient.METHOD_GET, data = {}, headers =
 
 
 func get_record(collection_name: String, record_id: String, query_params: String = ""):
-	return (await _fetch("%s/api/collections/%s/records/%s%s" % [url, collection_name, record_id, query_params])).data
+	var res = await _fetch("%s/api/collections/%s/records/%s%s" % [url, collection_name, record_id, query_params])
+	return res.data if res.code == 200 else null
 
 
 func get_records(collection_name: String, query_params: String = "") -> Array:
-	return (await _fetch("%s/api/collections/%s/records%s" % [url, collection_name, query_params])).data.items
+	var res = await _fetch("%s/api/collections/%s/records%s" % [url, collection_name, query_params])
+	return res.data.items if res.code == 200 else null
 
 
 func authenticate(authcollection_name: String, identity: String, password: String, query_params: String = ""):
