@@ -178,7 +178,8 @@ func assign_player(node_path: NodePath):
 	Camera.reparent(player)
 	gui.player = player
 	
-	
+	await Database.subscribe("player_profiles/%s" % profile_record_id, "*", func(_r): load_hotbar_item_textures())
+	load_hotbar_item_textures()
 
 
 # TODO: adjust for ping and dynamic velocity, perhaps make a whole new component specialized for position synchronization
@@ -187,5 +188,23 @@ func predict_client_position(position_client: Vector2, position_server: Vector2,
 		return position_server
 	else:
 		return position_client.lerp(position_server, clamp(average_velocity / position_client.distance_to(position_server), 0, 1))
+
+
+func load_hotbar_item_textures():
+	hotbar_gui.get_children().map(func(n): n.get_children().map(func(n2): n2.queue_free()))
+	
+	(await Database.get_record("player_profiles", profile_record_id))["json"]["items"].map(func(item):
+		if item.inventory_name != "hotbar":
+			return
+		
+		assert(hotbar_gui.get_child(item.slot).get_child_count() == 0, "hotbar slot >>%s<< is already full!" % item.slot)
+		
+		var item_texture_rect = TextureRect.new()
+		item_texture_rect.texture = ItemDisplayTextures.data[item.item_data.name]
+		item_texture_rect.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+		hotbar_gui.get_child(item.slot).add_child(item_texture_rect)
+	)
+	
+
 
 

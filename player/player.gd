@@ -151,10 +151,22 @@ func set_player_facing_direction(_facing_direction):
 func pickup_item(item_data):
 	assert(multiplayer.is_server())
 	await Server.update_profile_entry(Server.players[user_record_id]["profile_record_id"], "items", func(items):
+		var maybe_available_slots = range(8)
+		items.map(func(item):
+			if item.inventory_name == "hotbar":
+				# fucking floating points dammit
+				var slot = int(item.slot)
+				assert(slot in maybe_available_slots, "item >>%s<< has invalid slot >>%d<<" % [item, slot])
+				maybe_available_slots.erase(slot)
+		)
+		
+		if maybe_available_slots.is_empty():
+			return
+		
 		items.append({
 			"item_data": item_data,
-			"inventoy_name": "hotbar",
-			"slot": 0
+			"inventory_name": "hotbar",
+			"slot": maybe_available_slots[0]
 		})
 		return items
 	)
