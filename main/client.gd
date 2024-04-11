@@ -173,6 +173,12 @@ func assign_player(node_path: NodePath):
 	player = get_node(node_path)
 	main_node.camera.reparent(player)
 	gui.player = player
+	
+	
+	
+	
+	
+	
 
 
 # TODO: adjust for ping and dynamic velocity, perhaps make a whole new component specialized for position synchronization

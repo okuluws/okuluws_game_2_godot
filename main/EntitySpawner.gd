@@ -4,17 +4,8 @@ extends MultiplayerSpawner
 @export var main_node: Node2D
 
 
-const entity_scenes = {
-	"punch": preload("res://player/punch.tscn"),
-	"squareenemy": preload("res://squareenemy/squareenemy.tscn"),
-	"player": preload("res://player/player.tscn"),
-	"overworld": preload("res://overworld/overworld.tscn"),
-	"item": preload("res://item/item.tscn"),
-}
-
-
 func _spawn_function(data: Dictionary):
-	var entity: Node2D = entity_scenes[data["entity_name"]].instantiate()
+	var entity: Node2D = Entities.data[data["entity_name"]].instantiate()
 	
 	if data.has("set_main_node"):
 		if data.set_main_node:
