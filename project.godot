@@ -19,6 +19,12 @@ config/icon="res://icon.svg"
 
 Entities="*res://globals/Entities.gd"
 ItemDisplayTextures="*res://globals/ItemDisplayTextures.gd"
+Database="*res://globals/Database.tscn"
+Client="*res://globals/Client.tscn"
+Server="*res://globals/Server.tscn"
+Camera="*res://globals/Camera.tscn"
+World="*res://globals/World.tscn"
+EntitySpawner="*res://globals/EntitySpawner.tscn"
 
 [debug]
 

@@ -12,4 +12,4 @@ func _on_body_entered(body: Node2D):
 	if body.has_method("pickup_item"):
 		already_picked_up = true
 		body.pickup_item(item.data)
-		queue_free()
+		item.queue_free()

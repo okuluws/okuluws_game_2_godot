@@ -1,7 +1,6 @@
 extends CharacterBody2D
 
 
-@export var main_node: Node2D
 @export var healthpoints_max: int = 20
 @export var healthpoints: int = 20
 
@@ -23,9 +22,9 @@ func take_damage(damagepoints, rewards_user_record_id = ""):
 		already_dead = true
 		
 		if rewards_user_record_id:
-			main_node.server.update_profile_entry(main_node.server.players[rewards_user_record_id]["profile_record_id"], "coins", func(value): return value + 1)
+			Server.update_profile_entry(Server.players[rewards_user_record_id]["profile_record_id"], "coins", func(value): return value + 1)
 		await get_tree().create_timer(1).timeout
-		main_node.entity_spawner.spawn({
+		EntitySpawner.spawn({
 			"entity_name": "squareenemy",
 			"set_main_node": true,
 			"properties": {

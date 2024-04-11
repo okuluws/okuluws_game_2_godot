@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://broq0i14ng4ad"]
+
+[ext_resource type="Script" path="res://globals/Database.gd" id="1_qwiux"]
+
+[node name="Database" type="Node"]
+script = ExtResource("1_qwiux")
+url = "http://127.0.0.1:8090"

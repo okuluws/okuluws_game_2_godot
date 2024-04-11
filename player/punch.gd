@@ -1,8 +1,6 @@
 extends CharacterBody2D
 
 
-@export var main_node: Node2D
-
 @export var user_record_id: String
 @export var timer: Timer
 @export var auto_despawn: bool
@@ -20,7 +18,7 @@ func _physics_process(_delta):
 		move_and_slide()
 		synced_position = position
 	else:
-		position = main_node.client.predict_client_position(position, synced_position, 14, 40)
+		position = Client.predict_client_position(position, synced_position, 14, 40)
 
 func _on_timer_timeout():
 	if multiplayer.is_server():

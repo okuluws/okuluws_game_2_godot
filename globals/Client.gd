@@ -1,17 +1,16 @@
-extends Node2D
+extends Node
 
 
-@export var main_node: Node2D
 var enet_peer = ENetMultiplayerPeer.new()
 var gui: CanvasLayer
 var player: CharacterBody2D
 
 
-@export var account_n_profile_gui: ColorRect
-@export var inventory_gui: GridContainer
-@export var hotbar_gui: GridContainer
+@onready var account_n_profile_gui: ColorRect = $"/root/main/GUI/AccountNProfileManagment"
+@onready var inventory_gui: GridContainer = $"/root/main/GUI/Inventory"
+@onready var hotbar_gui: GridContainer = $"/root/main/GUI/Hotbar"
 
-@export var database: Node
+
 var user_record_id: String
 var user_username: String
 var user_password: String
@@ -40,16 +39,21 @@ func _ready():
 	if user_record_id:
 		account_n_profile_gui.itemlist_profiles.clear()
 		account_n_profile_gui.itemlist_profiles_data.clear()
-		for p in await database.get_records("player_profiles", "?filter=(user.id='%s')" % user_record_id):
+		for p in await Database.get_records("player_profiles", "?filter=(user.id='%s')" % user_record_id):
 			account_n_profile_gui.itemlist_profiles.add_item(p["name"])
 			account_n_profile_gui.itemlist_profiles_data.append(p["id"])
 	
+	
+	account_n_profile_gui.get_node("Login").connect("pressed", _on_login_pressed)
+	account_n_profile_gui.get_node("CreateProfile").connect("pressed", _on_create_profile_pressed)
+	account_n_profile_gui.get_node("ProfileList").connect("item_selected", _on_profile_list_item_selected)
+	account_n_profile_gui.get_node("Join").connect("pressed", _on_join_pressed)
 
 
 
 
 func user_login(username: String, password: String) -> bool:
-	var user = await database.authenticate("users", username, password)
+	var user = await Database.authenticate("users", username, password)
 	
 	if not user:
 		print_debug("invalid user")
@@ -74,13 +78,13 @@ func _on_login_pressed():
 	
 	account_n_profile_gui.itemlist_profiles.clear()
 	account_n_profile_gui.itemlist_profiles_data.clear()
-	for p in await database.get_records("player_profiles", "?filter=(user.id='%s')" % user_record_id):
+	for p in await Database.get_records("player_profiles", "?filter=(user.id='%s')" % user_record_id):
 		account_n_profile_gui.itemlist_profiles.add_item(p["name"])
 		account_n_profile_gui.itemlist_profiles_data.append(p["id"])
 	
 
 func set_profile(id: String) -> bool:
-	var profile = await database.get_record("player_profiles", id)
+	var profile = await Database.get_record("player_profiles", id)
 	if not profile:
 		print_debug("profile doesnt exist")
 		return false
@@ -98,7 +102,7 @@ func set_profile(id: String) -> bool:
 func _on_create_profile_pressed():
 	var new_profile_name = account_n_profile_gui.input_new_profile_name.text
 	
-	var new_profile = await database.create_record("player_profiles", {
+	var new_profile = await Database.create_record("player_profiles", {
 		"user": user_record_id,
 		"name": new_profile_name,
 		"json": {
@@ -113,7 +117,7 @@ func _on_create_profile_pressed():
 	
 	account_n_profile_gui.itemlist_profiles.clear()
 	account_n_profile_gui.itemlist_profiles_data.clear()
-	for p in await database.get_records("player_profiles", "?filter=(user.id='%s')" % user_record_id):
+	for p in await Database.get_records("player_profiles", "?filter=(user.id='%s')" % user_record_id):
 		account_n_profile_gui.itemlist_profiles.add_item(p["name"])
 		account_n_profile_gui.itemlist_profiles_data.append(p["id"])
 	
@@ -128,7 +132,7 @@ func _on_profile_list_item_selected(index):
 
 
 func _on_join_pressed():
-	var server_url: String = (await database.get_records("hosts"))[0]["url"]
+	var server_url: String = (await Database.get_records("hosts"))[0]["url"]
 	var server_address = server_url.rsplit(":", false, 1)[0].trim_prefix("http://").trim_prefix("https://")
 	var server_port = server_url.rsplit(":", false, 1)[1].to_int()
 	
@@ -149,8 +153,8 @@ func start(address: String, port: int):
 	enet_peer.create_client(address, port)
 	multiplayer.multiplayer_peer = enet_peer
 	await multiplayer.connected_to_server
-	
-	main_node.server.connect_player.rpc_id(1, multiplayer.get_unique_id(), user_username, user_password, profile_record_id)
+
+	Server.connect_player.rpc_id(1, multiplayer.get_unique_id(), user_username, user_password, profile_record_id)
 	client_print("connecting to %s on port %d" % [address, port])
 	
 	
@@ -162,7 +166,7 @@ func start(address: String, port: int):
 	hotbar_gui.visible = true
 	
 	gui = preload("res://gui/gui.tscn").instantiate()
-	main_node.add_child(gui)
+	World.add_child(gui)
 	
 
 func _on_server_disconnected():
@@ -171,12 +175,8 @@ func _on_server_disconnected():
 @rpc
 func assign_player(node_path: NodePath):
 	player = get_node(node_path)
-	main_node.camera.reparent(player)
+	Camera.reparent(player)
 	gui.player = player
-	
-	
-	
-	
 	
 	
 

@@ -1,13 +1,6 @@
 extends Node2D
 
 
-@export var entity_spawner: MultiplayerSpawner
-@export var world: Node2D
-@export var camera: Camera2D
-@export var server: Node2D
-@export var client: Node2D
-@export var database: Node
-
 
 # TODO:
 # !add account registration
@@ -48,10 +41,10 @@ func parse_os_arguments():
 func _ready():
 	if OS.get_cmdline_args().has("serve"):
 		var args = parse_os_arguments()
-		$"Server".call("start", int(args["port"]), args["username"], args["password"])
+		Server.start(int(args["port"]), args["username"], args["password"])
 
 
 
 # NOTE: DELETE BEFORE RELEASE!
 func _on_host_pressed():
-	$"Server".call("start", 42000, "host0", "K7bKo5GVgG2-mwo")
+	Server.start(42000, "host0", "K7bKo5GVgG2-mwo")

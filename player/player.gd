@@ -8,7 +8,6 @@ extends CharacterBody2D
 @export var player_type: String
 @export var display_text: String
 
-@export var main_node: Node2D
 @export var peer_id: int
 @export var user_record_id: String
 
@@ -19,7 +18,7 @@ extends CharacterBody2D
 func load_profile_data():
 	assert(multiplayer.is_server())
 	
-	var profile_data = await main_node.server.get_profile_data(main_node.server.players[user_record_id]["profile_record_id"])
+	var profile_data = await Server.get_profile_data(Server.players[user_record_id]["profile_record_id"])
 	coins = profile_data["coins"]
 	healthpoints_max = profile_data["hp"]
 	player_type = profile_data["player_type"]
@@ -30,7 +29,7 @@ func _ready():
 	if multiplayer.is_server():
 		set_process(false)
 		set_physics_process(false)
-		await main_node.database.subscribe("player_profiles/%s" % main_node.server.players[user_record_id]["profile_record_id"], "*", func(_r): load_profile_data())
+		await Database.subscribe("player_profiles/%s" % Server.players[user_record_id]["profile_record_id"], "*", func(_r): load_profile_data())
 		await load_profile_data()
 		$IdleTimer.start()
 		set_process(true)
@@ -39,7 +38,7 @@ func _ready():
 
 func _process(_delta):
 	if multiplayer.is_server():
-		display_text = "[center][color=white]%s " % main_node.server.players[user_record_id]["user_username"]
+		display_text = "[center][color=white]%s " % Server.players[user_record_id]["user_username"]
 		if is_idle:
 			display_text += "[color=darkgray][AFK][/color]"
 	
@@ -90,7 +89,7 @@ func _physics_process(_delta):
 			is_idle = true
 	
 	else:
-		if main_node.client.user_record_id == user_record_id:
+		if Client.user_record_id == user_record_id:
 			var move_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 			var move_direction_signed = move_direction.sign()
 			
@@ -109,7 +108,7 @@ func _physics_process(_delta):
 			
 			
 			if Input.is_action_just_pressed("attack"):
-				main_node.server.spawn_entity.rpc_id(1, {
+				Server.spawn_entity.rpc_id(1, {
 					"entity_name": "punch",
 					"set_main_node": true,
 					"properties": {
@@ -126,7 +125,7 @@ func _physics_process(_delta):
 			
 			
 		else:
-			position = main_node.client.predict_client_position(position, synced_position, 7, 40)
+			position = Client.predict_client_position(position, synced_position, 7, 40)
 		
 		
 	
@@ -151,7 +150,7 @@ func set_player_facing_direction(_facing_direction):
 
 func pickup_item(item_data):
 	assert(multiplayer.is_server())
-	await main_node.server.update_profile_entry(main_node.server.players[user_record_id]["profile_record_id"], "items", func(items):
+	await Server.update_profile_entry(Server.players[user_record_id]["profile_record_id"], "items", func(items):
 		items.append({
 			"item_data": item_data,
 			"inventoy_name": "hotbar",

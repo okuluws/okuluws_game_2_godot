@@ -1,23 +1,25 @@
-extends Node2D
+extends Node
 
 
-@export var main_node: Node2D
 var enet_peer = ENetMultiplayerPeer.new()
 
-@export var database: Node
 var host_record_id: String
 var host_username: String
 var host_password: String
 var host_authtoken: String
 
-@export var account_n_profile_gui: ColorRect
-@export var server_pannel: ColorRect
+@onready var account_n_profile_gui: ColorRect = $"/root/main/GUI/AccountNProfileManagment"
+@onready var server_pannel: ColorRect = $"/root/main/GUI/ServerPannel"
 
 @export var players: Dictionary
 
 
+func _ready():
+	server_pannel.get_node("PrintProfiles").connect("pressed", _on_print_profiles_pressed)
+
+
 func host_login(username: String, password: String) -> bool:
-	var host = await database.authenticate("hosts", username, password)
+	var host = await Database.authenticate("hosts", username, password)
 	
 	if not host:
 		print_debug("invalid user")
@@ -55,12 +57,12 @@ func start(port: int, username: String, password: String):
 	account_n_profile_gui.visible = false
 	server_pannel.visible = true
 	
-	main_node.entity_spawner.spawn({
+	EntitySpawner.spawn({
 		"entity_name": "overworld",
 		"set_main_node": true,
 	})
 	
-	main_node.camera.zoom = Vector2(0.4, 0.4)
+	Camera.zoom = Vector2(0.4, 0.4)
 	
 
 
@@ -70,13 +72,13 @@ func _on_client_connected(peer_id):
 
 func _on_client_disconnected(peer_id):
 	server_print("disconnected peer: %d" % peer_id)
-	main_node.world.get_node("%s" % peer_id).queue_free()
+	World.get_node("%s" % peer_id).queue_free()
 	players.erase(peer_id)
 
 
 @rpc("any_peer")
 func connect_player(peer_id: int, username: String, password: String, profile_id: String):
-	var user = await database.authenticate("users", username, password, "?expand=player_profiles_via_user")
+	var user = await Database.authenticate("users", username, password, "?expand=player_profiles_via_user")
 	#print(user)
 	if not user:
 		print_debug("djahjha, you thought")
@@ -97,9 +99,8 @@ func connect_player(peer_id: int, username: String, password: String, profile_id
 		"profile_record_id": profile["id"],
 	}
 	
-	var player = main_node.entity_spawner.spawn({
+	var player = EntitySpawner.spawn({
 		"entity_name": "player",
-		"set_main_node": true,
 		"properties": {
 			"user_record_id": user["record"]["id"],
 			"name": user["record"]["id"],
@@ -107,7 +108,7 @@ func connect_player(peer_id: int, username: String, password: String, profile_id
 	})
 	
 	server_print("connected user %s, profile: %s" % [user["record"]["username"], profile["name"]])
-	main_node.client.assign_player.rpc_id(peer_id, player.get_path())
+	Client.assign_player.rpc_id(peer_id, player.get_path())
 
 
 @rpc("any_peer")
@@ -115,24 +116,24 @@ func spawn_entity(data: Dictionary):
 	# something has gone horribly wrong
 	assert(is_multiplayer_authority())
 	
-	main_node.entity_spawner.spawn(data)
+	EntitySpawner.spawn(data)
 	
 
 
 func get_profile_data(profile_record_id: String):
 	assert(multiplayer.is_server())
-	return (await database.get_record("player_profiles", profile_record_id))["json"]
+	return (await Database.get_record("player_profiles", profile_record_id))["json"]
 
 
 func update_profile_entry(profile_record_id: String, entry: String, callable: Callable):
 	assert(multiplayer.is_server())
 	var profile_data = await get_profile_data(profile_record_id)
 	profile_data[entry] = callable.call(profile_data[entry])
-	await database.update_record("player_profiles", profile_record_id, { "json": profile_data }, host_authtoken)
+	await Database.update_record("player_profiles", profile_record_id, { "json": profile_data }, host_authtoken)
 
 
 func get_player_node(user_record_id: String):
-	return main_node.world.get_node(user_record_id)
+	return World.get_node(user_record_id)
 
 
 func _on_print_profiles_pressed():
