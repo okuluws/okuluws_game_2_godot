@@ -194,31 +194,19 @@ func predict_client_position(position_client: Vector2, position_server: Vector2,
 
 
 func load_hotbar_item_textures():
-	hotbar_gui.get_children().map(func(node):
-		node.get_child(0).texture = null
-	)
-	
-	(await Database.get_record("player_profiles", profile_record_id))["json"]["items"].map(func(item):
-		if item.inventory_name != "hotbar":
-			return
+	var items = (await Database.get_record("player_profiles", profile_record_id))["json"]["items"].filter(func(item): return item.inventory_name == "hotbar")
+	for n in range(hotbar_gui.get_child_count()):
+		var fitting_items = items.filter(func(item): return item.slot == n)
+		assert(fitting_items.size() <= 1, "multiple items are trying to fit into hotbar slot >>%d<<" % n)
 		
-		assert(hotbar_gui.get_child(item.slot).get_child(0).texture == null, "hotbar slot >>%s<< is already occupied!" % item.slot)
-		
-		hotbar_gui.get_child(item.slot).get_child(0).texture = ItemDisplayTextures.data[item.item_data.name]
-	)
-	
+		hotbar_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[fitting_items[0].item_data.name] if not fitting_items.is_empty() else null
+
 
 func load_inventory_item_textures():
-	inventory_gui.get_children().map(func(node):
-		node.get_child(0).texture = null
-	)
-	
-	(await Database.get_record("player_profiles", profile_record_id))["json"]["items"].map(func(item):
-		if item.inventory_name != "inventory":
-			return
+	var items = (await Database.get_record("player_profiles", profile_record_id))["json"]["items"].filter(func(item): return item.inventory_name == "inventory")
+	for n in range(inventory_gui.get_child_count()):
+		var fitting_items = items.filter(func(item): return item.slot == n)
+		assert(fitting_items.size() <= 1, "multiple items are trying to fit into inventory slot >>%d<<" % n)
 		
-		assert(inventory_gui.get_child(item.slot).get_child(0).texture == null, "inventory slot >>%s<< is already occupied!" % item.slot)
-		
-		inventory_gui.get_child(item.slot).get_child(0).texture = ItemDisplayTextures.data[item.item_data.name]
-	)
+		inventory_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[fitting_items[0].item_data.name] if not fitting_items.is_empty() else null
 
