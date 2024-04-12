@@ -123,6 +123,10 @@ func _physics_process(_delta):
 			if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action): return Input.is_action_pressed(_action)):
 				i_am_not_idle.rpc_id(1)
 			
+			if Input.is_action_just_pressed("open_inventory"):
+				Client.inventory_gui.visible = not Client.inventory_gui.visible
+			
+			
 			
 		else:
 			position = Client.predict_client_position(position, synced_position, 7, 40)
@@ -151,24 +155,35 @@ func set_player_facing_direction(_facing_direction):
 func pickup_item(item_data):
 	assert(multiplayer.is_server())
 	await Server.update_profile_entry(Server.players[user_record_id]["profile_record_id"], "items", func(items):
-		var maybe_available_slots = range(8)
+		var maybe_available_hotbar_slots = range(8)
+		var maybe_available_inventory_slots = range(32)
 		items.map(func(item):
+			# fucking floating points dammit
+			var slot = int(item.slot)
 			if item.inventory_name == "hotbar":
-				# fucking floating points dammit
-				var slot = int(item.slot)
-				assert(slot in maybe_available_slots, "item >>%s<< has invalid slot >>%d<<" % [item, slot])
-				maybe_available_slots.erase(slot)
+				assert(slot in maybe_available_hotbar_slots, "item >>%s<< has invalid slot >>%d<<" % [item, slot])
+				maybe_available_hotbar_slots.erase(slot)
+			
+			if item.inventory_name == "inventory":
+				assert(slot in maybe_available_inventory_slots, "item >>%s<< has invalid slot >>%d<<" % [item, slot])
+				maybe_available_inventory_slots.erase(slot)
 		)
 		
-		if maybe_available_slots.is_empty():
-			return
+		if not maybe_available_hotbar_slots.is_empty():
+			items.append({
+				"item_data": item_data,
+				"inventory_name": "hotbar",
+				"slot": maybe_available_hotbar_slots[0]
+			})
+			return items
 		
-		items.append({
-			"item_data": item_data,
-			"inventory_name": "hotbar",
-			"slot": maybe_available_slots[0]
-		})
-		return items
+		if not maybe_available_inventory_slots.is_empty():
+			items.append({
+				"item_data": item_data,
+				"inventory_name": "inventory",
+				"slot": maybe_available_inventory_slots[0]
+			})
+			return items
 	)
 	
 

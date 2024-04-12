@@ -180,6 +180,9 @@ func assign_player(node_path: NodePath):
 	
 	await Database.subscribe("player_profiles/%s" % profile_record_id, "*", func(_r): load_hotbar_item_textures())
 	load_hotbar_item_textures()
+	
+	await Database.subscribe("player_profiles/%s" % profile_record_id, "*", func(_r): load_inventory_item_textures())
+	load_inventory_item_textures()
 
 
 # TODO: adjust for ping and dynamic velocity, perhaps make a whole new component specialized for position synchronization
@@ -205,5 +208,17 @@ func load_hotbar_item_textures():
 	)
 	
 
-
+func load_inventory_item_textures():
+	inventory_gui.get_children().map(func(node):
+		node.get_child(0).texture = null
+	)
+	
+	(await Database.get_record("player_profiles", profile_record_id))["json"]["items"].map(func(item):
+		if item.inventory_name != "inventory":
+			return
+		
+		assert(inventory_gui.get_child(item.slot).get_child(0).texture == null, "inventory slot >>%s<< is already occupied!" % item.slot)
+		
+		inventory_gui.get_child(item.slot).get_child(0).texture = ItemDisplayTextures.data[item.item_data.name]
+	)
 
