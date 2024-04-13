@@ -15,8 +15,6 @@ extends Node2D
 # add more player animations
 # add player emote system
 # add ping display
-# add items
-# add inventory system
 # add skills / collections
 # add more stats, crit, mana, fortune
 # !serverside validation of player packets
