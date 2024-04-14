@@ -15,10 +15,9 @@ extends CharacterBody2D
 @export var is_idle: bool
 
 
-func load_profile_data():
+func load_profile_data(profile_data):
 	assert(multiplayer.is_server())
 	
-	var profile_data = await Server.get_profile_data(Server.players[user_record_id]["profile_record_id"])
 	coins = profile_data["coins"]
 	healthpoints_max = profile_data["hp"]
 	player_type = profile_data["player_type"]
@@ -29,8 +28,8 @@ func _ready():
 	if multiplayer.is_server():
 		set_process(false)
 		set_physics_process(false)
-		await Database.subscribe("player_profiles/%s" % Server.players[user_record_id]["profile_record_id"], "*", func(_r): load_profile_data())
-		await load_profile_data()
+		await Database.subscribe("player_profiles/%s" % Server.players[user_record_id]["profile_record_id"], "*", func(r): load_profile_data(r["json"]))
+		load_profile_data(await Server.get_profile_data(Server.players[user_record_id]["profile_record_id"]))
 		$IdleTimer.start()
 		set_process(true)
 		set_physics_process(true)
