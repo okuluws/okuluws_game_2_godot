@@ -197,16 +197,26 @@ func load_hotbar_item_textures():
 	var items = (await Database.get_record("player_profiles", profile_record_id))["json"]["items"].filter(func(item): return item.inventory_name == "hotbar")
 	for n in range(hotbar_gui.get_child_count()):
 		var fitting_items = items.filter(func(item): return item.slot == n)
-		assert(fitting_items.size() <= 1, "multiple items are trying to fit into hotbar slot >>%d<<" % n)
+		if fitting_items.is_empty():
+			hotbar_gui.get_child(n).get_child(0).texture = null
+			hotbar_gui.get_child(n).get_child(1).text = ""
+			return
 		
-		hotbar_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[fitting_items[0].item_data.name] if not fitting_items.is_empty() else null
+		assert(fitting_items.all(func(item): return item.item_data.name == fitting_items[0].item_data.name), "multiple different items >>%s<< are trying to fit into single hotbar slot" % JSON.stringify(fitting_items))
+		hotbar_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[fitting_items[0].item_data.name]
+		hotbar_gui.get_child(n).get_child(1).text = "%d" % fitting_items.size() if fitting_items.size() > 1 else ""
 
 
 func load_inventory_item_textures():
 	var items = (await Database.get_record("player_profiles", profile_record_id))["json"]["items"].filter(func(item): return item.inventory_name == "inventory")
 	for n in range(inventory_gui.get_child_count()):
 		var fitting_items = items.filter(func(item): return item.slot == n)
-		assert(fitting_items.size() <= 1, "multiple items are trying to fit into inventory slot >>%d<<" % n)
+		if fitting_items.is_empty():
+			inventory_gui.get_child(n).get_child(0).texture = null
+			inventory_gui.get_child(n).get_child(1).text = ""
+			return
 		
-		inventory_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[fitting_items[0].item_data.name] if not fitting_items.is_empty() else null
+		assert(fitting_items.all(func(item): return item.item_data.name == fitting_items[0].item_data.name), "multiple different items >>%s<< are trying to fit into single inventory slot" % JSON.stringify(fitting_items))
+		inventory_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[fitting_items[0].item_data.name]
+		inventory_gui.get_child(n).get_child(1).text = "%d" % fitting_items.size() if fitting_items.size() > 1 else ""
 

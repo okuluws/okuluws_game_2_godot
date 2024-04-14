@@ -109,7 +109,15 @@ func _read_stream(stream: StreamPeer) -> String:
 
 # ;)
 func _get_sse_stream_data(stream: StreamPeer):
-	return JSON.parse_string(Array((await _read_stream(stream)).replace("\r", "").split("\n")).filter(func(s): return s.begins_with("data:"))[0].trim_prefix("data:"))
+	var raw_string = await _read_stream(stream)
+	var raw_data_string_array = Array(raw_string.substr(raw_string.find("\ndata:") + 1).trim_prefix("data:").replace("\r", "").split("\n"))
+	
+	var actual_data_string = ""
+	var n = 0
+	while n < raw_data_string_array.size():
+		actual_data_string += raw_data_string_array[n]
+		n += 2
+	return JSON.parse_string(actual_data_string)
 
 
 func _start_realtime():

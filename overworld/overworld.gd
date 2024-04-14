@@ -17,3 +17,19 @@ func _ready():
 				"data": { "name": "squareenemy_fragment" },
 			},
 		})
+		
+		EntitySpawner.spawn({
+			"entity_name": "squareenemy_fragment",
+			"properties": {
+				"position": Vector2(700, 500),
+				"data": { "name": "squareenemy_fragment" },
+			},
+		})
+		
+		EntitySpawner.spawn({
+			"entity_name": "squareenemy_fragment",
+			"properties": {
+				"position": Vector2(900, 500),
+				"data": { "name": "squareenemy_fragment" },
+			},
+		})

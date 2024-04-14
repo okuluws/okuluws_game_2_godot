@@ -25,6 +25,8 @@ Server="*res://globals/Server.tscn"
 Camera="*res://globals/Camera.tscn"
 World="*res://globals/World.tscn"
 EntitySpawner="*res://globals/EntitySpawner.tscn"
+InventorySlotSizes="*res://globals/InventorySlotSizes.gd"
+ItemSlotSizes="*res://globals/ItemSlotSizes.gd"
 
 [debug]
 

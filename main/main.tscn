@@ -212,6 +212,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Hotbar/TextureButton"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton2" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -229,6 +245,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Hotbar/TextureButton2"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton3" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
@@ -248,6 +280,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Hotbar/TextureButton3"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton4" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -265,6 +313,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Hotbar/TextureButton4"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton5" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
@@ -284,6 +348,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Hotbar/TextureButton5"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton6" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -301,6 +381,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Hotbar/TextureButton6"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton7" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
@@ -320,6 +416,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Hotbar/TextureButton7"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton8" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -337,6 +449,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Hotbar/TextureButton8"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="Inventory" type="GridContainer" parent="GUI"]
 visible = false
@@ -374,6 +502,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton2" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -391,6 +535,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton2"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton3" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -410,6 +570,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton3"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton4" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -427,6 +603,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton4"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton5" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -446,6 +638,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton5"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton6" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -463,6 +671,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton6"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton7" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -482,6 +706,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton7"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton8" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -499,6 +739,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton8"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton9" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -518,6 +774,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton9"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton10" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -535,6 +807,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton10"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton11" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -554,6 +842,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton11"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton12" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -571,6 +875,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton12"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton13" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -590,6 +910,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton13"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton14" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -607,6 +943,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton14"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton15" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -626,6 +978,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton15"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton16" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -643,6 +1011,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton16"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton17" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -662,6 +1046,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton17"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton18" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -679,6 +1079,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton18"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton19" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -698,6 +1114,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton19"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton20" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -715,6 +1147,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton20"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton21" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -734,6 +1182,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton21"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton22" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -751,6 +1215,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton22"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton23" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -770,6 +1250,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton23"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton24" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -787,6 +1283,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton24"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton25" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -806,6 +1318,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton25"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton26" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -823,6 +1351,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton26"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton27" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -842,6 +1386,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton27"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton28" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -859,6 +1419,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton28"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton29" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -878,6 +1454,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton29"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton30" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -895,6 +1487,22 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton30"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [node name="TextureButton31" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
@@ -914,6 +1522,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton31"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
 [node name="TextureButton32" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
 texture_normal = ExtResource("4_ade7y")
@@ -931,5 +1555,21 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Inventory/TextureButton32"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
 
 [connection signal="pressed" from="GUI/AccountNProfileManagment/Host" to="." method="_on_host_pressed"]

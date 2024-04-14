@@ -154,35 +154,32 @@ func set_player_facing_direction(_facing_direction):
 func pickup_item(item_data):
 	assert(multiplayer.is_server())
 	await Server.update_profile_entry(Server.players[user_record_id]["profile_record_id"], "items", func(items):
-		var maybe_available_hotbar_slots = range(8)
-		var maybe_available_inventory_slots = range(32)
+		var pickup_inventories = { "hotbar": [], "inventory": [] }
+		pickup_inventories["hotbar"].resize(8)
+		pickup_inventories["hotbar"] = pickup_inventories["hotbar"].map(func(_n): return { "capacity": InventorySlotSizes.data["hotbar"], "occupying_item_name": null })
+		pickup_inventories["inventory"].resize(32)
+		pickup_inventories["inventory"] = pickup_inventories["inventory"].map(func(_n): return { "capacity": InventorySlotSizes.data["inventory"], "occupying_item_name": null })
+		# why the fuck does Array.fill() pass by reference, using Array.map() as a workaround 
+		
 		items.map(func(item):
-			# fucking floating points dammit
-			var slot = int(item.slot)
-			if item.inventory_name == "hotbar":
-				assert(slot in maybe_available_hotbar_slots, "item >>%s<< has invalid slot >>%d<<" % [item, slot])
-				maybe_available_hotbar_slots.erase(slot)
-			
-			if item.inventory_name == "inventory":
-				assert(slot in maybe_available_inventory_slots, "item >>%s<< has invalid slot >>%d<<" % [item, slot])
-				maybe_available_inventory_slots.erase(slot)
+			if item.inventory_name in pickup_inventories:
+				assert(pickup_inventories[item.inventory_name][item.slot]["occupying_item_name"] in [null, item.item_data.name])
+				assert(pickup_inventories[item.inventory_name][item.slot]["capacity"] >= 0)
+				pickup_inventories[item.inventory_name][item.slot]["occupying_item_name"] = item.item_data.name
+				pickup_inventories[item.inventory_name][item.slot]["capacity"] -= ItemSlotSizes.data[item.item_data.name]
 		)
 		
-		if not maybe_available_hotbar_slots.is_empty():
-			items.append({
-				"item_data": item_data,
-				"inventory_name": "hotbar",
-				"slot": maybe_available_hotbar_slots[0]
-			})
-			return items
+		for k in pickup_inventories:
+			var slots_availability = pickup_inventories[k].map(func(s): return s["occupying_item_name"] == null or (s["capacity"] >= ItemSlotSizes.data[item_data.name] and s["occupying_item_name"] == item_data.name))
+			if slots_availability.any(func(s): return s):
+				items.append({
+						"item_data": item_data,
+						"inventory_name": k,
+						"slot": slots_availability.find(true)
+				})
+				break
 		
-		if not maybe_available_inventory_slots.is_empty():
-			items.append({
-				"item_data": item_data,
-				"inventory_name": "inventory",
-				"slot": maybe_available_inventory_slots[0]
-			})
-			return items
+		return items
 	)
 	
 
