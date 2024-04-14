@@ -2,6 +2,6 @@ extends Node
 
 
 const data = {
-	"hotbar": 1,
+	"hotbar": 16,
 	"inventory": 16,
 }
