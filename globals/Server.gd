@@ -141,5 +141,3 @@ func _on_print_profiles_pressed():
 	print(players)
 
 
-
-

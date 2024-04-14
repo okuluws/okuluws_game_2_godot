@@ -183,4 +183,3 @@ func pickup_item(item_data):
 	)
 	
 
-

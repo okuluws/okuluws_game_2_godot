@@ -11,25 +11,25 @@ func _ready():
 		})
 		
 		EntitySpawner.spawn({
-			"entity_name": "squareenemy_fragment",
+			"entity_name": "square_fragment",
 			"properties": {
 				"position": Vector2(500, 500),
-				"data": { "name": "squareenemy_fragment" },
+				"data": { "name": "square_fragment" },
 			},
 		})
 		
 		EntitySpawner.spawn({
-			"entity_name": "squareenemy_fragment",
+			"entity_name": "widesquare_fragment",
 			"properties": {
 				"position": Vector2(700, 500),
-				"data": { "name": "squareenemy_fragment" },
+				"data": { "name": "widesquare_fragment" },
 			},
 		})
 		
 		EntitySpawner.spawn({
-			"entity_name": "squareenemy_fragment",
+			"entity_name": "triangle_fragment",
 			"properties": {
 				"position": Vector2(900, 500),
-				"data": { "name": "squareenemy_fragment" },
+				"data": { "name": "triangle_fragment" },
 			},
 		})

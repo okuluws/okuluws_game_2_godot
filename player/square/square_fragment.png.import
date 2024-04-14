@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bykgrqjr5gp2v"
-path="res://.godot/imported/squareenemy_fragment.png-b787e5824c1ce5a524a797296a036867.ctex"
+uid="uid://b6jef870eoiev"
+path="res://.godot/imported/square_fragment.png-ca4fa01344f857aca5f6a9d403624db2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://squareenemy/squareenemy_fragment.png"
-dest_files=["res://.godot/imported/squareenemy_fragment.png-b787e5824c1ce5a524a797296a036867.ctex"]
+source_file="res://player/square/square_fragment.png"
+dest_files=["res://.godot/imported/square_fragment.png-ca4fa01344f857aca5f6a9d403624db2.ctex"]
 
 [params]
 

@@ -2,5 +2,7 @@ extends Node
 
 
 const data = {
-	"squareenemy_fragment": 1
+	"square_fragment": 1,
+	"widesquare_fragment": 1,
+	"triangle_fragment": 1,
 }

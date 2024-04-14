@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dc4su4w2n1fjd"]
+
+[ext_resource type="Script" path="res://item/item_pickup.gd" id="1_5ievg"]
+[ext_resource type="Script" path="res://player/widesquare/widesquare_fragment.gd" id="1_r68d3"]
+[ext_resource type="Texture2D" uid="uid://c4qlkr1einhpv" path="res://player/widesquare/widesquare_fragment.png" id="2_h0lxm"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tcsaa"]
+radius = 48.0
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_r68d3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_h0lxm")
+
+[node name="Area2D" type="Area2D" parent="." node_paths=PackedStringArray("item")]
+collision_mask = 3
+script = ExtResource("1_5ievg")
+item = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_tcsaa")
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
