@@ -188,7 +188,7 @@ func pickup_item(item):
 			
 			assert(_maybe_slot_items.size() == 1)
 			var slot_item = _maybe_slot_items[0]
-			if (slot_item.stack + 1) * ItemSlotSizes.data[slot_item.item.name] <= InventorySlotSizes.data.hotbar:
+			if slot_item.item.name == item.name and (slot_item.stack + 1) * ItemSlotSizes.data[slot_item.item.name] <= InventorySlotSizes.data.hotbar:
 				items[items.find(slot_item)].stack += 1
 				return items
 	)
