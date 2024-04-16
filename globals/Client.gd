@@ -194,29 +194,31 @@ func predict_client_position(position_client: Vector2, position_server: Vector2,
 
 
 func load_hotbar_item_textures():
-	var items = (await Database.get_record("player_profiles", profile_record_id))["json"]["items"].filter(func(item): return item.inventory_name == "hotbar")
+	var items = (await Database.get_record("player_profiles", profile_record_id))["json"]["items"].filter(func(i): return i.inventory == "hotbar")
 	for n in range(hotbar_gui.get_child_count()):
-		var fitting_items = items.filter(func(item): return item.slot == n)
-		if fitting_items.is_empty():
+		var _maybe_slot_items = items.filter(func(i): return i.slot == n)
+		if _maybe_slot_items.is_empty():
 			hotbar_gui.get_child(n).get_child(0).texture = null
 			hotbar_gui.get_child(n).get_child(1).text = ""
 			return
 		
-		assert(fitting_items.all(func(item): return item.item_data.name == fitting_items[0].item_data.name), "multiple different items >>%s<< are trying to fit into single hotbar slot" % JSON.stringify(fitting_items))
-		hotbar_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[fitting_items[0].item_data.name]
-		hotbar_gui.get_child(n).get_child(1).text = "%d" % fitting_items.size() if fitting_items.size() > 1 else ""
+		assert(_maybe_slot_items.size() == 1)
+		var slot_item = _maybe_slot_items[0]
+		hotbar_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[slot_item.item.name]
+		hotbar_gui.get_child(n).get_child(1).text = "%d" % slot_item.stack if slot_item.stack > 1 else ""
 
 
 func load_inventory_item_textures():
-	var items = (await Database.get_record("player_profiles", profile_record_id))["json"]["items"].filter(func(item): return item.inventory_name == "inventory")
+	var items = (await Database.get_record("player_profiles", profile_record_id))["json"]["items"].filter(func(i): return i.inventory == "inventory")
 	for n in range(inventory_gui.get_child_count()):
-		var fitting_items = items.filter(func(item): return item.slot == n)
-		if fitting_items.is_empty():
+		var _maybe_slot_items = items.filter(func(i): return i.slot == n)
+		if _maybe_slot_items.is_empty():
 			inventory_gui.get_child(n).get_child(0).texture = null
 			inventory_gui.get_child(n).get_child(1).text = ""
 			return
 		
-		assert(fitting_items.all(func(item): return item.item_data.name == fitting_items[0].item_data.name), "multiple different items >>%s<< are trying to fit into single inventory slot" % JSON.stringify(fitting_items))
-		inventory_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[fitting_items[0].item_data.name]
-		inventory_gui.get_child(n).get_child(1).text = "%d" % fitting_items.size() if fitting_items.size() > 1 else ""
+		assert(_maybe_slot_items.size() == 1)
+		var slot_item = _maybe_slot_items[0]
+		inventory_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[slot_item.item.name]
+		inventory_gui.get_child(n).get_child(1).text = "%d" % slot_item.stack if slot_item.stack > 1 else ""
 

@@ -21,9 +21,11 @@ extends Node2D
 # add tablist
 # add more player roles f.e vip / legend / tryhard
 # add trading
-# add minable ores
+# add mineable ores
 # add enemy ai
 
+# WORK IN PROGRESS:
+# 
 
 
 func parse_os_arguments():
