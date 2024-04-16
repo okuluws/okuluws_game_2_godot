@@ -59,7 +59,6 @@ func start(port: int, username: String, password: String):
 	
 	EntitySpawner.spawn({
 		"entity_name": "overworld",
-		"set_main_node": true,
 	})
 	
 	Camera.zoom = Vector2(0.4, 0.4)
