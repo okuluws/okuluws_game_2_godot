@@ -109,7 +109,6 @@ func _physics_process(_delta):
 			if Input.is_action_just_pressed("attack"):
 				Server.spawn_entity.rpc_id(1, {
 					"entity_name": "punch",
-					"set_main_node": true,
 					"properties": {
 						"auto_despawn": true,
 						"user_record_id": user_record_id,
