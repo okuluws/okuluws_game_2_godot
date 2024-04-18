@@ -124,10 +124,9 @@ func _physics_process(_delta):
 			if Input.is_action_just_pressed("open_inventory"):
 				Client.inventory_gui.visible = not Client.inventory_gui.visible
 			
-			
-			
-		else:
-			position = Client.predict_client_position(position, synced_position, 7, 40)
+		
+		position = Client.predict_client_position(position, synced_position, 7, 40)
+		
 		
 		
 	
@@ -148,38 +147,4 @@ func set_player_velocity(_velocity):
 func set_player_facing_direction(_facing_direction):
 	assert(multiplayer.is_server())
 	facing_direction = _facing_direction
-
-
-func pickup_item(item):
-	assert(multiplayer.is_server())
-	
-	await Server.update_profile_entry(Server.players[user_record_id]["profile_record_id"], "inventories", func(inventories):
-		for k in Inventories.data.hotbar:
-			if not k in inventories.hotbar:
-				inventories.hotbar[k] = {
-					"item": item,
-					"stack": 1
-				}
-				return inventories
-			
-			if inventories.hotbar[k].item.name == item.name and Items.data[item.name].slot_size * (inventories.hotbar[k].stack + 1) <= Inventories.data.hotbar[k].capacity:
-				inventories.hotbar[k].stack += 1
-				return inventories
-		
-		
-		for k in Inventories.data.inventory:
-			if not k in inventories.inventory:
-				inventories.inventory[k] = {
-					"item": item,
-					"stack": 1
-				}
-				return inventories
-			
-			if inventories.inventory[k].item.name == item.name and Items.data[item.name].slot_size * (inventories.inventory[k].stack + 1) <= Inventories.data.inventory[k].capacity:
-				inventories.inventory[k].stack += 1
-				return inventories
-	)
-	
-
-
 

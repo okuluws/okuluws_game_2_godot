@@ -14,7 +14,6 @@ func _ready():
 			"entity_name": "square_fragment",
 			"properties": {
 				"position": Vector2(500, 500),
-				"data": { "name": "square_fragment" },
 			},
 		})
 		

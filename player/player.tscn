@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://cs3f2fj0a3n6i"]
+[gd_scene load_steps=44 format=3 uid="uid://cs3f2fj0a3n6i"]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_p5a3p"]
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="3_c0tlq"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://lueb0gkw8oyr" path="res://player/triangle/triangle_right.png" id="13_ip588"]
 [ext_resource type="Texture2D" uid="uid://xeg0s52f6dnp" path="res://player/widesquare/widesquare_left.png" id="17_2xbdg"]
 [ext_resource type="Texture2D" uid="uid://b3whmyh0u225l" path="res://player/widesquare/widesquare_right.png" id="18_087pc"]
+[ext_resource type="Script" path="res://player/ItemHandler.gd" id="18_jtv3r"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3nhra"]
 properties/0/path = NodePath(".:facing_direction")
@@ -772,6 +773,12 @@ _data = {
 "collision_widesquare": SubResource("Animation_ddlgk")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_ws831"]
+radius = 100.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dkbu6"]
+radius = 80.0
+
 [node name="CharacterBody2D" type="CharacterBody2D"]
 collision_layer = 2
 motion_mode = 1
@@ -824,3 +831,18 @@ libraries = {
 libraries = {
 "": SubResource("AnimationLibrary_ggpti")
 }
+
+[node name="ItemHandler" type="Node2D" parent="."]
+script = ExtResource("18_jtv3r")
+
+[node name="AttractionArea" type="Area2D" parent="ItemHandler"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ItemHandler/AttractionArea"]
+shape = SubResource("CircleShape2D_ws831")
+
+[node name="PickupArea" type="Area2D" parent="ItemHandler"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ItemHandler/PickupArea"]
+shape = SubResource("CircleShape2D_dkbu6")
+
+[connection signal="area_entered" from="ItemHandler/PickupArea" to="ItemHandler" method="_on_pickup_area_area_entered"]

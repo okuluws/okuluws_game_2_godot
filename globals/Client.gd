@@ -153,7 +153,7 @@ func start(address: String, port: int):
 	enet_peer.create_client(address, port)
 	multiplayer.multiplayer_peer = enet_peer
 	await multiplayer.connected_to_server
-
+	
 	Server.connect_player.rpc_id(1, multiplayer.get_unique_id(), user_username, user_password, profile_record_id)
 	client_print("connecting to %s on port %d" % [address, port])
 	
@@ -162,7 +162,14 @@ func start(address: String, port: int):
 	
 	account_n_profile_gui.visible = false
 	
-	hotbar_gui.connect("itemslot_selected", func(index): print(index))
+	hotbar_gui.connect("itemslot_selected", func(i): 
+		for n in range(hotbar_gui.get_child_count()):
+			if n != i:
+				hotbar_gui.get_child(n).texture_normal = preload("res://gui/itemslot.png")
+				hotbar_gui.get_child(n).z_index = 0
+		hotbar_gui.get_child(i).texture_normal = preload("res://gui/itemslot_selected.png")
+		hotbar_gui.get_child(i).z_index = 1
+	)
 	hotbar_gui.visible = true
 	
 	gui = preload("res://gui/gui.tscn").instantiate()

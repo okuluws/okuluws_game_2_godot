@@ -1,6 +1,8 @@
 extends Node2D
 
 
-@export var data = {
-	"name": "square_fragment"
+var data = {
+	"name": "square_fragment",
 }
+
+var is_player_pickupable = true
