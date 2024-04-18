@@ -153,43 +153,31 @@ func set_player_facing_direction(_facing_direction):
 func pickup_item(item):
 	assert(multiplayer.is_server())
 	
-	await Server.update_profile_entry(Server.players[user_record_id]["profile_record_id"], "items", func(items: Array):
-		var hotbar_items = items.filter(func(i): return i.inventory == "hotbar")
-		for n in range(8):
-			var _maybe_slot_items = hotbar_items.filter(func(i): return i.slot == n)
-			if _maybe_slot_items.is_empty():
-				items.append({
+	await Server.update_profile_entry(Server.players[user_record_id]["profile_record_id"], "inventories", func(inventories):
+		for k in Inventories.data.hotbar:
+			if not k in inventories.hotbar:
+				inventories.hotbar[k] = {
 					"item": item,
-					"inventory": "hotbar",
-					"slot": n,
 					"stack": 1
-				})
-				return items
+				}
+				return inventories
 			
-			assert(_maybe_slot_items.size() == 1)
-			var slot_item = _maybe_slot_items[0]
-			if slot_item.item.name == item.name and (slot_item.stack + 1) * ItemSlotSizes.data[slot_item.item.name] <= InventorySlotSizes.data.hotbar:
-				items[items.find(slot_item)].stack += 1
-				return items
+			if inventories.hotbar[k].item.name == item.name and Items.data[item.name].slot_size * (inventories.hotbar[k].stack + 1) <= Inventories.data.hotbar[k].capacity:
+				inventories.hotbar[k].stack += 1
+				return inventories
 		
 		
-		var inventory_items = items.filter(func(i): return i.inventory == "inventory")
-		for n in range(32):
-			var _maybe_slot_items = inventory_items.filter(func(i): return i.slot == n)
-			if _maybe_slot_items.is_empty():
-				items.append({
+		for k in Inventories.data.inventory:
+			if not k in inventories.inventory:
+				inventories.inventory[k] = {
 					"item": item,
-					"inventory": "inventory",
-					"slot": n,
 					"stack": 1
-				})
-				return items
+				}
+				return inventories
 			
-			assert(_maybe_slot_items.size() == 1)
-			var slot_item = _maybe_slot_items[0]
-			if slot_item.item.name == item.name and (slot_item.stack + 1) * ItemSlotSizes.data[slot_item.item.name] <= InventorySlotSizes.data.inventory:
-				items[items.find(slot_item)].stack += 1
-				return items
+			if inventories.inventory[k].item.name == item.name and Items.data[item.name].slot_size * (inventories.inventory[k].stack + 1) <= Inventories.data.inventory[k].capacity:
+				inventories.inventory[k].stack += 1
+				return inventories
 	)
 	
 

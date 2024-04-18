@@ -23,9 +23,10 @@ extends Node2D
 # add trading
 # add mineable ores
 # add enemy ai
+# add server selection screen
 
 # WORK IN PROGRESS:
-# 
+
 
 
 func parse_os_arguments():

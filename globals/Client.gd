@@ -194,31 +194,25 @@ func predict_client_position(position_client: Vector2, position_server: Vector2,
 
 
 func load_hotbar_item_textures():
-	var items = (await Database.get_record("player_profiles", profile_record_id))["json"]["items"].filter(func(i): return i.inventory == "hotbar")
-	for n in range(hotbar_gui.get_child_count()):
-		var _maybe_slot_items = items.filter(func(i): return i.slot == n)
-		if _maybe_slot_items.is_empty():
-			hotbar_gui.get_child(n).get_child(0).texture = null
-			hotbar_gui.get_child(n).get_child(1).text = ""
-			return
+	var hotbar = (await Database.get_record("player_profiles", profile_record_id)).json.inventories.hotbar
+	for k in Inventories.data.hotbar:
+		if not k in hotbar:
+			hotbar_gui.get_child(int(k)).get_child(0).texture = null
+			hotbar_gui.get_child(int(k)).get_child(1).text = ""
+			continue
 		
-		assert(_maybe_slot_items.size() == 1)
-		var slot_item = _maybe_slot_items[0]
-		hotbar_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[slot_item.item.name]
-		hotbar_gui.get_child(n).get_child(1).text = "%d" % slot_item.stack if slot_item.stack > 1 else ""
+		hotbar_gui.get_child(int(k)).get_child(0).texture = Items.data[hotbar[k].item.name].texture
+		hotbar_gui.get_child(int(k)).get_child(1).text = "%d" % hotbar[k].stack if hotbar[k].stack > 1 else ""
 
 
 func load_inventory_item_textures():
-	var items = (await Database.get_record("player_profiles", profile_record_id))["json"]["items"].filter(func(i): return i.inventory == "inventory")
-	for n in range(inventory_gui.get_child_count()):
-		var _maybe_slot_items = items.filter(func(i): return i.slot == n)
-		if _maybe_slot_items.is_empty():
-			inventory_gui.get_child(n).get_child(0).texture = null
-			inventory_gui.get_child(n).get_child(1).text = ""
-			return
+	var inventory = (await Database.get_record("player_profiles", profile_record_id)).json.inventories.inventory
+	for k in Inventories.data.inventory:
+		if not k in inventory:
+			inventory_gui.get_child(int(k)).get_child(0).texture = null
+			inventory_gui.get_child(int(k)).get_child(1).text = ""
+			continue
 		
-		assert(_maybe_slot_items.size() == 1)
-		var slot_item = _maybe_slot_items[0]
-		inventory_gui.get_child(n).get_child(0).texture = ItemDisplayTextures.data[slot_item.item.name]
-		inventory_gui.get_child(n).get_child(1).text = "%d" % slot_item.stack if slot_item.stack > 1 else ""
+		inventory_gui.get_child(int(k)).get_child(0).texture = Items.data[inventory[k].item.name].texture
+		inventory_gui.get_child(int(k)).get_child(1).text = "%d" % inventory[k].stack if inventory[k].stack > 1 else ""
 
