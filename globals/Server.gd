@@ -71,8 +71,7 @@ func _on_client_connected(peer_id):
 
 func _on_client_disconnected(peer_id):
 	server_print("disconnected peer: %d" % peer_id)
-	World.get_node("%s" % peer_id).queue_free()
-	players.erase(peer_id)
+
 
 
 @rpc("any_peer")
@@ -96,6 +95,7 @@ func connect_player(peer_id: int, username: String, password: String, profile_id
 		"peer_id": peer_id,
 		"user_username": user["record"]["username"],
 		"profile_record_id": profile["id"],
+		"should_lock_profile": false,
 	}
 	
 	var player = EntitySpawner.spawn({
@@ -126,13 +126,15 @@ func get_profile_data(profile_record_id: String):
 
 func update_profile_entry(profile_record_id: String, entry: String, callable: Callable):
 	assert(multiplayer.is_server())
+	var user_record_id = players.find_key(players.values().filter(func(p): return p.profile_record_id == profile_record_id)[0])
+	while players[user_record_id].should_lock_profile:
+		await get_tree().process_frame
+	
+	players[user_record_id].should_lock_profile = true
 	var profile_data = await get_profile_data(profile_record_id)
 	profile_data[entry] = callable.call(profile_data[entry])
 	await Database.update_record("player_profiles", profile_record_id, { "json": profile_data }, host_authtoken)
-
-
-func get_player_node(user_record_id: String):
-	return World.get_node(user_record_id)
+	players[user_record_id].should_lock_profile = false
 
 
 func _on_print_profiles_pressed():
