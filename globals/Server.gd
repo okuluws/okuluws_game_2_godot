@@ -123,6 +123,8 @@ func get_profile_data(profile_record_id: String):
 	assert(multiplayer.is_server())
 	return (await Database.get_record("player_profiles", profile_record_id))["json"]
 
+func patch_profile_data(profile_record_id: String, profile_data: Dictionary):
+	await Database.update_record("player_profiles", profile_record_id, { "json": profile_data }, host_authtoken)
 
 func update_profile_entry(profile_record_id: String, entry: String, callable: Callable):
 	assert(multiplayer.is_server())
@@ -133,8 +135,9 @@ func update_profile_entry(profile_record_id: String, entry: String, callable: Ca
 	players[user_record_id].should_lock_profile = true
 	var profile_data = await get_profile_data(profile_record_id)
 	profile_data[entry] = callable.call(profile_data[entry])
-	await Database.update_record("player_profiles", profile_record_id, { "json": profile_data }, host_authtoken)
+	await patch_profile_data(profile_record_id, profile_data)
 	players[user_record_id].should_lock_profile = false
+
 
 
 func _on_print_profiles_pressed():

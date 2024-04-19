@@ -777,7 +777,7 @@ _data = {
 radius = 100.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dkbu6"]
-radius = 80.0
+radius = 69.0
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 collision_layer = 2
