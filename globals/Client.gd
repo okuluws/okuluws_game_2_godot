@@ -194,7 +194,7 @@ func assign_player(node_path: NodePath):
 
 # TODO: adjust for ping and dynamic velocity, perhaps make a whole new component specialized for position synchronization
 func predict_client_position(position_client: Vector2, position_server: Vector2, average_velocity: int, max_difference: int):
-	if position_client.distance_to(position_server) > max_difference:
+	if position_client.distance_to(position_server) > max_difference or position_client.distance_to(position_server) < 1:
 		return position_server
 	else:
 		return position_client.lerp(position_server, clamp(average_velocity / position_client.distance_to(position_server), 0, 1))

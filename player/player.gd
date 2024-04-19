@@ -11,7 +11,6 @@ extends CharacterBody2D
 @export var peer_id: int
 @export var user_record_id: String
 
-@export var synced_position: Vector2
 @export var is_idle: bool
 
 
@@ -81,9 +80,6 @@ func _process(_delta):
 
 func _physics_process(_delta):
 	if multiplayer.is_server():
-		move_and_slide()
-		synced_position = position
-		
 		if $IdleTimer.time_left == 0:
 			is_idle = true
 	
@@ -103,8 +99,6 @@ func _physics_process(_delta):
 			
 			set_player_velocity.rpc_id(1, move_direction * 400)
 			velocity = move_direction * 400
-			move_and_slide()
-			
 			
 			if Input.is_action_just_pressed("attack"):
 				Server.spawn_entity.rpc_id(1, {
@@ -123,13 +117,8 @@ func _physics_process(_delta):
 			
 			if Input.is_action_just_pressed("open_inventory"):
 				Client.inventory_gui.visible = not Client.inventory_gui.visible
-			
-		
-		position = Client.predict_client_position(position, synced_position, 7, 40)
-		
-		
-		
 	
+	move_and_slide()
 
 
 @rpc("any_peer")
@@ -147,4 +136,3 @@ func set_player_velocity(_velocity):
 func set_player_facing_direction(_facing_direction):
 	assert(multiplayer.is_server())
 	facing_direction = _facing_direction
-
