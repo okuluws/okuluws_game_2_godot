@@ -182,11 +182,17 @@ func move_inventory_item(profile_record_id, inventory, slot, inventory_dest, slo
 			return inventories
 		
 		var _slot_dest = inventories[inventory_dest][slot_dest]
-		if _slot_dest.item.name == _slot.item.name and Items.data[_slot.item.name].slot_size * (_slot_dest.stack + _slot.stack) <= Inventories.data[inventory_dest][slot_dest].capacity:
-			inventories[inventory_dest][slot_dest].stack += _slot.stack
-			inventories[inventory].erase(slot)
+		if _slot_dest.item.name == _slot.item.name:
+			var _movable_stacks = floorf(Inventories.data[inventory_dest][slot_dest].capacity / Items.data[_slot.item.name].slot_size - _slot_dest.stack)
+			if _movable_stacks > 0:
+				inventories[inventory_dest][slot_dest].stack += _movable_stacks
+				inventories[inventory][slot].stack -= _movable_stacks
+				if inventories[inventory][slot].stack == 0:
+					inventories[inventory].erase(slot)
+			
 			return inventories
 		
+		print_debug("this shouldnt happen")
 		return inventories
 	)
 
