@@ -172,7 +172,6 @@ func try_item_fit_inventory(profile_record_id: String, item: Dictionary, invento
 func move_inventory_item(profile_record_id, inventory, slot, inventory_dest, slot_dest):
 	await Server.update_profile_entry(profile_record_id, "inventories", func(inventories):
 		var _slot = inventories[inventory][slot]
-		
 		if not slot_dest in inventories[inventory_dest]:
 			inventories[inventory_dest][slot_dest] = _slot
 			inventories[inventory].erase(slot)
@@ -190,6 +189,16 @@ func move_inventory_item(profile_record_id, inventory, slot, inventory_dest, slo
 			return inventories
 		
 		print_debug("this shouldnt happen")
+		return inventories
+	)
+
+
+@rpc("any_peer")
+func swap_inventory_item(profile_record_id, inventory, slot, inventory_dest, slot_dest):
+	await Server.update_profile_entry(profile_record_id, "inventories", func(inventories):
+		var _old_slot = inventories[inventory][slot]
+		inventories[inventory][slot] = inventories[inventory_dest][slot_dest]
+		inventories[inventory_dest][slot_dest] = _old_slot
 		return inventories
 	)
 

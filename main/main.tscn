@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://daqf55ce8040q"]
+[gd_scene load_steps=7 format=3 uid="uid://daqf55ce8040q"]
 
 [ext_resource type="Script" path="res://main/main.gd" id="1_hpu5m"]
 [ext_resource type="Script" path="res://main/AccountNProfileManagment.gd" id="2_2n4gd"]
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="2_ow1ux"]
 [ext_resource type="Texture2D" uid="uid://cltejvdgwha2" path="res://gui/itemslot.png" id="4_ade7y"]
 [ext_resource type="Script" path="res://gui/Itemgrid.gd" id="5_w2qex"]
+[ext_resource type="Script" path="res://main/Limbo.gd" id="6_iaslv"]
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_hpu5m")
@@ -1608,6 +1609,47 @@ offset_right = -3.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 1
+theme = ExtResource("2_ow1ux")
+fit_content = true
+text_direction = 2
+
+[node name="Limbo" type="Control" parent="GUI"]
+z_index = 1
+layout_mode = 3
+anchors_preset = 0
+offset_right = 72.0
+offset_bottom = 72.0
+mouse_filter = 2
+script = ExtResource("6_iaslv")
+
+[node name="TextureRect" type="TextureRect" parent="GUI/Limbo"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Limbo"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -24.0
+offset_right = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
 theme = ExtResource("2_ow1ux")
 fit_content = true
 text_direction = 2
