@@ -18,35 +18,10 @@ func _on_pickup_area_area_entered(body):
 		return
 	
 	body.visible = false
-	await Server.update_profile_entry(Server.players[owner.user_record_id]["profile_record_id"], "inventories", func(inventories):
-		for k in Inventories.data.hotbar:
-			if not k in inventories.hotbar:
-				inventories.hotbar[k] = {
-					"item": body.data,
-					"stack": 1
-				}
-				body.queue_free()
-				return inventories
-			
-			if inventories.hotbar[k].item.name == body.data.name and Items.data[body.data.name].slot_size * (inventories.hotbar[k].stack + 1) <= Inventories.data.hotbar[k].capacity:
-				inventories.hotbar[k].stack += 1
-				body.queue_free()
-				return inventories
-		
-		
-		for k in Inventories.data.inventory:
-			if not k in inventories.inventory:
-				inventories.inventory[k] = {
-					"item": body.data,
-					"stack": 1
-				}
-				body.queue_free()
-				return inventories
-			
-			if inventories.inventory[k].item.name == body.data.name and Items.data[body.data.name].slot_size * (inventories.inventory[k].stack + 1) <= Inventories.data.inventory[k].capacity:
-				inventories.inventory[k].stack += 1
-				body.queue_free()
-				return inventories
-		
-		return inventories
-	)
+	if await Server.try_item_fit_inventory(Server.players[owner.user_record_id]["profile_record_id"], body.data, "hotbar"):
+		body.queue_free()
+		return
+	if await Server.try_item_fit_inventory(Server.players[owner.user_record_id]["profile_record_id"], body.data, "inventory"):
+		body.queue_free()
+		return
+

@@ -145,3 +145,24 @@ func _on_print_profiles_pressed():
 	print(players)
 
 
+func try_item_fit_inventory(profile_record_id: String, item: Dictionary, inventory_name: String):
+	var res = { "is_success": false }
+	await Server.update_profile_entry(profile_record_id, "inventories", func(inventories):
+		for k in Inventories.data[inventory_name]:
+			if not k in inventories[inventory_name]:
+				inventories[inventory_name][k] = {
+					"item": item,
+					"stack": 1
+				}
+				res.is_success = true
+				return inventories
+			
+			if inventories[inventory_name][k].item.name == item.name and Items.data[item.name].slot_size * (inventories[inventory_name][k].stack + 1) <= Inventories.data[inventory_name][k].capacity:
+				inventories[inventory_name][k].stack += 1
+				res.is_success = true
+				return inventories
+		
+		return inventories
+	)
+	
+	return res.is_success

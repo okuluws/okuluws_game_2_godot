@@ -21,6 +21,10 @@ var profile_data: Dictionary
 
 var config = ConfigFile.new()
 
+var is_dragging_stack = false
+var dragged_stack
+var dragged_stack_fake
+
 
 func _ready():
 	var err = config.load("user://config.cfg")
