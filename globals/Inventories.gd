@@ -46,4 +46,7 @@ const data = {
 		"30": { "capacity": 16 },
 		"31": { "capacity": 16 },
 	},
+	"limbo": {
+		"0": { "capacity": 69420 }
+	}
 }

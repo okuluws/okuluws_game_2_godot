@@ -178,11 +178,9 @@ func start(address: String, port: int):
 				Server.move_inventory_item.rpc_id(1, profile_record_id, "hotbar", str(i), "limbo", "0")
 			[true, true]:
 				if limbo["0"].item.name == hotbar[str(i)].item.name:
-					Server.move_inventory_item.rpc_id(1, profile_record_id, "hotbar", str(i), "limbo", "0")
+					Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", "hotbar", str(i))
 				else:
 					Server.swap_inventory_item.rpc_id(1, profile_record_id, "hotbar", str(i), "limbo", "0")
-				
-				Server.move_inventory_item.rpc_id(1, profile_record_id, "hotbar", str(i), "limbo", "0")
 			[true, false]:
 				Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", "hotbar", str(i))
 		
@@ -194,10 +192,11 @@ func start(address: String, port: int):
 				hotbar_gui.get_child(i).get_child(0).texture = null
 				hotbar_gui.get_child(i).get_child(1).text = ""
 			[true, true]:
-				limbo_gui.get_node("TextureRect").texture = Items.data[hotbar[str(i)].item.name].texture
-				limbo_gui.get_node("RichTextLabel").text = "%d" % hotbar[str(i)].stack if hotbar[str(i)].stack > 1 else ""
-				hotbar_gui.get_child(i).get_child(0).texture = Items.data[limbo["0"].item.name].texture
-				hotbar_gui.get_child(i).get_child(1).text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
+				if limbo["0"].item.name != hotbar[str(i)].item.name:
+					limbo_gui.get_node("TextureRect").texture = Items.data[hotbar[str(i)].item.name].texture
+					limbo_gui.get_node("RichTextLabel").text = "%d" % hotbar[str(i)].stack if hotbar[str(i)].stack > 1 else ""
+					hotbar_gui.get_child(i).get_child(0).texture = Items.data[limbo["0"].item.name].texture
+					hotbar_gui.get_child(i).get_child(1).text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
 			[true, false]:
 				limbo_gui.get_node("TextureRect").texture = null
 				limbo_gui.get_node("RichTextLabel").text = ""
@@ -216,7 +215,7 @@ func start(address: String, port: int):
 				Server.move_inventory_item.rpc_id(1, profile_record_id, "inventory", str(i), "limbo", "0")
 			[true, true]:
 				if limbo["0"].item.name == inventory[str(i)].item.name:
-					Server.move_inventory_item.rpc_id(1, profile_record_id, "inventory", str(i), "limbo", "0")
+					Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", "inventory", str(i))
 				else:
 					Server.swap_inventory_item.rpc_id(1, profile_record_id, "inventory", str(i), "limbo", "0")
 			[true, false]:
@@ -229,10 +228,11 @@ func start(address: String, port: int):
 				inventory_gui.get_child(i).get_child(0).texture = null
 				inventory_gui.get_child(i).get_child(1).text = ""
 			[true, true]:
-				limbo_gui.get_node("TextureRect").texture = Items.data[inventory[str(i)].item.name].texture
-				limbo_gui.get_node("RichTextLabel").text = "%d" % inventory[str(i)].stack if inventory[str(i)].stack > 1 else ""
-				inventory_gui.get_child(i).get_child(0).texture = Items.data[limbo["0"].item.name].texture
-				inventory_gui.get_child(i).get_child(1).text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
+				if limbo["0"].item.name != inventory[str(i)].item.name:
+					limbo_gui.get_node("TextureRect").texture = Items.data[inventory[str(i)].item.name].texture
+					limbo_gui.get_node("RichTextLabel").text = "%d" % inventory[str(i)].stack if inventory[str(i)].stack > 1 else ""
+					inventory_gui.get_child(i).get_child(0).texture = Items.data[limbo["0"].item.name].texture
+					inventory_gui.get_child(i).get_child(1).text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
 			[true, false]:
 				limbo_gui.get_node("TextureRect").texture = null
 				limbo_gui.get_node("RichTextLabel").text = ""

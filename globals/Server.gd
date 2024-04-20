@@ -143,24 +143,28 @@ func _on_print_profiles_pressed():
 	print(players)
 
 
-func try_item_fit_inventory(profile_record_id: String, item: Dictionary, inventory_name: String):
+func try_item_fit_inventories(profile_record_id: String, item: Dictionary, inventory_names):
 	assert(multiplayer.is_server())
+	if inventory_names is String:
+		inventory_names = [inventory_names]
 	var res = { "is_success": false }
 	await Server.update_profile_entry(profile_record_id, "inventories", func(inventories):
-		for k in Inventories.data[inventory_name]:
-			if k in inventories[inventory_name] and inventories[inventory_name][k].item.name == item.name and Items.data[item.name].slot_size * (inventories[inventory_name][k].stack + 1) <= Inventories.data[inventory_name][k].capacity:
-				inventories[inventory_name][k].stack += 1
-				res.is_success = true
-				return inventories
+		for inventory_name in inventory_names:
+			for k in Inventories.data[inventory_name]:
+				if k in inventories[inventory_name] and inventories[inventory_name][k].item.name == item.name and Items.data[item.name].slot_size * (inventories[inventory_name][k].stack + 1) <= Inventories.data[inventory_name][k].capacity:
+					inventories[inventory_name][k].stack += 1
+					res.is_success = true
+					return inventories
 		
-		for k in Inventories.data[inventory_name]:
-			if not k in inventories[inventory_name]:
-				inventories[inventory_name][k] = {
-					"item": item,
-					"stack": 1
-				}
-				res.is_success = true
-				return inventories
+		for inventory_name in inventory_names:
+			for k in Inventories.data[inventory_name]:
+				if not k in inventories[inventory_name]:
+					inventories[inventory_name][k] = {
+						"item": item,
+						"stack": 1
+					}
+					res.is_success = true
+					return inventories
 		
 		return inventories
 	)
@@ -180,11 +184,12 @@ func move_inventory_item(profile_record_id, inventory, slot, inventory_dest, slo
 		var _slot_dest = inventories[inventory_dest][slot_dest]
 		if _slot_dest.item.name == _slot.item.name:
 			var _movable_stacks = floorf(Inventories.data[inventory_dest][slot_dest].capacity / Items.data[_slot.item.name].slot_size - _slot_dest.stack)
-			if _movable_stacks > 0:
+			if _movable_stacks >= inventories[inventory][slot].stack:
+				inventories[inventory_dest][slot_dest].stack += inventories[inventory][slot].stack
+				inventories[inventory].erase(slot)
+			else:
 				inventories[inventory_dest][slot_dest].stack += _movable_stacks
 				inventories[inventory][slot].stack -= _movable_stacks
-				if inventories[inventory][slot].stack == 0:
-					inventories[inventory].erase(slot)
 			
 			return inventories
 		

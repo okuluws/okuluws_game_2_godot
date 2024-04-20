@@ -18,10 +18,7 @@ func _on_pickup_area_area_entered(body):
 		return
 	
 	body.visible = false
-	if await Server.try_item_fit_inventory(Server.players[owner.user_record_id]["profile_record_id"], body.data, "hotbar"):
-		body.queue_free()
-		return
-	if await Server.try_item_fit_inventory(Server.players[owner.user_record_id]["profile_record_id"], body.data, "inventory"):
+	if await Server.try_item_fit_inventories(Server.players[owner.user_record_id]["profile_record_id"], body.data, ["hotbar", "inventory"]):
 		body.queue_free()
 		return
 
