@@ -27,7 +27,7 @@ func _ready():
 	if multiplayer.is_server():
 		set_process(false)
 		set_physics_process(false)
-		await Database.subscribe("player_profiles/%s" % Server.players[user_record_id]["profile_record_id"], "*", func(r): load_profile_data(r["json"]))
+		await Database.subscribe("player_profiles/%s" % Server.players[user_record_id]["profile_record_id"], "*", load_profile_data)
 		load_profile_data(await Server.get_profile_data(Server.players[user_record_id]["profile_record_id"]))
 		$IdleTimer.start()
 		set_process(true)

@@ -17,7 +17,6 @@ var user_password: String
 var user_authtoken: String
 var profile_record_id: String
 var profile_name: String
-var profile_data: Dictionary
 
 var config = ConfigFile.new()
 
@@ -95,7 +94,6 @@ func set_profile(id: String) -> bool:
 	
 	profile_record_id = profile["id"]
 	profile_name = profile["name"]
-	profile_data = profile["json"]
 	
 	config.set_value("client", "profile", id)
 	config.save("user://config.cfg")
@@ -109,9 +107,7 @@ func _on_create_profile_pressed():
 	var new_profile = await Database.create_record("player_profiles", {
 		"user": user_record_id,
 		"name": new_profile_name,
-		"json": {
-			"player_type": ["square", "widesquare", "triangle"].pick_random()
-		}
+		"player_type": ["square", "widesquare", "triangle"].pick_random()
 	}, user_authtoken)
 	
 	if not new_profile:
@@ -174,7 +170,7 @@ func start(address: String, port: int):
 		hotbar_gui.get_child(i).texture_normal = preload("res://gui/itemslot_selected.png")
 		hotbar_gui.get_child(i).z_index = 1
 		
-		var hotbar = (await Database.get_record("player_profiles", profile_record_id)).json.inventories.hotbar
+		var hotbar = (await Server.get_profile_data(profile_record_id)).inventories.hotbar
 		match [dragged_slot != null, str(i) in hotbar]:
 			[false, true]:
 				dragged_inventory = "hotbar"
@@ -194,7 +190,7 @@ func start(address: String, port: int):
 	hotbar_gui.visible = true
 	
 	inventory_gui.connect("itemslot_selected", func(i):
-		var inventory = (await Database.get_record("player_profiles", profile_record_id)).json.inventories.inventory
+		var inventory = (await Server.get_profile_data(profile_record_id)).inventories.inventory
 		match [dragged_slot != null, str(i) in inventory]:
 			[false, true]:
 				dragged_inventory = "inventory"
@@ -241,7 +237,7 @@ func predict_client_position(position_client: Vector2, position_server: Vector2,
 
 
 func load_hotbar_item_textures():
-	var hotbar = (await Database.get_record("player_profiles", profile_record_id)).json.inventories.hotbar
+	var hotbar = (await Server.get_profile_data(profile_record_id)).inventories.hotbar
 	for k in Inventories.data.hotbar:
 		if not k in hotbar:
 			hotbar_gui.get_child(int(k)).get_child(0).texture = null
@@ -253,7 +249,7 @@ func load_hotbar_item_textures():
 
 
 func load_inventory_item_textures():
-	var inventory = (await Database.get_record("player_profiles", profile_record_id)).json.inventories.inventory
+	var inventory = (await Server.get_profile_data(profile_record_id)).inventories.inventory
 	for k in Inventories.data.inventory:
 		if not k in inventory:
 			inventory_gui.get_child(int(k)).get_child(0).texture = null

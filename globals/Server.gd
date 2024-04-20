@@ -120,8 +120,7 @@ func spawn_entity(data: Dictionary):
 
 
 func get_profile_data(profile_record_id: String):
-	assert(multiplayer.is_server())
-	return (await Database.get_record("player_profiles", profile_record_id))["json"]
+	return await Database.get_record("player_profiles", profile_record_id)
 
 func patch_profile_data(profile_record_id: String, profile_data: Dictionary):
 	assert(multiplayer.is_server())
@@ -134,11 +133,9 @@ func update_profile_entry(profile_record_id: String, entry: String, callable: Ca
 		await get_tree().process_frame
 	
 	players[user_record_id].should_lock_profile = true
-	var profile_data = await get_profile_data(profile_record_id)
-	profile_data[entry] = callable.call(profile_data[entry])
-	await patch_profile_data(profile_record_id, profile_data)
+	var profile = await Database.get_record("player_profiles", profile_record_id)
+	await Database.update_record("player_profiles", profile_record_id, { entry: callable.call(profile[entry]) }, host_authtoken)
 	players[user_record_id].should_lock_profile = false
-
 
 
 func _on_print_profiles_pressed():
