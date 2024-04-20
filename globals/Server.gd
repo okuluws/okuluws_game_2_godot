@@ -124,6 +124,7 @@ func get_profile_data(profile_record_id: String):
 	return (await Database.get_record("player_profiles", profile_record_id))["json"]
 
 func patch_profile_data(profile_record_id: String, profile_data: Dictionary):
+	assert(multiplayer.is_server())
 	await Database.update_record("player_profiles", profile_record_id, { "json": profile_data }, host_authtoken)
 
 func update_profile_entry(profile_record_id: String, entry: String, callable: Callable):
@@ -146,6 +147,7 @@ func _on_print_profiles_pressed():
 
 
 func try_item_fit_inventory(profile_record_id: String, item: Dictionary, inventory_name: String):
+	assert(multiplayer.is_server())
 	var res = { "is_success": false }
 	await Server.update_profile_entry(profile_record_id, "inventories", func(inventories):
 		for k in Inventories.data[inventory_name]:
@@ -166,3 +168,24 @@ func try_item_fit_inventory(profile_record_id: String, item: Dictionary, invento
 	)
 	
 	return res.is_success
+
+
+@rpc("any_peer")
+func move_inventory_item(profile_record_id, inventory, slot, inventory_dest, slot_dest):
+	await Server.update_profile_entry(profile_record_id, "inventories", func(inventories):
+		var _slot = inventories[inventory][slot]
+		
+		if not slot_dest in inventories[inventory_dest]:
+			inventories[inventory_dest][slot_dest] = _slot
+			inventories[inventory].erase(slot)
+			return inventories
+		
+		var _slot_dest = inventories[inventory_dest][slot_dest]
+		if _slot_dest.item.name == _slot.item.name and Items.data[_slot.item.name].slot_size * (_slot_dest.stack + _slot.stack) <= Inventories.data[inventory_dest][slot_dest].capacity:
+			inventories[inventory_dest][slot_dest].stack += _slot.stack
+			inventories[inventory].erase(slot)
+			return inventories
+		
+		return inventories
+	)
+

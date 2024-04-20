@@ -21,9 +21,9 @@ var profile_data: Dictionary
 
 var config = ConfigFile.new()
 
-var is_dragging_stack = false
-var dragged_stack
-var dragged_stack_fake
+var dragged_inventory = null
+var dragged_slot = null
+var dragged_item_name = null
 
 
 func _ready():
@@ -173,8 +173,44 @@ func start(address: String, port: int):
 				hotbar_gui.get_child(n).z_index = 0
 		hotbar_gui.get_child(i).texture_normal = preload("res://gui/itemslot_selected.png")
 		hotbar_gui.get_child(i).z_index = 1
+		
+		var hotbar = (await Database.get_record("player_profiles", profile_record_id)).json.inventories.hotbar
+		match [dragged_slot != null, str(i) in hotbar]:
+			[false, true]:
+				dragged_inventory = "hotbar"
+				dragged_slot = str(i)
+				dragged_item_name = hotbar[str(i)].item.name
+			[true, true]:
+				if dragged_item_name == hotbar[str(i)].item.name:
+					Server.move_inventory_item.rpc_id(1, profile_record_id, dragged_inventory, dragged_slot, "hotbar", str(i))
+				dragged_slot = null
+			[false, false]:
+				dragged_slot = null
+			[true, false]:
+				Server.move_inventory_item.rpc_id(1, profile_record_id, dragged_inventory, dragged_slot, "hotbar", str(i))
+				dragged_slot = null
+		
 	)
 	hotbar_gui.visible = true
+	
+	inventory_gui.connect("itemslot_selected", func(i):
+		var inventory = (await Database.get_record("player_profiles", profile_record_id)).json.inventories.inventory
+		match [dragged_slot != null, str(i) in inventory]:
+			[false, true]:
+				dragged_inventory = "inventory"
+				dragged_slot = str(i)
+				dragged_item_name = inventory[str(i)].item.name
+			[true, true]:
+				if dragged_item_name == inventory[str(i)].item.name:
+					Server.move_inventory_item.rpc_id(1, profile_record_id, dragged_inventory, dragged_slot, "inventory", str(i))
+				dragged_slot = null
+			[false, false]:
+				dragged_slot = null
+			[true, false]:
+				Server.move_inventory_item.rpc_id(1, profile_record_id, dragged_inventory, dragged_slot, "inventory", str(i))
+				dragged_slot = null
+	)
+	
 	
 	gui = preload("res://gui/gui.tscn").instantiate()
 	World.add_child(gui)
@@ -226,4 +262,3 @@ func load_inventory_item_textures():
 		
 		inventory_gui.get_child(int(k)).get_child(0).texture = Items.data[inventory[k].item.name].texture
 		inventory_gui.get_child(int(k)).get_child(1).text = "%d" % inventory[k].stack if inventory[k].stack > 1 else ""
-
