@@ -160,6 +160,14 @@ func start(address: String, port: int):
 	
 	account_n_profile_gui.visible = false
 	
+	player_gui = preload("res://gui/gui.tscn").instantiate()
+	World.add_child(player_gui)
+	
+	await setup_standart_inventory(hotbar_gui, "hotbar")
+	await setup_standart_inventory(inventory_gui, "inventory")
+	await Database.subscribe("player_profiles/%s" % profile_record_id, "*", func(_r): load_limbo_item(_r.inventories.limbo))
+	load_limbo_item((await Server.get_profile_data(profile_record_id)).inventories.limbo)
+	
 	hotbar_gui.connect("itemslot_selected", func(i): 
 		for n in range(hotbar_gui.get_child_count()):
 			if n != i:
@@ -167,94 +175,9 @@ func start(address: String, port: int):
 				hotbar_gui.get_child(n).z_index = 0
 		hotbar_gui.get_child(i).texture_normal = preload("res://gui/itemslot_selected.png")
 		hotbar_gui.get_child(i).z_index = 1
-		
-		
-		var inventories = (await Server.get_profile_data(profile_record_id)).inventories
-		var hotbar = inventories.hotbar
-		var limbo = inventories.limbo
-		
-		match ["0" in limbo, str(i) in hotbar]:
-			[false, true]:
-				Server.move_inventory_item.rpc_id(1, profile_record_id, "hotbar", str(i), "limbo", "0")
-			[true, true]:
-				if limbo["0"].item.name == hotbar[str(i)].item.name:
-					Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", "hotbar", str(i))
-				else:
-					Server.swap_inventory_item.rpc_id(1, profile_record_id, "hotbar", str(i), "limbo", "0")
-			[true, false]:
-				Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", "hotbar", str(i))
-		
-		# we do a little predict
-		match ["0" in limbo, str(i) in hotbar]:
-			[false, true]:
-				limbo_gui.get_node("TextureRect").texture = Items.data[hotbar[str(i)].item.name].texture
-				limbo_gui.get_node("RichTextLabel").text = "%d" % hotbar[str(i)].stack if hotbar[str(i)].stack > 1 else ""
-				hotbar_gui.get_child(i).get_child(0).texture = null
-				hotbar_gui.get_child(i).get_child(1).text = ""
-			[true, true]:
-				if limbo["0"].item.name != hotbar[str(i)].item.name:
-					limbo_gui.get_node("TextureRect").texture = Items.data[hotbar[str(i)].item.name].texture
-					limbo_gui.get_node("RichTextLabel").text = "%d" % hotbar[str(i)].stack if hotbar[str(i)].stack > 1 else ""
-					hotbar_gui.get_child(i).get_child(0).texture = Items.data[limbo["0"].item.name].texture
-					hotbar_gui.get_child(i).get_child(1).text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
-			[true, false]:
-				limbo_gui.get_node("TextureRect").texture = null
-				limbo_gui.get_node("RichTextLabel").text = ""
-				hotbar_gui.get_child(i).get_child(0).texture = Items.data[limbo["0"].item.name].texture
-				hotbar_gui.get_child(i).get_child(1).text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
-	)
-	hotbar_gui.connect("itemslot_mouse_entered", func(i):
-		hotbar_gui.get_child(i).get_node("TextureRect2").texture = preload("res://gui/itemslot_hover_overlay.png")
-	)
-	hotbar_gui.connect("itemslot_mouse_exited", func(i):
-		hotbar_gui.get_child(i).get_node("TextureRect2").texture = null
 	)
 	hotbar_gui.visible = true
 	
-	
-	inventory_gui.connect("itemslot_selected", func(i):
-		var inventories = (await Server.get_profile_data(profile_record_id)).inventories
-		var inventory = inventories.inventory
-		var limbo = inventories.limbo
-		
-		match ["0" in limbo, str(i) in inventory]:
-			[false, true]:
-				Server.move_inventory_item.rpc_id(1, profile_record_id, "inventory", str(i), "limbo", "0")
-			[true, true]:
-				if limbo["0"].item.name == inventory[str(i)].item.name:
-					Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", "inventory", str(i))
-				else:
-					Server.swap_inventory_item.rpc_id(1, profile_record_id, "inventory", str(i), "limbo", "0")
-			[true, false]:
-				Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", "inventory", str(i))
-		
-		match ["0" in limbo, str(i) in inventory]:
-			[false, true]:
-				limbo_gui.get_node("TextureRect").texture = Items.data[inventory[str(i)].item.name].texture
-				limbo_gui.get_node("RichTextLabel").text = "%d" % inventory[str(i)].stack if inventory[str(i)].stack > 1 else ""
-				inventory_gui.get_child(i).get_child(0).texture = null
-				inventory_gui.get_child(i).get_child(1).text = ""
-			[true, true]:
-				if limbo["0"].item.name != inventory[str(i)].item.name:
-					limbo_gui.get_node("TextureRect").texture = Items.data[inventory[str(i)].item.name].texture
-					limbo_gui.get_node("RichTextLabel").text = "%d" % inventory[str(i)].stack if inventory[str(i)].stack > 1 else ""
-					inventory_gui.get_child(i).get_child(0).texture = Items.data[limbo["0"].item.name].texture
-					inventory_gui.get_child(i).get_child(1).text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
-			[true, false]:
-				limbo_gui.get_node("TextureRect").texture = null
-				limbo_gui.get_node("RichTextLabel").text = ""
-				inventory_gui.get_child(i).get_child(0).texture = Items.data[limbo["0"].item.name].texture
-				inventory_gui.get_child(i).get_child(1).text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
-	)
-	inventory_gui.connect("itemslot_mouse_entered", func(i):
-		inventory_gui.get_child(i).get_node("TextureRect2").texture = preload("res://gui/itemslot_hover_overlay.png")
-	)
-	inventory_gui.connect("itemslot_mouse_exited", func(i):
-		inventory_gui.get_child(i).get_node("TextureRect2").texture = null
-	)
-	
-	player_gui = preload("res://gui/gui.tscn").instantiate()
-	World.add_child(player_gui)
 	
 
 func _on_server_disconnected():
@@ -265,15 +188,6 @@ func assign_player(node_path: NodePath):
 	player = get_node(node_path)
 	Camera.reparent(player)
 	player_gui.player = player
-	
-	await Database.subscribe("player_profiles/%s" % profile_record_id, "*", func(_r): load_hotbar_item_textures(_r.inventories.hotbar))
-	load_hotbar_item_textures((await Server.get_profile_data(profile_record_id)).inventories.hotbar)
-	
-	await Database.subscribe("player_profiles/%s" % profile_record_id, "*", func(_r): load_inventory_item_textures(_r.inventories.inventory))
-	load_inventory_item_textures((await Server.get_profile_data(profile_record_id)).inventories.inventory)
-	
-	await Database.subscribe("player_profiles/%s" % profile_record_id, "*", func(_r): load_limbo_item(_r.inventories.limbo))
-	load_limbo_item((await Server.get_profile_data(profile_record_id)).inventories.limbo)
 
 
 # TODO: adjust for ping and dynamic velocity, perhaps make a whole new component specialized for position synchronization
@@ -284,28 +198,6 @@ func predict_client_position(position_client: Vector2, position_server: Vector2,
 		return position_client.lerp(position_server, clamp(average_velocity / position_client.distance_to(position_server), 0, 1))
 
 
-func load_hotbar_item_textures(hotbar):
-	for k in Inventories.data.hotbar:
-		if not k in hotbar:
-			hotbar_gui.get_child(int(k)).get_child(0).texture = null
-			hotbar_gui.get_child(int(k)).get_child(1).text = ""
-			continue
-		
-		hotbar_gui.get_child(int(k)).get_child(0).texture = Items.data[hotbar[k].item.name].texture
-		hotbar_gui.get_child(int(k)).get_child(1).text = "%d" % hotbar[k].stack if hotbar[k].stack > 1 else ""
-
-
-func load_inventory_item_textures(inventory):
-	for k in Inventories.data.inventory:
-		if not k in inventory:
-			inventory_gui.get_child(int(k)).get_child(0).texture = null
-			inventory_gui.get_child(int(k)).get_child(1).text = ""
-			continue
-		
-		inventory_gui.get_child(int(k)).get_child(0).texture = Items.data[inventory[k].item.name].texture
-		inventory_gui.get_child(int(k)).get_child(1).text = "%d" % inventory[k].stack if inventory[k].stack > 1 else ""
-
-
 func load_limbo_item(limbo):
 	if "0" in limbo:
 		limbo_gui.get_node("TextureRect").texture = Items.data[limbo["0"].item.name].texture
@@ -313,3 +205,60 @@ func load_limbo_item(limbo):
 	else:
 		limbo_gui.get_node("TextureRect").texture = null
 		limbo_gui.get_node("RichTextLabel").text = ""
+
+
+func setup_standart_inventory(node: Node, inventory_name: String):
+	var load_item_textures = func(inventory):
+		for k in Inventories.data[inventory_name]:
+			if not k in inventory:
+				node.get_child(int(k)).get_node("TextureRect").texture = null
+				node.get_child(int(k)).get_node("RichTextLabel").text = ""
+				continue
+			
+			node.get_child(int(k)).get_node("TextureRect").texture = Items.data[inventory[k].item.name].texture
+			node.get_child(int(k)).get_node("RichTextLabel").text = "%d" % inventory[k].stack if inventory[k].stack > 1 else ""
+	
+	await Database.subscribe("player_profiles/%s" % profile_record_id, "*", func(r): load_item_textures.call(r.inventories[inventory_name]))
+	load_item_textures.call((await Server.get_profile_data(profile_record_id)).inventories[inventory_name])
+	
+	node.connect("itemslot_selected", func(i): 
+		var inventories = (await Server.get_profile_data(profile_record_id)).inventories
+		var inventory = inventories[inventory_name]
+		var limbo = inventories.limbo
+		
+		match ["0" in limbo, str(i) in inventory]:
+			[false, true]:
+				Server.move_inventory_item.rpc_id(1, profile_record_id, inventory_name, str(i), "limbo", "0")
+			[true, true]:
+				if limbo["0"].item.name == inventory[str(i)].item.name:
+					Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", inventory_name, str(i))
+				else:
+					Server.swap_inventory_item.rpc_id(1, profile_record_id, inventory_name, str(i), "limbo", "0")
+			[true, false]:
+				Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", inventory_name, str(i))
+		
+		# we do a little predict
+		match ["0" in limbo, str(i) in inventory]:
+			[false, true]:
+				limbo_gui.get_node("TextureRect").texture = Items.data[inventory[str(i)].item.name].texture
+				limbo_gui.get_node("RichTextLabel").text = "%d" % inventory[str(i)].stack if inventory[str(i)].stack > 1 else ""
+				node.get_child(i).get_node("TextureRect").texture = null
+				node.get_child(i).get_node("RichTextLabel").text = ""
+			[true, true]:
+				if limbo["0"].item.name != inventory[str(i)].item.name:
+					limbo_gui.get_node("TextureRect").texture = Items.data[inventory[str(i)].item.name].texture
+					limbo_gui.get_node("RichTextLabel").text = "%d" % inventory[str(i)].stack if inventory[str(i)].stack > 1 else ""
+					node.get_child(i).get_node("TextureRect").texture = Items.data[limbo["0"].item.name].texture
+					node.get_child(i).get_node("RichTextLabel").text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
+			[true, false]:
+				limbo_gui.get_node("TextureRect").texture = null
+				limbo_gui.get_node("RichTextLabel").text = ""
+				node.get_child(i).get_node("TextureRect").texture = Items.data[limbo["0"].item.name].texture
+				node.get_child(i).get_node("RichTextLabel").text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
+	)
+	node.connect("itemslot_mouse_entered", func(i):
+		node.get_child(i).get_node("TextureRect2").texture = preload("res://gui/itemslot_hover_overlay.png")
+	)
+	node.connect("itemslot_mouse_exited", func(i):
+		node.get_child(i).get_node("TextureRect2").texture = null
+	)
