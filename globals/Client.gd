@@ -203,7 +203,14 @@ func start(address: String, port: int):
 				hotbar_gui.get_child(i).get_child(0).texture = Items.data[limbo["0"].item.name].texture
 				hotbar_gui.get_child(i).get_child(1).text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
 	)
+	hotbar_gui.connect("itemslot_mouse_entered", func(i):
+		hotbar_gui.get_child(i).get_node("TextureRect2").texture = preload("res://gui/itemslot_hover_overlay.png")
+	)
+	hotbar_gui.connect("itemslot_mouse_exited", func(i):
+		hotbar_gui.get_child(i).get_node("TextureRect2").texture = null
+	)
 	hotbar_gui.visible = true
+	
 	
 	inventory_gui.connect("itemslot_selected", func(i):
 		var inventories = (await Server.get_profile_data(profile_record_id)).inventories
@@ -238,9 +245,13 @@ func start(address: String, port: int):
 				limbo_gui.get_node("RichTextLabel").text = ""
 				inventory_gui.get_child(i).get_child(0).texture = Items.data[limbo["0"].item.name].texture
 				inventory_gui.get_child(i).get_child(1).text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
-	
 	)
-	
+	inventory_gui.connect("itemslot_mouse_entered", func(i):
+		inventory_gui.get_child(i).get_node("TextureRect2").texture = preload("res://gui/itemslot_hover_overlay.png")
+	)
+	inventory_gui.connect("itemslot_mouse_exited", func(i):
+		inventory_gui.get_child(i).get_node("TextureRect2").texture = null
+	)
 	
 	player_gui = preload("res://gui/gui.tscn").instantiate()
 	World.add_child(player_gui)
