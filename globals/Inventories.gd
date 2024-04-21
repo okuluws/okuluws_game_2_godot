@@ -1,7 +1,7 @@
 extends Node
 
 
-const data = {
+var data = {
 	"hotbar": {
 		"0": { "capacity": 16 },
 		"1": { "capacity": 16 },
