@@ -163,11 +163,8 @@ func start(address: String, port: int):
 	player_gui = preload("res://gui/gui.tscn").instantiate()
 	World.add_child(player_gui)
 	
-	await setup_standart_inventory(hotbar_gui, "hotbar")
-	await setup_standart_inventory(inventory_gui, "inventory")
-	await Database.subscribe("player_profiles/%s" % profile_record_id, "*", func(_r): load_limbo_item(_r.inventories.limbo))
-	load_limbo_item((await Server.get_profile_data(profile_record_id)).inventories.limbo)
 	
+	await setup_standart_inventory(hotbar_gui, "hotbar")
 	hotbar_gui.connect("itemslot_selected", func(i): 
 		for n in range(hotbar_gui.get_child_count()):
 			if n != i:
@@ -177,6 +174,10 @@ func start(address: String, port: int):
 		hotbar_gui.get_child(i).z_index = 1
 	)
 	hotbar_gui.visible = true
+	await setup_standart_inventory(inventory_gui, "inventory")
+	await Database.subscribe("player_profiles/%s" % profile_record_id, "*", func(_r): load_limbo_item(_r.inventories.limbo))
+	load_limbo_item((await Server.get_profile_data(profile_record_id)).inventories.limbo)
+	
 	
 	
 
@@ -250,6 +251,14 @@ func setup_standart_inventory(node: Node, inventory_name: String):
 					limbo_gui.get_node("RichTextLabel").text = "%d" % inventory[str(i)].stack if inventory[str(i)].stack > 1 else ""
 					node.get_child(i).get_node("TextureRect").texture = Items.data[limbo["0"].item.name].texture
 					node.get_child(i).get_node("RichTextLabel").text = "%d" % limbo["0"].stack if limbo["0"].stack > 1 else ""
+				else:
+					var _movable_stacks = maxf(floorf(Inventories.data[inventory_name][str(i)].capacity / Items.data[inventory[str(i)].item.name].slot_size - inventory[str(i)].stack), 0)
+					if _movable_stacks >= limbo["0"].stack:
+						limbo_gui.get_node("RichTextLabel").text = ""
+						limbo_gui.get_node("TextureRect").texture = null
+					else:
+						limbo_gui.get_node("RichTextLabel").text = "%d" % (limbo["0"].stack - _movable_stacks) if (limbo["0"].stack - _movable_stacks) > 1 else ""
+					node.get_child(i).get_node("RichTextLabel").text = "%d" % (inventory[str(i)].stack + _movable_stacks)
 			[true, false]:
 				limbo_gui.get_node("TextureRect").texture = null
 				limbo_gui.get_node("RichTextLabel").text = ""
