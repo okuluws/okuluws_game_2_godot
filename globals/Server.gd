@@ -13,6 +13,8 @@ var host_authtoken: String
 
 @export var players: Dictionary
 
+var server_config = ConfigFile.new()
+
 
 func _ready():
 	server_pannel.get_node("PrintProfiles").connect("pressed", _on_print_profiles_pressed)
@@ -35,9 +37,10 @@ func host_login(username: String, password: String) -> bool:
 func server_print(args):
 	print("[SERVER|%d] " % multiplayer.get_unique_id(), args)
 
-func start(port: int, username: String, password: String):
-	if not await host_login(username, password):
-		print_debug("failed to login host, abboarding...")
+func start(port: int):
+	server_config.load("user://server_config.cfg")
+	if not await host_login(server_config.get_value("authentication", "username"), server_config.get_value("authentication", "password")):
+		print_debug("failed to login host, aborting...")
 		return
 	
 	server_print("successfully authenticated as %s" % host_username)

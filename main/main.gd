@@ -42,10 +42,10 @@ func parse_os_arguments():
 func _ready():
 	if OS.get_cmdline_args().has("serve"):
 		var args = parse_os_arguments()
-		Server.start(int(args["port"]), args["username"], args["password"])
+		Server.start(int(args["port"]))
 
 
 
 # NOTE: DELETE BEFORE RELEASE!
 func _on_host_pressed():
-	Server.start(42000, "host0", "K7bKo5GVgG2-mwo")
+	Server.start(42000)
