@@ -21,7 +21,6 @@ func _ready():
 			"entity_name": "widesquare_fragment",
 			"properties": {
 				"position": Vector2(700, 500),
-				"data": { "name": "widesquare_fragment" },
 			},
 		})
 		
@@ -29,6 +28,5 @@ func _ready():
 			"entity_name": "triangle_fragment",
 			"properties": {
 				"position": Vector2(900, 500),
-				"data": { "name": "triangle_fragment" },
 			},
 		})

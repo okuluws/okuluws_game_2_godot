@@ -19,16 +19,15 @@ func _ready():
 
 
 func host_login(username: String, password: String) -> bool:
-	var host = await Database.authenticate("hosts", username, password)
-	
-	if not host:
-		print_debug("invalid user")
+	var res = await Pocketbase.collection("hosts").auth(username, password)
+	if res.code != 200:
+		print_debug("couldnt authenticate as host <%s>" % username)
 		return false
 	
-	host_record_id = host["record"]["id"]
-	host_username = host["record"]["username"]
+	host_record_id = res.data.record.id
+	host_username = username
 	host_password = password
-	host_authtoken = host["token"]
+	host_authtoken = res.data.token
 	
 	return true
 
@@ -38,7 +37,7 @@ func server_print(args):
 
 func start(port: int, username: String, password: String):
 	if not await host_login(username, password):
-		print_debug("couldnt login as %s" % username)
+		print_debug("failed to login host, abboarding...")
 		return
 	
 	server_print("successfully authenticated as %s" % host_username)
@@ -75,39 +74,41 @@ func _on_client_disconnected(peer_id):
 
 
 @rpc("any_peer")
-func connect_player(peer_id: int, username: String, password: String, profile_id: String):
-	var user = await Database.authenticate("users", username, password, "?expand=player_profiles_via_user")
-	#print(user)
-	if not user:
-		print_debug("djahjha, you thought")
+func connect_player(peer_id: int, username: String, password: String, profile_id: String) -> void:
+	var res = await Pocketbase.collection("users").auth(username, password, "?expand=player_profiles_via_user", false)
+	if not res.code == 200:
+		server_print("peer <%d> unsuccessfully attempted to login as <%s>" % [peer_id, username])
 		return
 	
-	if not user["record"].has("expand"):
-		print_debug("player doesnt have any profiles?")
+	var user = res.data.record
+	if not user.has("expand"):
+		server_print("no profiles found on user <%s>" % username)
 		return
 	
-	var profile = user["record"]["expand"]["player_profiles_via_user"].filter(func(p): return p.id == profile_id)[0]
-	if not profile:
-		print_debug("player profile not found")
+	var all_profiles: Array = user.expand.player_profiles_via_user
+	if not all_profiles.any(func(p): return p.id == profile_id):
+		server_print("profile <%s> not found on user <%s>" % [profile_id, username])
 		return
 	
-	players[user["record"]["id"]] = {
+	
+	var profile = all_profiles.filter(func(p): return p.id == profile_id)[0]
+	players[user.id] = {
 		"peer_id": peer_id,
-		"user_username": user["record"]["username"],
-		"profile_record_id": profile["id"],
+		"user_username": user.username,
+		"profile_record_id": profile.id,
 		"should_lock_profile": false,
 	}
 	
 	var player = EntitySpawner.spawn({
 		"entity_name": "player",
 		"properties": {
-			"user_record_id": user["record"]["id"],
-			"name": user["record"]["id"],
+			"user_record_id": user.id,
+			"name": user.id,
 		},
 	})
 	
-	server_print("connected user %s, profile: %s" % [user["record"]["username"], profile["name"]])
 	Client.assign_player.rpc_id(peer_id, player.get_path())
+	server_print("successfully connected peer <%s> as user <%s> on profile <%s>" % [peer_id, user.username, profile.name])
 
 
 @rpc("any_peer")
@@ -120,11 +121,7 @@ func spawn_entity(data: Dictionary):
 
 
 func get_profile_data(profile_record_id: String):
-	return await Database.get_record("player_profiles", profile_record_id)
-
-func patch_profile_data(profile_record_id: String, profile_data: Dictionary):
-	assert(multiplayer.is_server())
-	await Database.update_record("player_profiles", profile_record_id, { "json": profile_data }, host_authtoken)
+	return (await Pocketbase.collection("player_profiles").record(profile_record_id)).data
 
 func update_profile_entry(profile_record_id: String, entry: String, callable: Callable):
 	assert(multiplayer.is_server())
@@ -133,8 +130,8 @@ func update_profile_entry(profile_record_id: String, entry: String, callable: Ca
 		await get_tree().process_frame
 	
 	players[user_record_id].should_lock_profile = true
-	var profile = await Database.get_record("player_profiles", profile_record_id)
-	await Database.update_record("player_profiles", profile_record_id, { entry: callable.call(profile[entry]) }, host_authtoken)
+	var profile = await get_profile_data(profile_record_id)
+	await Pocketbase.collection("player_profiles").update(profile_record_id, { entry: callable.call(profile[entry]) })
 	players[user_record_id].should_lock_profile = false
 
 
@@ -151,7 +148,7 @@ func try_item_fit_inventories(profile_record_id: String, item: Dictionary, inven
 	await Server.update_profile_entry(profile_record_id, "inventories", func(inventories):
 		for inventory_name in inventory_names:
 			for k in Inventories.data[inventory_name]:
-				if k in inventories[inventory_name] and inventories[inventory_name][k].item.name == item.name and Items.data[item.name].slot_size * (inventories[inventory_name][k].stack + 1) <= Inventories.data[inventory_name][k].capacity:
+				if k in inventories[inventory_name] and inventories[inventory_name][k].item.type == item.type and Items.data[item.type].slot_size * (inventories[inventory_name][k].stack + 1) <= Inventories.data[inventory_name][k].capacity:
 					inventories[inventory_name][k].stack += 1
 					res.is_success = true
 					return inventories
@@ -173,27 +170,9 @@ func try_item_fit_inventories(profile_record_id: String, item: Dictionary, inven
 
 
 @rpc("any_peer")
-func move_inventory_item(profile_record_id, inventory, slot, inventory_dest, slot_dest):
+func move_inventory_item(profile_record_id, inventory_id, slot_id, inventory_dest_id, slot_dest_id, amount = null):
 	await Server.update_profile_entry(profile_record_id, "inventories", func(inventories):
-		var _slot = inventories[inventory][slot]
-		if not slot_dest in inventories[inventory_dest]:
-			inventories[inventory_dest][slot_dest] = _slot
-			inventories[inventory].erase(slot)
-			return inventories
-		
-		var _slot_dest = inventories[inventory_dest][slot_dest]
-		if _slot_dest.item.name == _slot.item.name:
-			var _movable_stacks = maxf(floorf(Inventories.data[inventory_dest][slot_dest].capacity / Items.data[_slot_dest.item.name].slot_size - _slot_dest.stack), 0)
-			if _movable_stacks >= inventories[inventory][slot].stack:
-				inventories[inventory_dest][slot_dest].stack += inventories[inventory][slot].stack
-				inventories[inventory].erase(slot)
-			else:
-				inventories[inventory_dest][slot_dest].stack += _movable_stacks
-				inventories[inventory][slot].stack -= _movable_stacks
-			
-			return inventories
-		
-		print_debug("this shouldnt happen")
+		Inventories.push_slot_A_to_B(inventories, inventory_id, slot_id, inventory_dest_id, slot_dest_id, amount)
 		return inventories
 	)
 
@@ -201,9 +180,7 @@ func move_inventory_item(profile_record_id, inventory, slot, inventory_dest, slo
 @rpc("any_peer")
 func swap_inventory_item(profile_record_id, inventory, slot, inventory_dest, slot_dest):
 	await Server.update_profile_entry(profile_record_id, "inventories", func(inventories):
-		var _old_slot = inventories[inventory][slot]
-		inventories[inventory][slot] = inventories[inventory_dest][slot_dest]
-		inventories[inventory_dest][slot_dest] = _old_slot
+		Inventories.swap_slot_A_with_B(inventories, inventory, slot, inventory_dest, slot_dest)
 		return inventories
 	)
 

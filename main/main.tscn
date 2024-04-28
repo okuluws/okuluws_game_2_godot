@@ -197,6 +197,7 @@ script = ExtResource("5_w2qex")
 
 [node name="TextureButton" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Hotbar/TextureButton"]
@@ -246,6 +247,7 @@ grow_vertical = 2
 
 [node name="TextureButton2" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Hotbar/TextureButton2"]
@@ -295,6 +297,7 @@ grow_vertical = 2
 
 [node name="TextureButton3" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Hotbar/TextureButton3"]
@@ -344,6 +347,7 @@ grow_vertical = 2
 
 [node name="TextureButton4" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Hotbar/TextureButton4"]
@@ -393,6 +397,7 @@ grow_vertical = 2
 
 [node name="TextureButton5" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Hotbar/TextureButton5"]
@@ -442,6 +447,7 @@ grow_vertical = 2
 
 [node name="TextureButton6" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Hotbar/TextureButton6"]
@@ -491,6 +497,7 @@ grow_vertical = 2
 
 [node name="TextureButton7" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Hotbar/TextureButton7"]
@@ -540,6 +547,7 @@ grow_vertical = 2
 
 [node name="TextureButton8" type="TextureButton" parent="GUI/Hotbar"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Hotbar/TextureButton8"]
@@ -607,6 +615,7 @@ script = ExtResource("5_w2qex")
 
 [node name="TextureButton" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton"]
@@ -656,6 +665,7 @@ grow_vertical = 2
 
 [node name="TextureButton2" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton2"]
@@ -705,6 +715,7 @@ grow_vertical = 2
 
 [node name="TextureButton3" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton3"]
@@ -754,6 +765,7 @@ grow_vertical = 2
 
 [node name="TextureButton4" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton4"]
@@ -803,6 +815,7 @@ grow_vertical = 2
 
 [node name="TextureButton5" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton5"]
@@ -852,6 +865,7 @@ grow_vertical = 2
 
 [node name="TextureButton6" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton6"]
@@ -901,6 +915,7 @@ grow_vertical = 2
 
 [node name="TextureButton7" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton7"]
@@ -950,6 +965,7 @@ grow_vertical = 2
 
 [node name="TextureButton8" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton8"]
@@ -999,6 +1015,7 @@ grow_vertical = 2
 
 [node name="TextureButton9" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton9"]
@@ -1048,6 +1065,7 @@ grow_vertical = 2
 
 [node name="TextureButton10" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton10"]
@@ -1097,6 +1115,7 @@ grow_vertical = 2
 
 [node name="TextureButton11" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton11"]
@@ -1146,6 +1165,7 @@ grow_vertical = 2
 
 [node name="TextureButton12" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton12"]
@@ -1195,6 +1215,7 @@ grow_vertical = 2
 
 [node name="TextureButton13" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton13"]
@@ -1244,6 +1265,7 @@ grow_vertical = 2
 
 [node name="TextureButton14" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton14"]
@@ -1293,6 +1315,7 @@ grow_vertical = 2
 
 [node name="TextureButton15" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton15"]
@@ -1342,6 +1365,7 @@ grow_vertical = 2
 
 [node name="TextureButton16" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton16"]
@@ -1391,6 +1415,7 @@ grow_vertical = 2
 
 [node name="TextureButton17" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton17"]
@@ -1440,6 +1465,7 @@ grow_vertical = 2
 
 [node name="TextureButton18" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton18"]
@@ -1489,6 +1515,7 @@ grow_vertical = 2
 
 [node name="TextureButton19" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton19"]
@@ -1538,6 +1565,7 @@ grow_vertical = 2
 
 [node name="TextureButton20" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton20"]
@@ -1587,6 +1615,7 @@ grow_vertical = 2
 
 [node name="TextureButton21" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton21"]
@@ -1636,6 +1665,7 @@ grow_vertical = 2
 
 [node name="TextureButton22" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton22"]
@@ -1685,6 +1715,7 @@ grow_vertical = 2
 
 [node name="TextureButton23" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton23"]
@@ -1734,6 +1765,7 @@ grow_vertical = 2
 
 [node name="TextureButton24" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton24"]
@@ -1783,6 +1815,7 @@ grow_vertical = 2
 
 [node name="TextureButton25" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton25"]
@@ -1832,6 +1865,7 @@ grow_vertical = 2
 
 [node name="TextureButton26" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton26"]
@@ -1881,6 +1915,7 @@ grow_vertical = 2
 
 [node name="TextureButton27" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton27"]
@@ -1930,6 +1965,7 @@ grow_vertical = 2
 
 [node name="TextureButton28" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton28"]
@@ -1979,6 +2015,7 @@ grow_vertical = 2
 
 [node name="TextureButton29" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton29"]
@@ -2028,6 +2065,7 @@ grow_vertical = 2
 
 [node name="TextureButton30" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton30"]
@@ -2077,6 +2115,7 @@ grow_vertical = 2
 
 [node name="TextureButton31" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton31"]
@@ -2126,6 +2165,7 @@ grow_vertical = 2
 
 [node name="TextureButton32" type="TextureButton" parent="GUI/Inventory"]
 layout_mode = 2
+button_mask = 3
 texture_normal = ExtResource("4_ade7y")
 
 [node name="TextureRect" type="TextureRect" parent="GUI/Inventory/TextureButton32"]
