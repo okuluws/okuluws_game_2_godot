@@ -27,7 +27,7 @@ func _ready():
 	if multiplayer.is_server():
 		set_process(false)
 		set_physics_process(false)
-		await Pocketbase.collection("player_profiles").subscribe(Server.players[user_record_id].profile_record_id, "*", load_profile_data)
+		await Pocketbase.subscribe("player_profiles/%s" % Server.players[user_record_id].profile_record_id, "*", load_profile_data)
 		load_profile_data(await Server.get_profile_data(Server.players[user_record_id]["profile_record_id"]))
 		$IdleTimer.start()
 		set_process(true)
@@ -84,7 +84,7 @@ func _physics_process(_delta):
 			is_idle = true
 	
 	else:
-		if Client.user_record_id == user_record_id:
+		if user_record_id == Pocketbase.user_id:
 			var move_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 			var move_direction_signed = move_direction.sign()
 			

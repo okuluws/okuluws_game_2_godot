@@ -1,35 +1,22 @@
 extends Node
 
 
-var enet_peer = ENetMultiplayerPeer.new()
-
-var host_record_id: String
-var host_username: String
-var host_password: String
-var host_authtoken: String
-
-@onready var account_n_profile_gui: ColorRect = $"/root/main/GUI/AccountNProfileManagment"
-@onready var server_pannel: ColorRect = $"/root/main/GUI/ServerPannel"
-
-@export var players: Dictionary
-
-var server_config = ConfigFile.new()
-
-
 func _ready():
 	server_pannel.get_node("PrintProfiles").connect("pressed", _on_print_profiles_pressed)
 
 
+var enet_peer = ENetMultiplayerPeer.new()
+@export var players: Dictionary
+
+@onready var account_n_profile_gui: ColorRect = $"/root/main/GUI/AccountNProfileManagment"
+@onready var server_pannel: ColorRect = $"/root/main/GUI/ServerPannel"
+
+
 func host_login(username: String, password: String) -> bool:
-	var res = await Pocketbase.collection("hosts").auth(username, password)
+	var res = await Pocketbase.auth_w_password("hosts", username, password)
 	if res.code != 200:
 		print_debug("couldnt authenticate as host <%s>" % username)
 		return false
-	
-	host_record_id = res.data.record.id
-	host_username = username
-	host_password = password
-	host_authtoken = res.data.token
 	
 	return true
 
@@ -37,14 +24,12 @@ func host_login(username: String, password: String) -> bool:
 func server_print(args):
 	print("[SERVER|%d] " % multiplayer.get_unique_id(), args)
 
-func start(port: int):
-	server_config.load("user://server_config.cfg")
-	if not await host_login(server_config.get_value("authentication", "username"), server_config.get_value("authentication", "password")):
-		print_debug("failed to login host, aborting...")
-		return
+func start(identity: String, password: String, port: int):
+	var res = await Pocketbase.auth_w_password("hosts", identity, password)
+	if res.code != 200:
+		print_debug("couldnt authenticate as host <%s>" % identity)
 	
-	server_print("successfully authenticated as %s" % host_username)
-	
+	server_print("successfully authenticated as %s" % Pocketbase.username)
 	
 	multiplayer.peer_connected.connect(_on_client_connected)
 	multiplayer.peer_disconnected.connect(_on_client_disconnected)
@@ -77,20 +62,20 @@ func _on_client_disconnected(peer_id):
 
 
 @rpc("any_peer")
-func connect_player(peer_id: int, username: String, password: String, profile_id: String) -> void:
-	var res = await Pocketbase.collection("users").auth(username, password, "?expand=player_profiles_via_user", false)
+func connect_player(peer_id: int, authtoken: String, profile_id: String) -> void:
+	var res = await Pocketbase.check_authtoken("users", authtoken, "?expand=player_profiles_via_user")
 	if not res.code == 200:
-		server_print("peer <%d> unsuccessfully attempted to login as <%s>" % [peer_id, username])
+		server_print("unsuccessfull login attempt from peer <%d>" % peer_id)
 		return
 	
-	var user = res.data.record
+	var user = res.data
 	if not user.has("expand"):
-		server_print("no profiles found on user <%s>" % username)
+		server_print("no profiles found on user <%s>" % user.username)
 		return
 	
 	var all_profiles: Array = user.expand.player_profiles_via_user
 	if not all_profiles.any(func(p): return p.id == profile_id):
-		server_print("profile <%s> not found on user <%s>" % [profile_id, username])
+		server_print("profile <%s> not found on user <%s>" % [profile_id, user.username])
 		return
 	
 	
@@ -124,7 +109,7 @@ func spawn_entity(data: Dictionary):
 
 
 func get_profile_data(profile_record_id: String):
-	return (await Pocketbase.collection("player_profiles").record(profile_record_id)).data
+	return (await Pocketbase.get_record("player_profiles", profile_record_id)).data
 
 func update_profile_entry(profile_record_id: String, entry: String, callable: Callable):
 	assert(multiplayer.is_server())
@@ -134,7 +119,7 @@ func update_profile_entry(profile_record_id: String, entry: String, callable: Ca
 	
 	players[user_record_id].should_lock_profile = true
 	var profile = await get_profile_data(profile_record_id)
-	await Pocketbase.collection("player_profiles").update(profile_record_id, { entry: callable.call(profile[entry]) })
+	await Pocketbase.patch_record("player_profiles", profile_record_id, { entry: callable.call(profile[entry]) }, true)
 	players[user_record_id].should_lock_profile = false
 
 

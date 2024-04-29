@@ -1,17 +1,32 @@
 extends Node
 
 
+func _init():
+	config = FuncU.BetterConfig.new("user://pocketbase.cfg")
+	config.subscribe("idk", "username", func(val):
+		username = val
+	)
+	config.subscribe("idk", "authtoken", func(val):
+		authtoken = val
+	)
+	config.subscribe("idk", "user_id", func(val):
+		user_id = val
+	)
+
 func _ready() -> void:
 	_start_realtime()
 
 
-const Self = preload("res://globals/Pocketbase.gd")
 var address = "127.0.0.1"
 var port = 8090
 var authtoken: String
+var username: String
+var user_id: String
 
 var subscriptions = {}
 var sse_client_id = ""
+
+var config: FuncU.BetterConfig
 
 
 class FetchResponse:
@@ -22,62 +37,72 @@ class FetchResponse:
 		data = data_
 
 
-class Collection:
-	var pocketbase: Self
-	var collection_name: String
-	func _init(pocketbase_, collection_name_) -> void:
-		pocketbase = pocketbase_
-		collection_name = collection_name_
-	
-	func create(data: Dictionary) -> FetchResponse:
-		var res = await pocketbase.fetch_api("collections/%s/records" % collection_name, HTTPClient.METHOD_POST, data, ["Content-Type: application/json", "Authorization: %s" % pocketbase.authtoken if pocketbase.authtoken else ""])
-		return FetchResponse.new(res.code, res.data if res.code == 200 else {})
-	
-	func record(record_id: String) -> FetchResponse:
-		var res = await pocketbase.fetch_api("collections/%s/records/%s" % [collection_name, record_id])
-		return FetchResponse.new(res.code, res.data if res.code == 200 else {})
-	
-	func records(query_params: String = "") -> FetchResponse:
-		var res = await pocketbase.fetch_api("collections/%s/records%s" % [collection_name, query_params]) 
-		return FetchResponse.new(res.code, res.data.items if res.code == 200 else {})
-	
-	func auth(username: String, password: String, query_params: String = "", should_save_token: bool = true) -> FetchResponse:
-		var res = await pocketbase.fetch_api("collections/%s/auth-with-password%s" % [collection_name, query_params], HTTPClient.METHOD_POST, { "identity": username, "password": password })
-		if res.code == 200 and should_save_token:
-			pocketbase.authtoken = res.data.token
-		
-		return FetchResponse.new(res.code, res.data if res.code == 200 else {})
-	
-	func update(record_id: String, data: Dictionary) -> FetchResponse:
-		var res = await pocketbase.fetch_api("collections/%s/records/%s" % [collection_name, record_id], HTTPClient.METHOD_PATCH, data, ["Content-Type: application/json", "Authorization: %s" % pocketbase.authtoken if pocketbase.authtoken else ""])
-		return FetchResponse.new(res.code, res.data if res.code == 200 else {})
-	
-	func subscribe(record_id: String, action: String, callback: Callable) -> FetchResponse:
-		var sub_id = "%s%s" % [collection_name, ("/%s" % record_id) if record_id != "" else ""]
-		if not pocketbase.subscriptions.has(sub_id):
-			pocketbase.subscriptions[sub_id] = []
-		pocketbase.subscriptions[sub_id].append({ "action": action, "callback": callback })
-		
-		return await pocketbase.fetch_api("realtime", HTTPClient.METHOD_POST, { "clientId": pocketbase.sse_client_id, "subscriptions": pocketbase.subscriptions.keys() }, ["Content-Type: application/json"])
-	
-	func unsubscribe(record_id: String) -> FetchResponse:
-		var sub_id = "%s%s" % [collection_name, ("/%s" % record_id) if record_id != "" else ""]
-		pocketbase.subscriptions.erase(sub_id)
-		return await pocketbase.fetch_api("realtime", HTTPClient.METHOD_POST, { "clientId":  pocketbase.sse_client_id, "subscriptions":  pocketbase.subscriptions.keys() }, ["Content-Type: application/json"])
+func create_record(collection: String, data: Dictionary) -> FetchResponse:
+	var res = await fetch_api("collections/%s/records" % collection, HTTPClient.METHOD_POST, data)
+	return FetchResponse.new(res.code, res.data if res.code == 200 else {})
+
+func get_record(collection: String, record_id: String) -> FetchResponse:
+	var res = await fetch_api("collections/%s/records/%s" % [collection, record_id])
+	return FetchResponse.new(res.code, res.data if res.code == 200 else {})
+
+func get_records(collection: String, query_params: String = "") -> FetchResponse:
+	var res = await fetch_api("collections/%s/records%s" % [collection, query_params]) 
+	return FetchResponse.new(res.code, res.data.items if res.code == 200 else {})
+
+func auth_w_password(collection: String, identity: String, password: String, query_params: String = "") -> FetchResponse:
+	var res = await fetch_api("collections/%s/auth-with-password%s" % [collection, query_params], HTTPClient.METHOD_POST, { "identity": identity, "password": password })
+	if res.code == 200:
+		config.set_value("idk", "username", res.data.record.username)
+		config.set_value("idk", "user_id", res.data.record.id)
+		config.set_value("idk", "authtoken", res.data.token)
+	return FetchResponse.new(res.code, res.data.record if res.code == 200 else {})
+
+func refresh_authtoken(collection: String, query_params: String = "") -> FetchResponse:
+	var res = await fetch_api("collections/%s/auth-refresh%s" % [collection, query_params], HTTPClient.METHOD_POST, {}, authtoken)
+	if res.code == 200:
+		config.set_value("idk", "username", res.data.record.username)
+		config.set_value("idk", "user_id", res.data.record.id)
+		config.set_value("idk", "authtoken", res.data.token)
+	return FetchResponse.new(res.code, res.data.record if res.code == 200 else {})
+
+func check_authtoken(collection: String, authtoken_: String, query_params: String = "") -> FetchResponse:
+	var res = await fetch_api("collections/%s/auth-refresh%s" % [collection, query_params], HTTPClient.METHOD_POST, {}, authtoken_)
+	return FetchResponse.new(res.code, res.data.record if res.code == 200 else {})
+
+func patch_record(collection: String, record_id: String, data: Dictionary, should_use_authtoken: bool = false) -> FetchResponse:
+	var res = await fetch_api("collections/%s/records/%s" % [collection, record_id], HTTPClient.METHOD_PATCH, data, authtoken if should_use_authtoken else "")
+	return FetchResponse.new(res.code, res.data if res.code == 200 else {})
+
+func subscribe(subscription_id: String, action: String, callback: Callable) -> FetchResponse:
+	if not subscriptions.has(subscription_id):
+		subscriptions[subscription_id] = []
+	subscriptions[subscription_id].append({ "action": action, "callback": callback })
+	return await fetch_api("realtime", HTTPClient.METHOD_POST, { "clientId": sse_client_id, "subscriptions": subscriptions.keys() })
+
+func unsubscribe(subscription_id: String) -> FetchResponse:
+	subscriptions.erase(subscription_id)
+	return await fetch_api("realtime", HTTPClient.METHOD_POST, { "clientId":  sse_client_id, "subscriptions": subscriptions.keys() })
 
 
-func fetch_api(url: String, http_method: int = HTTPClient.METHOD_GET, data: Dictionary = {}, headers: Array[String] = ["Content-Type: application/json"]) -> FetchResponse:
+
+func fetch(url: String, http_method: int, data: Dictionary, headers: Array[String]) -> FetchResponse:
 	var http_requester = HTTPRequest.new()
 	http_requester.timeout = 2
 	add_child(http_requester)
-	http_requester.request("http://%s:%d/api/%s" % [address, port, url], headers, http_method, JSON.stringify(data))
+	http_requester.request(url, headers, http_method, JSON.stringify(data))
 	var res = await http_requester.request_completed
 	remove_child(http_requester)
 	return FetchResponse.new(res[1], JSON.parse_string(res[3].get_string_from_utf8()) if res[3] else {})
 
 
-func collection(collection_name) -> Collection:
-	return Collection.new(self, collection_name)
+func fetch_api(url: String, http_method: int = HTTPClient.METHOD_GET, data: Dictionary = {}, authtoken_: String = "") -> FetchResponse:
+	var headers = ["Content-Type: application/json"] as Array[String]
+	if authtoken_ != "":
+		headers.append("Authorization: %s" % authtoken_)
+	elif authtoken != "":
+		headers.append("Authorization: %s" % authtoken)
+	return await fetch("http://%s:%d/api/%s" % [address, port, url], http_method, data, headers)
+
 
 
 

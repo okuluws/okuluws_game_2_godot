@@ -36,7 +36,7 @@ func _ready():
 					right_click_sweep.append(n)
 				itemslot_right_click_sweep.emit(right_click_sweep)
 		)
-		slot_node.connect("mouse_exited", itemslot_mouse_exited.emit.bind(n))
+		slot_node.connect("mouse_exited", func(): itemslot_mouse_exited.emit(n))
 
 
 func update_textures(inventory: Dictionary, inventory_id):
