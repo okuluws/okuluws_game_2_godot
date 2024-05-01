@@ -1,40 +1,45 @@
 extends Node
 
 
-
-## ConfigFile but with syncing and saved filepath
-class BetterConfig:
+## self explanatory
+class ConfigFileSyncedValue:
 	var filepath: String
-	var config_file: ConfigFile
-	var subscriptions = {}
-	
-	func _init(filepath_: String) -> void:
-		config_file = ConfigFile.new()
-		filepath = filepath_
-		if FileAccess.file_exists(filepath):
-			config_file.load(filepath)
-		else:
-			config_file.save(filepath)
-	
-	func set_value(section: String, key: String, val) -> void:
-		config_file.set_value(section, key, val)
-		config_file.save(filepath)
-		if subscriptions.has("%s/%s" % [section, key]):
-			subscriptions["%s/%s" % [section, key]].call(get_value(section, key))
-	
-	func get_value(section: String, key: String):
-		return config_file.get_value(section, key)
-	
-	func compare_value(section: String, key: String, val) -> bool:
-		return config_file.get_value(section, key) == val
-	
-	func has_section_key(section: String, key: String) -> bool:
-		return config_file.has_section_key(section, key)
-	
-	func subscribe(section: String, key: String, callback: Callable) -> void:
-		subscriptions["%s/%s" % [section, key]] = callback
+	var section: String
+	var key: String
+	var value:
+		get:
+			var c = ConfigFile.new()
+			c.load(filepath)
+			return c.get_value(section, key)
 		
-		if has_section_key(section, key):
-			callback.call(get_value(section, key))
-	
-	
+		set(_value):
+			var c = ConfigFile.new()
+			c.load(filepath)
+			c.set_value(section, key, _value)
+			c.save(filepath)
+
+	func _init(_filepath: String, _section: String, _key: String, _value) -> void:
+		var c = ConfigFile.new()
+		if not FileAccess.file_exists(_filepath):
+			c.save(_filepath)
+		
+		c.load(_filepath)
+		if not c.has_section_key(_section, _key):
+			c.set_value(_section, _key, _value)
+			c.save(_filepath)
+		
+		filepath = _filepath
+		section = _section
+		key = _key
+
+
+func string_erase(string: String, i_start: int, i_stop: int = -1) -> String:
+	if i_stop == -1:
+		return string.left(i_start)
+	return string.erase(i_start, i_stop - i_start)
+
+
+func remove_enclosed_string(string: String, start_delimator: String, stop_delimator: String) -> String:
+	while string.contains(start_delimator):
+		string = string_erase(string, string.find(start_delimator), string.find(stop_delimator, string.find(start_delimator) + 1) + 1)
+	return string

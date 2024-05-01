@@ -8,7 +8,7 @@ func _spawn_function(data: Dictionary):
 	for k in data:
 		assert(k in ["entity_name", "properties"], "unknown argument >%s<" % k)
 	
-	var entity: Node2D = Entities.data[data["entity_name"]].instantiate()
+	var entity: Node2D = Entities.config[data["entity_name"]].instantiate()
 	
 	if data.has("properties"):
 		for k in data["properties"]:

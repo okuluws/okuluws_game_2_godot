@@ -1,7 +1,7 @@
 extends Node
 
 
-var data = {
+var config = {
 	"square_fragment": {
 		"display_name": "Square Fragment",
 		"texture": preload("res://player/square/square_fragment.png"),
@@ -20,14 +20,14 @@ var data = {
 }
 
 func _ready():
-	for item_id in data:
-		assert(item_id not in Entities.data, "entity <%s> already exists" % item_id)
+	for item_id in config:
+		assert(item_id not in Entities.config, "entity <%s> already exists" % item_id)
 		
-		var item = data[item_id]
+		var item = config[item_id]
 		var item_template = preload("res://item/item.tscn").instantiate()
 		item_template.get_node("Sprite2D").texture = item.texture
 		item_template.data.display_name = item.display_name
-		item_template.data.type = item_id
+		item_template.data.type_id = item_id
 		var item_scene = PackedScene.new()
 		item_scene.pack(item_template)
-		Entities.data[item_id] = item_scene
+		Entities.config[item_id] = item_scene

@@ -1,10 +1,6 @@
 extends Node
 
 
-func _ready():
-	server_pannel.get_node("PrintProfiles").connect("pressed", _on_print_profiles_pressed)
-
-
 var enet_peer = ENetMultiplayerPeer.new()
 @export var players: Dictionary
 
@@ -12,24 +8,23 @@ var enet_peer = ENetMultiplayerPeer.new()
 @onready var server_pannel: ColorRect = $"/root/main/GUI/ServerPannel"
 
 
-func host_login(username: String, password: String) -> bool:
-	var res = await Pocketbase.auth_w_password("hosts", username, password)
-	if res.code != 200:
-		print_debug("couldnt authenticate as host <%s>" % username)
-		return false
-	
-	return true
+func _ready():
+	server_pannel.get_node("PrintProfiles").connect("pressed", _on_print_profiles_pressed)
 
 
 func server_print(args):
 	print("[SERVER|%d] " % multiplayer.get_unique_id(), args)
 
 func start(identity: String, password: String, port: int):
+	Pocketbase.authtoken = FuncU.ConfigFileSyncedValue.new("user://server_pocketbase.cfg", "", "authtoken", "")
+	Pocketbase.username = FuncU.ConfigFileSyncedValue.new("user://server_pocketbase.cfg", "", "username", "")
+	Pocketbase.user_id = FuncU.ConfigFileSyncedValue.new("user://server_pocketbase.cfg", "", "user_id", "")
+	
 	var res = await Pocketbase.auth_w_password("hosts", identity, password)
 	if res.code != 200:
 		print_debug("couldnt authenticate as host <%s>" % identity)
 	
-	server_print("successfully authenticated as %s" % Pocketbase.username)
+	server_print("successfully authenticated as %s" % Pocketbase.username.value)
 	
 	multiplayer.peer_connected.connect(_on_client_connected)
 	multiplayer.peer_disconnected.connect(_on_client_disconnected)
@@ -134,17 +129,19 @@ func try_item_fit_inventories(profile_record_id: String, item: Dictionary, inven
 		inventory_names = [inventory_names]
 	var res = { "is_success": false }
 	await Server.update_profile_entry(profile_record_id, "inventories", func(inventories):
-		for inventory_name in inventory_names:
-			for k in Inventories.data[inventory_name]:
-				if k in inventories[inventory_name] and inventories[inventory_name][k].item.type == item.type and Items.data[item.type].slot_size * (inventories[inventory_name][k].stack + 1) <= Inventories.data[inventory_name][k].capacity:
-					inventories[inventory_name][k].stack += 1
+		for inventory_uid in inventory_names:
+			var inventory = inventories[inventory_uid]
+			for k in range(Inventories.config[inventory.type_id].slot_count).map(func(val): return str(val)):
+				if k in inventory.slots and inventory.slots[k].item.type_id == item.type_id and Items.config[item.type_id].slot_size * (inventory.slots[k].stack + 1) <= Inventories.config[inventory.type_id].slot_capacity:
+					inventory.slots[k].stack += 1
 					res.is_success = true
 					return inventories
 		
-		for inventory_name in inventory_names:
-			for k in Inventories.data[inventory_name]:
-				if not k in inventories[inventory_name]:
-					inventories[inventory_name][k] = {
+		for inventory_uid in inventory_names:
+			var inventory = inventories[inventory_uid]
+			for k in range(Inventories.config[inventory.type_id].slot_count).map(func(val): return str(val)):
+				if not k in inventory.slots:
+					inventories[inventory_uid].slots[k] = {
 						"item": item,
 						"stack": 1
 					}

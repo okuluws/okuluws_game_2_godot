@@ -17,16 +17,16 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Entities="*res://globals/Entities.gd"
-Client="*res://globals/Client.tscn"
+FuncU="*res://globals/FuncU.gd"
+Pocketbase="*res://globals/Pocketbase.gd"
 Server="*res://globals/Server.tscn"
+Client="*res://globals/Client.tscn"
+Entities="*res://globals/Entities.gd"
 Camera="*res://globals/Camera.tscn"
 World="*res://globals/World.tscn"
 EntitySpawner="*res://globals/EntitySpawner.tscn"
-Inventories="*res://globals/inventories/Inventories.gd"
 Items="*res://globals/Items.gd"
-FuncU="*res://globals/FuncU.gd"
-Pocketbase="*res://globals/Pocketbase.gd"
+Inventories="*res://globals/inventories/Inventories.gd"
 
 [debug]
 

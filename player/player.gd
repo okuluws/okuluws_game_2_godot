@@ -84,7 +84,7 @@ func _physics_process(_delta):
 			is_idle = true
 	
 	else:
-		if user_record_id == Pocketbase.user_id:
+		if user_record_id == Pocketbase.user_id.value:
 			var move_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 			var move_direction_signed = move_direction.sign()
 			

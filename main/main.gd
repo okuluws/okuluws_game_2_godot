@@ -4,7 +4,6 @@ extends Node2D
 
 # TODO:
 # !add account registration
-# !auto refresh authtoken for client and server
 # add chat
 # add world hub
 # add private worlds

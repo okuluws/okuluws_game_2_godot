@@ -1,7 +1,7 @@
 extends Node
 
 
-var data = {
+var config = {
 	"punch": preload("res://player/punch.tscn"),
 	"squareenemy": preload("res://squareenemy/squareenemy.tscn"),
 	"player": preload("res://player/player.tscn"),

@@ -5,32 +5,28 @@ var enet_peer = ENetMultiplayerPeer.new()
 var player_gui: CanvasLayer
 var player: CharacterBody2D
 
-
 @onready var account_n_profile_gui: ColorRect = $"/root/main/GUI/AccountNProfileManagment"
 @onready var inventory_gui: GridContainer = $"/root/main/GUI/Inventory"
 @onready var hotbar_gui: GridContainer = $"/root/main/GUI/Hotbar"
 @onready var limbo_node = $"/root/main/GUI/Limbo"
 
-var profile_record_id: String
-var profile_name: String
+const CONFIG_FILEPATH = "user://client.cfg"
+var profile_id: FuncU.ConfigFileSyncedValue
+var profile_name: FuncU.ConfigFileSyncedValue
 
-var config: FuncU.BetterConfig
+signal start_finished
 
 
 func _ready():
-	config = FuncU.BetterConfig.new("user://client.cfg")
-	if Pocketbase.authtoken != "":
+	profile_id = FuncU.ConfigFileSyncedValue.new(CONFIG_FILEPATH, "", "profile_id", "")
+	profile_name = FuncU.ConfigFileSyncedValue.new(CONFIG_FILEPATH, "", "profile_name", "")
+	if Pocketbase.authtoken.value != "":
 		await Pocketbase.refresh_authtoken("users")
-		account_n_profile_gui.label_user.text = "[center]Logged in as %s" % Pocketbase.username
-		await fetch_n_update_user_profiles()
+		update_current_user_gui()
+		await update_profiles_list_gui()
 	
-	config.subscribe("_", "profile_id", func(val):
-		profile_record_id = val
-	)
-	config.subscribe("_", "profile_name", func(val):
-		profile_name = val
-		account_n_profile_gui.label_profile.text = "[center]Current Profile: %s" % profile_name
-	)
+	if profile_name.value != "":
+		update_selected_profile_gui()
 	
 	account_n_profile_gui.get_node("Login").connect("pressed", _on_login_pressed)
 	account_n_profile_gui.get_node("CreateProfile").connect("pressed", _on_create_profile_pressed)
@@ -38,36 +34,37 @@ func _ready():
 	account_n_profile_gui.get_node("Join").connect("pressed", _on_join_pressed)
 
 
-
-func fetch_n_update_user_profiles():
+func update_profiles_list_gui():
 	account_n_profile_gui.itemlist_profiles.clear()
 	account_n_profile_gui.itemlist_profiles_data.clear()
 	
-	var res = await Pocketbase.get_records("player_profiles", "?filter=(user.id='%s')" % Pocketbase.user_id)
+	var res = await Pocketbase.get_records("player_profiles", "?filter=(user.id='%s')" % Pocketbase.user_id.value)
 	if res.code == 200:
 		for p in res.data:
 			account_n_profile_gui.itemlist_profiles.add_item(p.name)
 			account_n_profile_gui.itemlist_profiles_data.append(p.id)
 
+func update_selected_profile_gui():
+	account_n_profile_gui.label_profile.text = "[center]Current Profile: %s" % profile_name.value
 
-func user_login(username: String, password: String):
-	var res = await Pocketbase.auth_w_password("users", username, password)
-	if res.code != 200:
-		print_debug("failed to login")
-
+func update_current_user_gui():
+	account_n_profile_gui.label_user.text = "[center]Logged in as %s" % Pocketbase.username.value
 
 func _on_login_pressed():
-	await user_login(account_n_profile_gui.input_username.text, account_n_profile_gui.input_password.text)
-	account_n_profile_gui.label_user.text = "[center]Logged in as %s" % Pocketbase.username
+	var res = await Pocketbase.auth_w_password("users", account_n_profile_gui.input_username.text, account_n_profile_gui.input_password.text)
+	if res.code == 200:
+		update_current_user_gui()
+	else:
+		print_debug("failed to login")
 	
-	await fetch_n_update_user_profiles()
+	await update_profiles_list_gui()
 
 
 func _on_create_profile_pressed():
 	var new_profile_name = account_n_profile_gui.input_new_profile_name.text
 	
 	var res = await Pocketbase.create_record("player_profiles", {
-		"user": Pocketbase.user_id,
+		"user": Pocketbase.user_id.value,
 		"name": new_profile_name,
 		"player_type": ["square", "widesquare", "triangle"].pick_random()
 	})
@@ -75,7 +72,7 @@ func _on_create_profile_pressed():
 		print_debug("couldn't create profile")
 		return
 	
-	await fetch_n_update_user_profiles()
+	await update_profiles_list_gui()
 
 
 func _on_profile_list_item_selected(index):
@@ -84,8 +81,10 @@ func _on_profile_list_item_selected(index):
 		print_debug("selected invalid profile")
 		return
 	
-	config.set_value("_", "profile_id", res.data.id)
-	config.set_value("_", "profile_name", res.data.name)
+	
+	profile_id.value = res.data.id
+	profile_name.value = res.data.name
+	update_selected_profile_gui()
 
 
 func _on_join_pressed():
@@ -109,7 +108,7 @@ func client_print(args):
 	print("[CLIENT|%d] " % multiplayer.get_unique_id(), args)
 
 func start(address: String, port: int):
-	if Pocketbase.authtoken == "":
+	if Pocketbase.authtoken.value == "":
 		print_debug("not logged in")
 		return
 	
@@ -120,7 +119,7 @@ func start(address: String, port: int):
 	multiplayer.multiplayer_peer = enet_peer
 	await multiplayer.connected_to_server
 	
-	Server.connect_player.rpc_id(1, multiplayer.get_unique_id(), Pocketbase.authtoken, profile_record_id)
+	Server.connect_player.rpc_id(1, multiplayer.get_unique_id(), Pocketbase.authtoken.value, profile_id.value)
 	client_print("connecting to %s on port %d" % [address, port])
 	
 	
@@ -143,9 +142,10 @@ func start(address: String, port: int):
 	)
 	hotbar_gui.visible = true
 	await setup_standart_inventory(inventory_gui, "inventory")
-	await Pocketbase.subscribe("player_profiles/%s" % profile_record_id, "*", func(_profile): limbo_node.update_textures(_profile.inventories.limbo))
-	limbo_node.update_textures((await Server.get_profile_data(profile_record_id)).inventories.limbo)
+	await Pocketbase.subscribe("player_profiles/%s" % profile_id.value, "*", func(_profile): limbo_node.update_textures(_profile.inventories.limbo.slots))
+	limbo_node.update_textures((await Server.get_profile_data(profile_id.value)).inventories.limbo.slots)
 	
+	start_finished.emit()
 
 
 
@@ -168,45 +168,45 @@ func predict_client_position(position_client: Vector2, position_server: Vector2,
 
 
 func setup_standart_inventory(inventory_node: Node, inventory_id: String):
-	await Pocketbase.subscribe("player_profiles/%s" % profile_record_id, "*", func(_profile): inventory_node.update_textures(_profile.inventories[inventory_id], inventory_id))
-	inventory_node.update_textures((await Server.get_profile_data(profile_record_id)).inventories[inventory_id], inventory_id)
+	await Pocketbase.subscribe("player_profiles/%s" % profile_id.value, "*", func(_profile): inventory_node.update_textures(_profile.inventories[inventory_id].slots, inventory_id))
+	inventory_node.update_textures((await Server.get_profile_data(profile_id.value)).inventories[inventory_id].slots, inventory_id)
 	
 	inventory_node.connect("itemslot_left_click", func(i): 
-		var inventories = (await Server.get_profile_data(profile_record_id)).inventories
-		match ["0" in inventories.limbo, str(i) in inventories[inventory_id]]:
+		var inventories = (await Server.get_profile_data(profile_id.value)).inventories
+		match ["0" in inventories.limbo.slots, str(i) in inventories[inventory_id].slots]:
 			[false, true]:
-				Server.move_inventory_item.rpc_id(1, profile_record_id, inventory_id, str(i), "limbo", "0")
+				Server.move_inventory_item.rpc_id(1, profile_id.value, inventory_id, str(i), "limbo", "0")
 				Inventories.push_slot_A_to_B(inventories, inventory_id, str(i), "limbo", "0")
 			[true, true]:
-				if inventories.limbo["0"].item.type == inventories[inventory_id][str(i)].item.type:
-					Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", inventory_id, str(i))
+				if inventories.limbo.slots["0"].item.type_id == inventories[inventory_id].slots[str(i)].item.type_id:
+					Server.move_inventory_item.rpc_id(1, profile_id.value, "limbo", "0", inventory_id, str(i))
 					Inventories.push_slot_A_to_B(inventories, "limbo", "0", inventory_id, str(i))
 				else:
-					Server.swap_inventory_item.rpc_id(1, profile_record_id, inventory_id, str(i), "limbo", "0")
+					Server.swap_inventory_item.rpc_id(1, profile_id.value, inventory_id, str(i), "limbo", "0")
 					Inventories.swap_slot_A_with_B(inventories, inventory_id, str(i), "limbo", "0")
 			[true, false]:
-				Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", inventory_id, str(i))
+				Server.move_inventory_item.rpc_id(1, profile_id.value, "limbo", "0", inventory_id, str(i))
 				Inventories.push_slot_A_to_B(inventories, "limbo", "0", inventory_id, str(i))
 			
-		inventory_node.update_textures(inventories[inventory_id], inventory_id)
-		limbo_node.update_textures(inventories.limbo)
+		inventory_node.update_textures(inventories[inventory_id].slots, inventory_id)
+		limbo_node.update_textures(inventories.limbo.slots)
 	)
 	inventory_node.connect("itemslot_right_click", func(i):
-		var inventories = (await Server.get_profile_data(profile_record_id)).inventories
-		match ["0" in inventories.limbo, str(i) in inventories[inventory_id]]:
+		var inventories = (await Server.get_profile_data(profile_id.value)).inventories
+		match ["0" in inventories.limbo.slots, str(i) in inventories[inventory_id].slots]:
 			[false, true]:
-				Server.move_inventory_item.rpc_id(1, profile_record_id, inventory_id, str(i), "limbo", "0", ceil(inventories[inventory_id][str(i)].stack / 2))
-				Inventories.push_slot_A_to_B(inventories, inventory_id, str(i), "limbo", "0", ceil(inventories[inventory_id][str(i)].stack / 2))
+				Server.move_inventory_item.rpc_id(1, profile_id.value, inventory_id, str(i), "limbo", "0", ceil(inventories[inventory_id].slots[str(i)].stack / 2))
+				Inventories.push_slot_A_to_B(inventories, inventory_id, str(i), "limbo", "0", ceil(inventories[inventory_id].slots[str(i)].stack / 2))
 			[true, true]:
-				if inventories.limbo["0"].item.type == inventories[inventory_id][str(i)].item.type:
-					Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", inventory_id, str(i), 1)
+				if inventories.limbo["0"].slots.item.type_id == inventories[inventory_id].slots[str(i)].item.type_id:
+					Server.move_inventory_item.rpc_id(1, profile_id.value, "limbo", "0", inventory_id, str(i), 1)
 					Inventories.push_slot_A_to_B(inventories, "limbo", "0", inventory_id, str(i), 1)
 			[true, false]:
-				Server.move_inventory_item.rpc_id(1, profile_record_id, "limbo", "0", inventory_id, str(i), 1)
+				Server.move_inventory_item.rpc_id(1, profile_id.value, "limbo", "0", inventory_id, str(i), 1)
 				Inventories.push_slot_A_to_B(inventories, "limbo", "0", inventory_id, str(i), 1)
 			
-		inventory_node.update_textures(inventories[inventory_id], inventory_id)
-		limbo_node.update_textures(inventories.limbo)
+		inventory_node.update_textures(inventories[inventory_id].slots, inventory_id)
+		limbo_node.update_textures(inventories.limbo.slots)
 	)
 	inventory_node.connect("itemslot_mouse_entered", func(i):
 		inventory_node.get_child(i).get_node("TextureRect2").texture = preload("res://gui/itemslot_hover_overlay.png")
