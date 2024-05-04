@@ -71,6 +71,7 @@ func subscribe(subscription_id: String, action: String, callback: Callable) -> F
 	subscriptions[subscription_id].append({ "action": action, "callback": callback })
 	return await fetch_api("realtime", HTTPClient.METHOD_POST, { "clientId": sse_client_id, "subscriptions": subscriptions.keys() })
 
+# TODO: unsub only specifique callback, not all
 func unsubscribe(subscription_id: String) -> FetchResponse:
 	subscriptions.erase(subscription_id)
 	return await fetch_api("realtime", HTTPClient.METHOD_POST, { "clientId":  sse_client_id, "subscriptions": subscriptions.keys() })
@@ -141,9 +142,11 @@ Accept: text/event-stream
 	sse_client_id = (await _get_sse_stream_data(tcp)).data.clientId
 	while true:
 		var event = await _get_sse_stream_data(tcp)
-		if subscriptions.has(event.subscription_id):
-			subscriptions[event.subscription_id].map(func(sub):
-				if sub.action in ["*", event.data.action]:
-					sub.callback.call(event.data.record)
-			)
+		FuncU.map_dict(subscriptions, func(subscription_id, subs):
+			if subscription_id in [event.subscription_id, event.subscription_id.get_slice("/", 0)]:
+				subs.map(func(sub):
+					if sub.action in ["*", event.data.action]:
+						sub.callback.call(event.data.record)
+				)
+		)
 	

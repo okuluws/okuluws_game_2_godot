@@ -1,14 +1,14 @@
 extends MultiplayerSpawner
 
 
-@export var main_node: Node2D
+@onready var Main = $"/root/Main"
 
 
 func _spawn_function(data: Dictionary):
 	for k in data:
-		assert(k in ["entity_name", "properties"], "unknown argument >%s<" % k)
+		assert(k in ["id", "properties"], "unknown argument >%s<" % k)
 	
-	var entity: Node2D = Entities.config[data["entity_name"]].instantiate()
+	var entity: Node2D = Main.config.entities[data["id"]].instantiate()
 	
 	if data.has("properties"):
 		for k in data["properties"]:
@@ -20,16 +20,4 @@ func _spawn_function(data: Dictionary):
 
 func _enter_tree():
 	spawn_function = _spawn_function
-	spawn_path = World.get_path()
-
-
-
-
-
-
-
-
-
-
-
 

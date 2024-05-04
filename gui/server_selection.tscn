@@ -1,0 +1,88 @@
+[gd_scene load_steps=3 format=3 uid="uid://bu5sofg6f5shv"]
+
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="1_7ygn6"]
+[ext_resource type="Script" path="res://gui/server_selection.gd" id="1_lqv63"]
+
+[node name="Server Selection" type="CanvasLayer"]
+script = ExtResource("1_lqv63")
+
+[node name="Title" type="RichTextLabel" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 12.0
+offset_bottom = 52.0
+grow_horizontal = 2
+theme = ExtResource("1_7ygn6")
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = "[center]Server Selection"
+fit_content = true
+
+[node name="Server Address" type="LineEdit" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -230.0
+offset_top = -121.0
+offset_right = 28.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+theme = ExtResource("1_7ygn6")
+theme_override_font_sizes/font_size = 26
+text = "127.0.0.1:42000"
+placeholder_text = "address"
+
+[node name="Join Server" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 39.0
+offset_top = -121.0
+offset_right = 231.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+theme = ExtResource("1_7ygn6")
+theme_override_font_sizes/font_size = 26
+text = "Join Server"
+
+[node name="Back" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -230.5
+offset_top = -62.0
+offset_right = 230.5
+offset_bottom = -17.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("1_7ygn6")
+text = "Back"
+
+[node name="Host Locally" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 261.0
+offset_top = -62.0
+offset_right = 469.0
+offset_bottom = -17.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("1_7ygn6")
+text = "Host Locally"
+
+[connection signal="pressed" from="Join Server" to="." method="_on_join_server_pressed"]
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Host Locally" to="." method="_on_host_locally_pressed"]

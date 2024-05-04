@@ -790,9 +790,9 @@ script = ExtResource("1_p5a3p")
 replication_config = SubResource("SceneReplicationConfig_3nhra")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
-offset_left = -158.0
+offset_left = -186.0
 offset_top = -100.0
-offset_right = 158.0
+offset_right = 186.0
 offset_bottom = -64.0
 theme = ExtResource("3_c0tlq")
 bbcode_enabled = true

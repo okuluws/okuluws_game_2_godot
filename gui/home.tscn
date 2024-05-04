@@ -1,0 +1,72 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqtr7tqdd75x5"]
+
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="1_ll8v3"]
+[ext_resource type="Script" path="res://gui/home.gd" id="1_w624d"]
+
+[node name="Home" type="CanvasLayer"]
+script = ExtResource("1_w624d")
+
+[node name="Title" type="RichTextLabel" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 61.0
+offset_bottom = 181.0
+grow_horizontal = 2
+theme = ExtResource("1_ll8v3")
+theme_override_font_sizes/normal_font_size = 95
+bbcode_enabled = true
+text = "[center]okuluws-game-2"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -198.0
+offset_top = 213.0
+offset_right = 199.0
+offset_bottom = 419.0
+grow_horizontal = 2
+
+[node name="Singleplayer" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 2
+theme = ExtResource("1_ll8v3")
+theme_override_font_sizes/font_size = 36
+text = "Singleplayer"
+
+[node name="Multiplayer" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("1_ll8v3")
+theme_override_font_sizes/font_size = 36
+text = "Multiplayer"
+
+[node name="Options" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 10
+theme = ExtResource("1_ll8v3")
+theme_override_font_sizes/font_size = 36
+text = "Options"
+
+[node name="Quit" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -221.0
+offset_top = -68.0
+offset_right = -28.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("1_ll8v3")
+theme_override_font_sizes/font_size = 32
+text = "Quit ;("
+
+[connection signal="pressed" from="VBoxContainer/Singleplayer" to="." method="_on_singleplayer_pressed"]
+[connection signal="pressed" from="VBoxContainer/Multiplayer" to="." method="_on_multiplayer_pressed"]
+[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

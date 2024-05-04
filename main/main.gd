@@ -38,10 +38,13 @@ func parse_os_arguments():
 	return arguments
 
 
+
 func _ready():
 	if OS.get_cmdline_args().has("serve"):
 		var args = parse_os_arguments()
 		Server.start(args.username, args.password, int(args["port"]))
+		return
+
 
 
 

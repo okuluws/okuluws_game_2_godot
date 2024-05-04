@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://daqf55ce8040q"]
+[gd_scene load_steps=8 format=3 uid="uid://daqf55ce8040q"]
 
 [ext_resource type="Script" path="res://main/main.gd" id="1_hpu5m"]
 [ext_resource type="Script" path="res://main/AccountNProfileManagment.gd" id="2_2n4gd"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cltejvdgwha2" path="res://gui/itemslot.png" id="4_ade7y"]
 [ext_resource type="Script" path="res://gui/Itemgrid.gd" id="5_w2qex"]
 [ext_resource type="Script" path="res://main/Limbo.gd" id="6_iaslv"]
+[ext_resource type="PackedScene" uid="uid://cxp5u86rg80ik" path="res://gui/tab.tscn" id="7_l6ull"]
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_hpu5m")
@@ -2253,5 +2254,7 @@ mouse_filter = 2
 theme = ExtResource("2_ow1ux")
 fit_content = true
 text_direction = 2
+
+[node name="Tab" parent="GUI" instance=ExtResource("7_l6ull")]
 
 [connection signal="pressed" from="GUI/AccountNProfileManagment/Host" to="." method="_on_host_pressed"]

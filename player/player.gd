@@ -1,42 +1,28 @@
 extends CharacterBody2D
 
 
-@export var facing_direction: Vector2 = Vector2.DOWN
-@export var healthpoints_max: int = 10
-@export var healthpoints: int = 10
-@export var coins: int = 0
-@export var player_type: String
-@export var display_text: String
+# TODO: better static typing
+@onready var World: Node = $"/root/Main/World"
+@onready var Client: Node = $"/root/Main/Client"
 
-@export var peer_id: int
-@export var user_record_id: String
-
-@export var is_idle: bool
-
-
-func load_profile_data(profile_data):
-	assert(multiplayer.is_server())
-	
-	coins = profile_data["coins"]
-	healthpoints_max = profile_data["hp"]
-	player_type = profile_data["player_type"]
-	
+var facing_direction: Vector2 = Vector2.DOWN
+var healthpoints_max: int = 10
+var healthpoints: int = 10
+var coins: int = 0
+var player_type: String
+var display_text: String
+var is_idle: bool
 
 
 func _ready():
-	if multiplayer.is_server():
-		set_process(false)
-		set_physics_process(false)
-		await Pocketbase.subscribe("player_profiles/%s" % Server.players[user_record_id].profile_record_id, "*", load_profile_data)
-		load_profile_data(await Server.get_profile_data(Server.players[user_record_id]["profile_record_id"]))
+	if World.RUNNING_SERVER:
 		$IdleTimer.start()
-		set_process(true)
-		set_physics_process(true)
+
 
 
 func _process(_delta):
-	if multiplayer.is_server():
-		display_text = "[center][color=white]%s " % Server.players[user_record_id]["user_username"]
+	if World.RUNNING_SERVER:
+		display_text = "[center][color=green]Player %s" % name
 		if is_idle:
 			display_text += "[color=darkgray][AFK][/color]"
 	
@@ -79,44 +65,45 @@ func _process(_delta):
 
 
 func _physics_process(_delta):
-	if multiplayer.is_server():
+	if World.RUNNING_SERVER:
 		if $IdleTimer.time_left == 0:
 			is_idle = true
 	
-	else:
-		if user_record_id == Pocketbase.user_id.value:
+	if World.RUNNING_CLIENT:
+		if name == str(Client.multiplayer.get_unique_id()):
 			var move_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 			var move_direction_signed = move_direction.sign()
 			
 			if move_direction_signed.x == -1:
-				set_player_facing_direction.rpc_id(1, Vector2.LEFT)
+				Client.multiplayer.rpc(1, self, "set_player_facing_direction", [Vector2.LEFT])
 			elif move_direction_signed.x == 1:
-				set_player_facing_direction.rpc_id(1, Vector2.RIGHT)
+				Client.multiplayer.rpc(1, self, "set_player_facing_direction", [Vector2.RIGHT])
 			elif move_direction_signed.y == -1:
-				set_player_facing_direction.rpc_id(1, Vector2.UP)
+				Client.multiplayer.rpc(1, self, "set_player_facing_direction", [Vector2.UP])
 			elif move_direction_signed.y == 1:
-				set_player_facing_direction.rpc_id(1, Vector2.DOWN)
+				Client.multiplayer.rpc(1, self, "set_player_facing_direction", [Vector2.DOWN])
 			
-			set_player_velocity.rpc_id(1, move_direction * 400)
+			Client.multiplayer.rpc(1, self, "set_player_velocity", [move_direction * 400])
+			#set_player_velocity.rpc_id(1, move_direction * 400)
 			velocity = move_direction * 400
 			
-			if Input.is_action_just_pressed("attack"):
-				Server.spawn_entity.rpc_id(1, {
-					"entity_name": "punch",
-					"properties": {
-						"auto_despawn": true,
-						"user_record_id": user_record_id,
-						"position": position + get_local_mouse_position().normalized()  * 80,
-						"rotation": get_local_mouse_position().angle() + PI / 2,
-						"velocity": get_local_mouse_position().normalized() * 1000,
-					},
-				})
-			
-			if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action): return Input.is_action_pressed(_action)):
-				i_am_not_idle.rpc_id(1)
-			
-			if Input.is_action_just_pressed("open_inventory"):
-				Client.inventory_gui.visible = not Client.inventory_gui.visible
+			#if Input.is_action_just_pressed("attack"):
+				#Server.spawn_entity.rpc_id(1, {
+					#"entity_name": "punch",
+					#"properties": {
+						#"auto_despawn": true,
+						#"user_record_id": user_record_id,
+						#"position": position + get_local_mouse_position().normalized()  * 80,
+						#"rotation": get_local_mouse_position().angle() + PI / 2,
+						#"velocity": get_local_mouse_position().normalized() * 1000,
+					#},
+				#})
+			#
+			#if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action): return Input.is_action_pressed(_action)):
+				#i_am_not_idle.rpc_id(1)
+			#
+			#if Input.is_action_just_pressed("open_inventory"):
+				#Client.inventory_gui.visible = not Client.inventory_gui.visible
 	
 	move_and_slide()
 
@@ -136,3 +123,6 @@ func set_player_velocity(_velocity):
 func set_player_facing_direction(_facing_direction):
 	assert(multiplayer.is_server())
 	facing_direction = _facing_direction
+
+#@rpc("any_peer")
+

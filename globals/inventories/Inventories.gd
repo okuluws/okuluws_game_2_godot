@@ -16,14 +16,6 @@ var config = {
 	}
 }
 
-var model: Dictionary = {}
-
-
-func _ready():
-	Client.start_finished.connect(func():
-		print("test")
-	)
-
 
 func get_total_slot_space(item_type_id, inventory_type_id):
 	return floor(config[inventory_type_id].slot_capacity / Items.config[item_type_id].slot_size)

@@ -43,3 +43,23 @@ func remove_enclosed_string(string: String, start_delimator: String, stop_delima
 	while string.contains(start_delimator):
 		string = string_erase(string, string.find(start_delimator), string.find(stop_delimator, string.find(start_delimator) + 1) + 1)
 	return string
+
+
+func map_dict(dict: Dictionary, callable: Callable) -> Dictionary:
+	var result = {}
+	var _dict = dict.duplicate(true)
+	for k in _dict:
+		var _val = callable.call(k, _dict[k])
+		if _val != null:
+			result[k] = _val
+	# maybe dangerous
+	return result
+
+func filter_dict(dict: Dictionary, callable: Callable) -> Dictionary:
+	var result = {}
+	var _dict = dict.duplicate(true)
+	for k in _dict:
+		var _cond = callable.call(k, _dict[k])
+		if _cond == true:
+			result[k] = _dict[k]
+	return result

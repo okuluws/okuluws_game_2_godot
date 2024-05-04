@@ -17,8 +17,8 @@ func _on_pickup_area_area_entered(body):
 	if not ("is_player_pickupable" in body and body.is_player_pickupable):
 		return
 	
-	body.visible = false
-	if await Server.try_item_fit_inventories(Server.players[owner.user_record_id]["profile_record_id"], body.data, ["hotbar", "inventory"]):
-		body.queue_free()
-		return
+	#body.visible = false
+	#if await Server.try_item_fit_inventories(Server.players[owner.user_record_id]["profile_record_id"], body.data, ["hotbar", "inventory"]):
+		#body.queue_free()
+		#return
 
