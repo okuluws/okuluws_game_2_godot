@@ -17,6 +17,8 @@ var player_nodes = {}
 @onready var Level: Node2D = $"Level"
 var WORLD_FOLDER: String
 
+const FuncU = preload("res://globals/FuncU.gd")
+
 
 func _process(_delta):
 	if Input.is_action_just_pressed("escape"):
@@ -56,7 +58,7 @@ func start_server(full_server_address: String):
 		player_nodes.erase(peer_id)
 	)
 	
-	if FileAccess.file_exists(WORLD_FOLDER):
+	if FileAccess.file_exists("%s/level.cfg" % WORLD_FOLDER):
 		load_level()
 	else:
 		# initial world
@@ -103,13 +105,12 @@ func _notification(what):
 
 ## Creates new empty file if doesnt exist, else clears it, should proly make backup of the file :o
 func save_level():
-	var savefile = ConfigFile.new()
-	savefile.save("%s/level.cfg" % WORLD_FOLDER)
+	var savefile = FuncU.BetterConfigFile.new("%s/level.cfg" % WORLD_FOLDER)
 	for node in get_tree().get_nodes_in_group("Persist"):
 		var pers_cfg = node.get_persistent()
 		savefile.set_value(Level.get_path_to(node), "handler", pers_cfg.handler)
 		savefile.set_value(Level.get_path_to(node), "data", pers_cfg.data)
-	savefile.save("%s/level.cfg" % WORLD_FOLDER)
+	savefile.save()
 
 
 func load_level():
@@ -119,18 +120,17 @@ func load_level():
 		load(savefile.get_value(section_key, "handler")).new().load_persistent(savefile.get_value(section_key, "data"), self)
 	
 
-
 static func create_world_folder(world_name: String) -> String:
 	var worlds_folder = DirAccess.open("user://worlds")
-	worlds_folder.make_dir(world_name)
-	var world_folder = DirAccess.open("%s/%s" % [worlds_folder.get_current_dir(), world_name])
-	var world_config = ConfigFile.new()
-	world_config.save("%s/config.cfg" % world_folder.get_current_dir())
+	assert(worlds_folder.dir_exists(world_name.replace(" ", "_")) == false)
+	worlds_folder.make_dir(world_name.replace(" ", "_"))
+	var world_folder = DirAccess.open("%s/%s" % [worlds_folder.get_current_dir(), world_name.replace(" ", "_")])
+	var world_config = FuncU.BetterConfigFile.new("%s/config.cfg" % world_folder.get_current_dir())
 	
-	world_config.set_value("_", "playtime", 69420)
-	world_config.set_value("_", "version", "0.0.1")
-	world_config.save("%s/config.cfg" % world_folder.get_current_dir())
+	world_config.set_base_value("name", world_name)
+	world_config.set_base_value("playtime", 0.0)
+	world_config.set_base_value("version", "0.0.1")
+	world_config.save()
 	
 	return world_folder.get_current_dir()
-
 

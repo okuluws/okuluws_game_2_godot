@@ -1,9 +1,5 @@
 # LOL
 
-# PLANS:
-# switch to C# for most stuff cause it has way better typing, maybe revert in future if gdscript has grown up
-# i hope i wont regret this one ;)
-
 
 extends Node
 
@@ -22,11 +18,14 @@ func parse_os_arguments():
 
 
 func _ready():
+	print(OS.get_cmdline_args())
 	var args = parse_os_arguments()
 	if args.has("server") and args.has("world"):
 		var World = preload("res://globals/World.tscn").instantiate()
-		World.WORLD_FOLDER = args.world
 		add_child(World)
+		if not DirAccess.dir_exists_absolute(args.world):
+			World.create_world_folder(Array(args.world.split("/")).back())
+		World.WORLD_FOLDER = args.world
 		World.start_server(args.server)
 		return
 	

@@ -63,3 +63,55 @@ func filter_dict(dict: Dictionary, callable: Callable) -> Dictionary:
 		if _cond == true:
 			result[k] = _dict[k]
 	return result
+
+
+class BetterConfigFile:
+	var cfg = ConfigFile.new()
+	var filepath: String
+	
+	func _init(_filepath: String) -> void:
+		if FileAccess.file_exists(_filepath):
+			cfg.load(_filepath)
+		else:
+			FileAccess.open(_filepath, FileAccess.WRITE)
+		
+		filepath = _filepath
+	
+	func set_value(section: String, key: String, val) -> void:
+		cfg.set_value(section, key, val)
+	
+	func get_value(section: String, key: String, default = null):
+		return cfg.get_value(section, key, default)
+	
+	func save() -> int:
+		return cfg.save(filepath)
+	
+	
+	func set_base_value(key: String, val) -> void:
+		return set_value("", key, val)
+	
+	func get_base_value(key: String, default = null):
+		return get_value("", key, default)
+
+
+# pssst, not stolen
+static func s_to_hhmmss(total_seconds: float) -> String:
+	#total_seconds = 12345
+	var seconds:float = fmod(total_seconds , 60.0)
+	var minutes:int   =  int(total_seconds / 60.0) % 60
+	var hours:  int   =  int(total_seconds / 3600.0)
+	var hhmmss_string:String = "%02dh %02dmin %02.1fs" % [hours, minutes, seconds]
+	return hhmmss_string
+
+
+
+
+
+
+
+
+
+
+
+
+

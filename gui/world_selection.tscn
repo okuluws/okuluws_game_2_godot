@@ -53,9 +53,9 @@ anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -387.0
+offset_left = -315.0
 offset_top = 68.0
-offset_right = 387.0
+offset_right = 315.0
 offset_bottom = -139.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -66,5 +66,34 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 1
 
+[node name="Join World" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 325.0
+offset_top = 68.0
+offset_right = 531.0
+offset_bottom = 118.0
+grow_horizontal = 2
+theme = ExtResource("1_m1hu2")
+disabled = true
+text = "Join World
+"
+
+[node name="Edit World" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 325.0
+offset_top = 127.0
+offset_right = 531.0
+offset_bottom = 177.0
+grow_horizontal = 2
+theme = ExtResource("1_m1hu2")
+disabled = true
+text = "Edit World"
+
 [connection signal="pressed" from="New World" to="." method="_on_new_world_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Join World" to="." method="_on_join_world_pressed"]
+[connection signal="pressed" from="Edit World" to="." method="_on_edit_world_pressed"]
