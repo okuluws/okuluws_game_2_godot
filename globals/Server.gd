@@ -17,12 +17,18 @@ func start(full_server_address: String):
 	enet.create_server(server_port)
 	multiplayer.multiplayer_peer = enet
 	
-	#OS.execute()
 	multiplayer.peer_connected.connect(func(peer_id):
 		print("connected client peer %d" % peer_id)
 		
-		EntitySpawner.spawn({ "id": "player", "properties": { "name": str(peer_id), "player_type": "square" } })
+		var new_player_node = EntitySpawner.spawn({ "id": "player", "properties": { "name": str(peer_id), "player_type": "square" } })
 		Client.assign_player.rpc_id(peer_id, str(peer_id))
+		player_nodes[peer_id] = new_player_node
+	)
+	
+	multiplayer.peer_disconnected.connect(func(peer_id):
+		print("disconnected client peer %d" % peer_id)
+		player_nodes[peer_id].queue_free()
+		player_nodes.erase(peer_id)
 	)
 	
 	EntitySpawner.spawn({ "id": "overworld" })

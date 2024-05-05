@@ -18,7 +18,7 @@ properties/2/path = NodePath(".:position")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="Squareenemy" type="CharacterBody2D"]
+[node name="Squareenemy" type="CharacterBody2D" groups=["Persist"]]
 script = ExtResource("1_hgl2n")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

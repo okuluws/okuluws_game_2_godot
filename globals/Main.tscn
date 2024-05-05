@@ -1,23 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cegssjy7r8gx7"]
+[gd_scene load_steps=2 format=3 uid="uid://cegssjy7r8gx7"]
 
 [ext_resource type="Script" path="res://globals/Main.gd" id="1_6dk3d"]
-[ext_resource type="Script" path="res://globals/Client.gd" id="2_tvl1n"]
-[ext_resource type="Script" path="res://globals/Server.gd" id="3_0virn"]
-[ext_resource type="Script" path="res://globals/EntitySpawner.gd" id="4_jlm0r"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_6dk3d")
 
 [node name="GUIs" type="CanvasLayer" parent="."]
-
-[node name="Client" type="Node" parent="."]
-script = ExtResource("2_tvl1n")
-
-[node name="Server" type="Node" parent="."]
-script = ExtResource("3_0virn")
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-spawn_path = NodePath("../World")
-script = ExtResource("4_jlm0r")
-
-[node name="World" type="Node2D" parent="."]

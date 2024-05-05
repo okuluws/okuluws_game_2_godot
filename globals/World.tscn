@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://l0amv7p2h58v"]
+
+[ext_resource type="Script" path="res://globals/World.gd" id="1_el4op"]
+[ext_resource type="Script" path="res://globals/EntitySpawner.gd" id="2_be7pc"]
+
+[node name="World" type="Node"]
+script = ExtResource("1_el4op")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("../Level")
+script = ExtResource("2_be7pc")
+
+[node name="Level" type="Node2D" parent="."]
+
+[node name="In World Options" type="CanvasLayer" parent="."]

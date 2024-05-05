@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://n8daocod2i0i"]
+
+[ext_resource type="Script" path="res://gui/in_world_options.gd" id="1_jiqea"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="2_rwka7"]
+
+[node name="In World Options" type="CanvasLayer"]
+script = ExtResource("1_jiqea")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.231518, 0.231518, 0.231518, 0.227451)
+
+[node name="Leave World" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -98.0
+offset_top = 445.0
+offset_right = 98.0
+offset_bottom = 480.0
+grow_horizontal = 2
+theme = ExtResource("2_rwka7")
+text = "Leave World"
+
+[connection signal="pressed" from="Leave World" to="." method="_on_leave_world_pressed"]

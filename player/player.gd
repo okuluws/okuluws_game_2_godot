@@ -3,7 +3,7 @@ extends CharacterBody2D
 
 # TODO: better static typing
 @onready var World: Node = $"/root/Main/World"
-@onready var Client: Node = $"/root/Main/Client"
+@onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
 
 var facing_direction: Vector2 = Vector2.DOWN
 var healthpoints_max: int = 10
@@ -12,16 +12,18 @@ var coins: int = 0
 var player_type: String
 var display_text: String
 var is_idle: bool
+var peer_owner: int
+var entity_id: String
 
 
 func _ready():
-	if World.RUNNING_SERVER:
+	peer_owner = name.to_int()
+	if multiplayer.is_server():
 		$IdleTimer.start()
 
 
-
 func _process(_delta):
-	if World.RUNNING_SERVER:
+	if multiplayer.is_server():
 		display_text = "[center][color=green]Player %s" % name
 		if is_idle:
 			display_text += "[color=darkgray][AFK][/color]"
@@ -65,42 +67,33 @@ func _process(_delta):
 
 
 func _physics_process(_delta):
-	if World.RUNNING_SERVER:
+	if multiplayer.is_server():
 		if $IdleTimer.time_left == 0:
 			is_idle = true
 	
-	if World.RUNNING_CLIENT:
-		if name == str(Client.multiplayer.get_unique_id()):
+	else:
+		if peer_owner == multiplayer.get_unique_id():
 			var move_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 			var move_direction_signed = move_direction.sign()
 			
 			if move_direction_signed.x == -1:
-				Client.multiplayer.rpc(1, self, "set_player_facing_direction", [Vector2.LEFT])
+				set_player_facing_direction.rpc_id(1, Vector2.LEFT)
 			elif move_direction_signed.x == 1:
-				Client.multiplayer.rpc(1, self, "set_player_facing_direction", [Vector2.RIGHT])
+				set_player_facing_direction.rpc_id(1, Vector2.RIGHT)
 			elif move_direction_signed.y == -1:
-				Client.multiplayer.rpc(1, self, "set_player_facing_direction", [Vector2.UP])
+				set_player_facing_direction.rpc_id(1, Vector2.UP)
 			elif move_direction_signed.y == 1:
-				Client.multiplayer.rpc(1, self, "set_player_facing_direction", [Vector2.DOWN])
+				set_player_facing_direction.rpc_id(1, Vector2.DOWN)
 			
-			Client.multiplayer.rpc(1, self, "set_player_velocity", [move_direction * 400])
-			#set_player_velocity.rpc_id(1, move_direction * 400)
+			set_player_velocity.rpc_id(1, move_direction * 400)
 			velocity = move_direction * 400
 			
-			#if Input.is_action_just_pressed("attack"):
-				#Server.spawn_entity.rpc_id(1, {
-					#"entity_name": "punch",
-					#"properties": {
-						#"auto_despawn": true,
-						#"user_record_id": user_record_id,
-						#"position": position + get_local_mouse_position().normalized()  * 80,
-						#"rotation": get_local_mouse_position().angle() + PI / 2,
-						#"velocity": get_local_mouse_position().normalized() * 1000,
-					#},
-				#})
-			#
-			#if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action): return Input.is_action_pressed(_action)):
-				#i_am_not_idle.rpc_id(1)
+			if Input.is_action_just_pressed("attack"):
+				spawn_punch.rpc_id(1, position + get_local_mouse_position().normalized() * 80, get_local_mouse_position().angle() + PI / 2, get_local_mouse_position().normalized() * 1000)
+				
+			
+			if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action): return Input.is_action_pressed(_action)):
+				i_am_not_idle.rpc_id(1)
 			#
 			#if Input.is_action_just_pressed("open_inventory"):
 				#Client.inventory_gui.visible = not Client.inventory_gui.visible
@@ -124,5 +117,33 @@ func set_player_facing_direction(_facing_direction):
 	assert(multiplayer.is_server())
 	facing_direction = _facing_direction
 
-#@rpc("any_peer")
+@rpc("any_peer")
+func spawn_punch(_position: Vector2, _rotation: float, _velocity: Vector2):
+	EntitySpawner.spawn({
+		"id": "punch",
+		"properties": {
+			"peer_owner": multiplayer.get_remote_sender_id(),
+			"position": _position,
+			"rotation": _rotation,
+			"velocity": _velocity,
+		}
+	})
+
+func get_persistent():
+	return {
+		"data": {
+			"position": position,
+			"healthpoints_max": healthpoints_max,
+			"healthpoints": healthpoints,
+			"coins": coins,
+			"player_type": player_type,
+			"peer_owner_network_address": (multiplayer.multiplayer_peer as ENetMultiplayerPeer).get_peer(1).get_remote_address()
+		},
+		"handler": get_script().get_path()
+	}
+
+func load_persistent(_data, _World):
+	#healthpoints_max = data.healthpoints_max
+	#healthpoints = data.healthpoints
+	pass
 

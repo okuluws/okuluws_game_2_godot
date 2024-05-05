@@ -2,17 +2,23 @@ extends CanvasLayer
 
 
 @onready var Main: Node = $"/root/Main"
-@onready var Server: Node = Main.Server
-@onready var Client: Node = Main.Client
-@onready var GUIs: CanvasLayer = Main.GUIs
+@onready var GUIs: CanvasLayer = $"/root/Main/GUIs"
 
 
 func _on_new_world_pressed():
-	Server.start("127.0.0.1:42000")
-	Client.start("127.0.0.1:42000")
+	var World = preload("res://globals/World.tscn").instantiate()
+	Main.add_child(World)
+	World.start_local()
 	queue_free()
+	
 
 
 func _on_back_pressed():
 	GUIs.add_child(preload("res://gui/home.tscn").instantiate())
 	queue_free()
+	
+
+func _ready():
+	var worlds_folder = DirAccess.open("user://worlds")
+	for dir_name in worlds_folder.get_directories():
+		$"ScrollContainer/VBoxContainer"
