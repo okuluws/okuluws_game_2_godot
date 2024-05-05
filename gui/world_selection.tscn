@@ -64,21 +64,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
-color = Color(0.192157, 0.192157, 0.192157, 0.411765)
-
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/ColorRect"]
-layout_mode = 0
-offset_left = 12.0
-offset_top = 12.0
-offset_right = 350.0
-offset_bottom = 52.0
-theme = ExtResource("1_m1hu2")
-text = "Meine Erste Welt LUL"
-fit_content = true
+theme_override_constants/separation = 1
 
 [connection signal="pressed" from="New World" to="." method="_on_new_world_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

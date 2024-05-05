@@ -15,9 +15,7 @@ var enet = ENetMultiplayerPeer.new()
 var player_nodes = {}
 @onready var EntitySpawner: MultiplayerSpawner = $"MultiplayerSpawner"
 @onready var Level: Node2D = $"Level"
-const WORLDS_FOLDER = "user://worlds"
-var SAVEFILE_PATH = "user://world.cfg"
-var WORLD_FOLDER = "user://worlds/idk"
+var WORLD_FOLDER: String
 
 
 func _process(_delta):
@@ -58,7 +56,7 @@ func start_server(full_server_address: String):
 		player_nodes.erase(peer_id)
 	)
 	
-	if FileAccess.file_exists(SAVEFILE_PATH):
+	if FileAccess.file_exists(WORLD_FOLDER):
 		load_level()
 	else:
 		# initial world
@@ -69,7 +67,7 @@ func start_server(full_server_address: String):
 				"position": Vector2(randi_range(300, 800), randi_range(300, 800))
 			},
 		})
-		
+	
 	save_level()
 
 
@@ -77,9 +75,9 @@ func start_local():
 	# NOTE: delete before release
 	var pid: int
 	if OS.is_debug_build():
-		pid = OS.create_process(OS.get_executable_path(), ["--server='127.0.0.1:42000'"], true)
+		pid = OS.create_process(OS.get_executable_path(), ["--server=\"127.0.0.1:42000\"", "--world=\"%s\"" % WORLD_FOLDER], true)
 	else:
-		pid = OS.create_instance(["--headless", "--server='127.0.0.1:42000'"])
+		pid = OS.create_instance(["--headless", "--server=\"127.0.0.1:42000\"", "--world=\"%s\"" % WORLD_FOLDER])
 	#var pid = OS.create_instance(["--headless", "--server='127.0.0.1:42000'"])
 	
 	local_server_pid = [pid]
@@ -106,21 +104,33 @@ func _notification(what):
 ## Creates new empty file if doesnt exist, else clears it, should proly make backup of the file :o
 func save_level():
 	var savefile = ConfigFile.new()
-	savefile.save(SAVEFILE_PATH)
+	savefile.save("%s/level.cfg" % WORLD_FOLDER)
 	for node in get_tree().get_nodes_in_group("Persist"):
 		var pers_cfg = node.get_persistent()
 		savefile.set_value(Level.get_path_to(node), "handler", pers_cfg.handler)
 		savefile.set_value(Level.get_path_to(node), "data", pers_cfg.data)
-	savefile.save(SAVEFILE_PATH)
+	savefile.save("%s/level.cfg" % WORLD_FOLDER)
 
 
-
-## Can only load handlers in PRELOADED
 func load_level():
 	var savefile = ConfigFile.new()
-	savefile.load(SAVEFILE_PATH)
+	savefile.load("%s/level.cfg" % WORLD_FOLDER)
 	for section_key in savefile.get_sections():
 		load(savefile.get_value(section_key, "handler")).new().load_persistent(savefile.get_value(section_key, "data"), self)
 	
+
+
+static func create_world_folder(world_name: String) -> String:
+	var worlds_folder = DirAccess.open("user://worlds")
+	worlds_folder.make_dir(world_name)
+	var world_folder = DirAccess.open("%s/%s" % [worlds_folder.get_current_dir(), world_name])
+	var world_config = ConfigFile.new()
+	world_config.save("%s/config.cfg" % world_folder.get_current_dir())
+	
+	world_config.set_value("_", "playtime", 69420)
+	world_config.set_value("_", "version", "0.0.1")
+	world_config.save("%s/config.cfg" % world_folder.get_current_dir())
+	
+	return world_folder.get_current_dir()
 
 

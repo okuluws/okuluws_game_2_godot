@@ -23,8 +23,9 @@ func parse_os_arguments():
 
 func _ready():
 	var args = parse_os_arguments()
-	if args.has("server"):
+	if args.has("server") and args.has("world"):
 		var World = preload("res://globals/World.tscn").instantiate()
+		World.WORLD_FOLDER = args.world
 		add_child(World)
 		World.start_server(args.server)
 		return
