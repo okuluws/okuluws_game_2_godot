@@ -4,7 +4,7 @@
 extends Node
 
 
-#@onready var GUIs = $"GUIs"
+@export var GUIs: CanvasLayer
 
 
 # definitly not stolen code

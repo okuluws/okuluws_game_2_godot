@@ -25,11 +25,10 @@ func _ready():
 
 func _on_join_world_pressed():
 	var Server = preload("res://globals/World.tscn").instantiate()
-	Main.add_child(Server)
-	Server.get_node("Level").position += Vector2.RIGHT * 200
+	Main.get_node("GUIs/SubViewportContainer2/SubViewport").add_child(Server)
 	Server.start_server(selected_world_folder, "127.0.0.1:42000")
 	var Client = preload("res://globals/World.tscn").instantiate()
-	Main.add_child(Client)
+	Main.get_node("GUIs/SubViewportContainer/SubViewport").add_child(Client)
 	Client.start_client("127.0.0.1:42000")
 	queue_free()
 	

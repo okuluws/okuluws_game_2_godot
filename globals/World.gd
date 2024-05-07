@@ -28,6 +28,8 @@ var config = {
 }
 
 const FuncU = preload("res://globals/FuncU.gd")
+@onready var Main: Node = $"/root/Main"
+@onready var GUIs: CanvasLayer = Main.GUIs
 @onready var EntitySpawner: MultiplayerSpawner = $"MultiplayerSpawner"
 @onready var Level: Node2D = $"Level"
 var WORLD_FOLDER: String
@@ -59,6 +61,11 @@ func start_client(full_server_address: String):
 ## server_address must contain port
 func start_server(world_folder: String, full_server_address: String):
 	print("Starting Server...")
+	
+	var cam = Camera2D.new()
+	cam.zoom = Vector2.ONE * 0.2
+	add_child(cam)
+	
 	if not DirAccess.dir_exists_absolute(world_folder): print("couldn't find folder >%s<" % world_folder); return
 	WORLD_FOLDER = world_folder
 	
@@ -90,7 +97,7 @@ func start_server(world_folder: String, full_server_address: String):
 		EntitySpawner.spawn({
 			"id": "squareenemy",
 			"properties": {
-				"position": Vector2(randi_range(300, 800), randi_range(300, 800))
+				"position": Vector2(randi_range(100, 400), randi_range(100, 400))
 			},
 		})
 	
@@ -137,3 +144,14 @@ static func create_world_folder(world_name: String) -> String:
 	return world_dir.get_current_dir()
 
 
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		save_level()
+
+
+
+
+
+func _on_quit_pressed():
+	GUIs.add_child(preload("res://gui/home.tscn").instantiate())
+	queue_free()

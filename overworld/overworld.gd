@@ -1,7 +1,7 @@
 extends Node2D
 
 
-@onready var World: Node = $"/root/Main/World"
+@onready var World: Node = get_viewport().get_child(0)
 @onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
 
 var entity_id: String

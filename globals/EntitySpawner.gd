@@ -2,7 +2,7 @@ extends MultiplayerSpawner
 
 
 @onready var World = $"../"
-@onready var Level = $"../Level"
+@onready var Level = World.Level
 
 
 func _spawn_function(data: Dictionary):

@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 
 # TODO: better static typing
-@onready var World: Node = $"/root/Main/World"
+@onready var World: Node = get_viewport().get_child(0)
 @onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
 
 var facing_direction: Vector2 = Vector2.DOWN
@@ -137,7 +137,7 @@ func get_persistent():
 			"healthpoints": healthpoints,
 			"coins": coins,
 			"player_type": player_type,
-			"peer_owner_network_address": (multiplayer.multiplayer_peer as ENetMultiplayerPeer).get_peer(1).get_remote_address()
+			#"peer_owner_network_address": (multiplayer.multiplayer_peer as ENetMultiplayerPeer).get_peer(1).get_remote_address()
 		},
 		"handler": get_script().get_path()
 	}
