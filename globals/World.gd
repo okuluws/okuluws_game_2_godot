@@ -7,22 +7,39 @@ var config = {
 		"player": preload("res://player/player.tscn"),
 		"punch": preload("res://player/punch.tscn"),
 		"squareenemy": preload("res://squareenemy/squareenemy.tscn"),
+	},
+	"items": {
+		"square_fragment": {
+			"display_name": "Square Fragment",
+			"texture": preload("res://player/square/square_fragment.png"),
+			"slot_size": 1,
+		},
+		"widesquare_fragment": {
+			"display_name": "Widesquare Fragment",
+			"texture": preload("res://player/widesquare/widesquare_fragment.png"),
+			"slot_size": 1,
+		},
+		"triangle_fragment": {
+			"display_name": "Triangle Fragment",
+			"texture": preload("res://player/triangle/triangle_fragment.png"),
+			"slot_size": 1,
+		},
 	}
 }
 
-var local_server_pid = []
-var enet = ENetMultiplayerPeer.new()
-var player_nodes = {}
+const FuncU = preload("res://globals/FuncU.gd")
 @onready var EntitySpawner: MultiplayerSpawner = $"MultiplayerSpawner"
 @onready var Level: Node2D = $"Level"
 var WORLD_FOLDER: String
+var enet = ENetMultiplayerPeer.new()
+var smapi = SceneMultiplayer.new()
+var player_nodes = {}
 
-const FuncU = preload("res://globals/FuncU.gd")
 
 
 func _process(_delta):
 	if Input.is_action_just_pressed("escape"):
-		pass
+		$"In World Options".visible = not $"In World Options".visible
 	
 
 
@@ -31,18 +48,25 @@ func start_client(full_server_address: String):
 	var server_address = full_server_address.get_slice(":", 0)
 	var server_port = int(full_server_address.get_slice(":", 1))
 	enet.create_client(server_address, server_port)
-	multiplayer.multiplayer_peer = enet
+	smapi.multiplayer_peer = enet
+	get_tree().set_multiplayer(smapi, get_path())
 	
 	multiplayer.connected_to_server.connect(func(): print("connected to server peer"))
 	
 
 
-func start_server(full_server_address: String):
+## world_folder should be an absolute path
+## server_address must contain port
+func start_server(world_folder: String, full_server_address: String):
 	print("Starting Server...")
+	if not DirAccess.dir_exists_absolute(world_folder): print("couldn't find folder >%s<" % world_folder); return
+	WORLD_FOLDER = world_folder
+	
 	var _server_address = full_server_address.get_slice(":", 0)
 	var server_port = int(full_server_address.get_slice(":", 1))
 	enet.create_server(server_port)
-	multiplayer.multiplayer_peer = enet
+	smapi.multiplayer_peer = enet
+	get_tree().set_multiplayer(smapi, get_path())
 	
 	multiplayer.peer_connected.connect(func(peer_id):
 		print("connected client peer %d" % peer_id)
@@ -73,34 +97,11 @@ func start_server(full_server_address: String):
 	save_level()
 
 
-func start_local():
-	# NOTE: delete before release
-	var pid: int
-	if OS.is_debug_build():
-		pid = OS.create_process(OS.get_executable_path(), ["--server=\"127.0.0.1:42000\"", "--world=\"%s\"" % WORLD_FOLDER], true)
-	else:
-		pid = OS.create_instance(["--headless", "--server=\"127.0.0.1:42000\"", "--world=\"%s\"" % WORLD_FOLDER])
-	#var pid = OS.create_instance(["--headless", "--server='127.0.0.1:42000'"])
-	
-	local_server_pid = [pid]
-	start_client("127.0.0.1:42000")
-	
-
-
 @rpc
 func assign_player(node_name: String):
 	await get_tree().create_timer(0.1).timeout
 	Level.get_node(node_name).add_child(Camera2D.new())
 	
-
-
-func _notification(what):
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		save_level()
-		for pid in local_server_pid:
-			OS.kill(pid)
-	
-
 
 
 ## Creates new empty file if doesnt exist, else clears it, should proly make backup of the file :o
@@ -121,16 +122,18 @@ func load_level():
 	
 
 static func create_world_folder(world_name: String) -> String:
-	var worlds_folder = DirAccess.open("user://worlds")
-	assert(worlds_folder.dir_exists(world_name.replace(" ", "_")) == false)
-	worlds_folder.make_dir(world_name.replace(" ", "_"))
-	var world_folder = DirAccess.open("%s/%s" % [worlds_folder.get_current_dir(), world_name.replace(" ", "_")])
-	var world_config = FuncU.BetterConfigFile.new("%s/config.cfg" % world_folder.get_current_dir())
+	var world_name_converted = world_name.replace(" ", "_")
+	var worlds_dir = DirAccess.open("user://worlds")
+	if DirAccess.dir_exists_absolute(world_name_converted): print("folder >%s< already exists" % world_name_converted); return ""
+	worlds_dir.make_dir(world_name_converted)
+	var world_dir = DirAccess.open("%s/%s" % [worlds_dir.get_current_dir(), world_name_converted])
+	var world_config = FuncU.BetterConfigFile.new("%s/config.cfg" % world_dir.get_current_dir())
 	
 	world_config.set_base_value("name", world_name)
 	world_config.set_base_value("playtime", 0.0)
 	world_config.set_base_value("version", "0.0.1")
 	world_config.save()
 	
-	return world_folder.get_current_dir()
+	return world_dir.get_current_dir()
+
 

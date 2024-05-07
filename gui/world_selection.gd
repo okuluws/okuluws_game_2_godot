@@ -9,11 +9,8 @@ var selected_world_folder: String
 
 
 func _on_new_world_pressed():
-	var World = preload("res://globals/World.tscn").instantiate()
-	World.WORLD_FOLDER = World.create_world_folder("New World")
-	Main.add_child(World)
-	World.start_local()
-	queue_free()
+	preload("res://globals/World.gd").create_world_folder("New World")
+	load_world_displays()
 	
 
 
@@ -23,6 +20,30 @@ func _on_back_pressed():
 	
 
 func _ready():
+	load_world_displays()
+
+
+func _on_join_world_pressed():
+	var Server = preload("res://globals/World.tscn").instantiate()
+	Main.add_child(Server)
+	Server.get_node("Level").position += Vector2.RIGHT * 200
+	Server.start_server(selected_world_folder, "127.0.0.1:42000")
+	var Client = preload("res://globals/World.tscn").instantiate()
+	Main.add_child(Client)
+	Client.start_client("127.0.0.1:42000")
+	queue_free()
+	
+
+
+func _on_edit_world_pressed():
+	var world_edit_scene = preload("res://gui/world_edit.tscn").instantiate()
+	world_edit_scene.setup(selected_world_folder)
+	GUIs.add_child(world_edit_scene)
+	queue_free()
+	
+
+
+func load_world_displays():
 	var worlds_folder = DirAccess.open("user://worlds")
 	for dir_name in worlds_folder.get_directories():
 		var world_config = FuncU.BetterConfigFile.new("%s/%s/config.cfg" % [worlds_folder.get_current_dir(), dir_name])
@@ -37,15 +58,3 @@ func _ready():
 		)
 		$"ScrollContainer/VBoxContainer".add_child(world_display)
 
-
-func _on_join_world_pressed():
-	var World = preload("res://globals/World.tscn").instantiate()
-	Main.add_child(World)
-	World.WORLD_FOLDER = selected_world_folder
-	World.start_local()
-	queue_free()
-	
-
-
-func _on_edit_world_pressed():
-	pass

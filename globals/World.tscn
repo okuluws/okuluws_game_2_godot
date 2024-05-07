@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://l0amv7p2h58v"]
+[gd_scene load_steps=4 format=3 uid="uid://l0amv7p2h58v"]
 
 [ext_resource type="Script" path="res://globals/World.gd" id="1_el4op"]
 [ext_resource type="Script" path="res://globals/EntitySpawner.gd" id="2_be7pc"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="3_k050s"]
 
 [node name="World" type="Node"]
 script = ExtResource("1_el4op")
@@ -13,3 +14,24 @@ script = ExtResource("2_be7pc")
 [node name="Level" type="Node2D" parent="."]
 
 [node name="In World Options" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="In World Options"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.223529, 0.223529, 0.223529, 0.247059)
+
+[node name="Quit" type="Button" parent="In World Options"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -212.0
+offset_top = 433.0
+offset_right = 212.0
+offset_bottom = 477.0
+grow_horizontal = 2
+theme = ExtResource("3_k050s")
+text = "Quit"

@@ -13,7 +13,7 @@ offset_top = 61.0
 offset_bottom = 181.0
 grow_horizontal = 2
 theme = ExtResource("1_ll8v3")
-theme_override_font_sizes/normal_font_size = 95
+theme_override_font_sizes/normal_font_size = 96
 bbcode_enabled = true
 text = "[center]okuluws-game-2"
 
