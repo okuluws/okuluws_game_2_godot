@@ -1,10 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://cegssjy7r8gx7"]
+[gd_scene load_steps=9 format=3 uid="uid://cegssjy7r8gx7"]
 
 [ext_resource type="Script" path="res://globals/Main.gd" id="1_6dk3d"]
+[ext_resource type="PackedScene" uid="uid://l0amv7p2h58v" path="res://globals/World.tscn" id="2_ke6ov"]
+[ext_resource type="Script" path="res://globals/World.gd" id="3_8cb0t"]
+[ext_resource type="PackedScene" uid="uid://bqtr7tqdd75x5" path="res://gui/home.tscn" id="3_w7ofk"]
+[ext_resource type="PackedScene" uid="uid://c4by3skeseg0c" path="res://gui/world_edit.tscn" id="5_f3tsq"]
+[ext_resource type="PackedScene" uid="uid://bu5sofg6f5shv" path="res://gui/server_selection.tscn" id="5_j5nni"]
+[ext_resource type="PackedScene" uid="uid://b75h5pk7slpam" path="res://gui/world_display.tscn" id="6_ktwlo"]
+[ext_resource type="PackedScene" uid="uid://bus6e712ij5qc" path="res://gui/world_selection.tscn" id="6_x2oqq"]
 
 [node name="Main" type="Node" node_paths=PackedStringArray("GUIs")]
 script = ExtResource("1_6dk3d")
 GUIs = NodePath("GUIs")
+world_scene = ExtResource("2_ke6ov")
+world_script = ExtResource("3_8cb0t")
+home_scene = ExtResource("3_w7ofk")
+server_selection_scene = ExtResource("5_j5nni")
+world_selection_scene = ExtResource("6_x2oqq")
+world_edit_scene = ExtResource("5_f3tsq")
+world_display_scene = ExtResource("6_ktwlo")
 
 [node name="GUIs" type="CanvasLayer" parent="."]
 
@@ -24,15 +38,13 @@ size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="SubViewportContainer2" type="SubViewportContainer" parent="GUIs"]
-anchors_preset = -1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -324.0
 offset_bottom = 171.0
-grow_horizontal = 2
-grow_vertical = 2
+grow_horizontal = 0
 stretch = true
-metadata/_edit_use_anchors_ = true
 
 [node name="SubViewport" type="SubViewport" parent="GUIs/SubViewportContainer2"]
 disable_3d = true

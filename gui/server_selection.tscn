@@ -32,7 +32,7 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 3
 theme = ExtResource("1_7ygn6")
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 20
 text = "127.0.0.1:42000"
 placeholder_text = "address"
 
@@ -50,7 +50,6 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 3
 theme = ExtResource("1_7ygn6")
-theme_override_font_sizes/font_size = 26
 text = "Join Server"
 
 [node name="Back" type="Button" parent="."]

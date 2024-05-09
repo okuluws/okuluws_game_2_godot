@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 
+@export var PersistHandler: Node
+
 @onready var World: Node = get_viewport().get_child(0)
 @onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
 
@@ -38,25 +40,6 @@ func take_damage(damagepoints, rewards_peer_):
 		queue_free()
 	
 
-func get_persistent():
-	return {
-		"data": {
-			"position": position,
-			"healthpoints_max": healthpoints_max,
-			"healthpoints": healthpoints,
-		},
-		"handler": get_script().get_path()
-	}
-
-func load_persistent(data, _World):
-	var squareenemy = _World.EntitySpawner.spawn({
-		"id": "squareenemy",
-		"properties": { "position": data.position }
-	})
-	
-	squareenemy.healthpoints_max = data.healthpoints_max
-	squareenemy.healthpoints = data.healthpoints
-	# Why not set these in spawn()? - Both is possible but you should only do that if really needed like for position which would be set to zero before sync and that could mess things up client side
 
 
 

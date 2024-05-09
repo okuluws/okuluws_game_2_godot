@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://g4h5ljqoyvvm"]
+[gd_scene load_steps=7 format=3 uid="uid://g4h5ljqoyvvm"]
 
 [ext_resource type="Script" path="res://squareenemy/squareenemy.gd" id="1_hgl2n"]
 [ext_resource type="Texture2D" uid="uid://c32brgefmkhb5" path="res://squareenemy/squareenemy.png" id="1_r3ses"]
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="3_gqxut"]
+[ext_resource type="Script" path="res://squareenemy/PersistHandler.gd" id="4_ni2j1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_snuj2"]
 size = Vector2(104, 104)
@@ -18,8 +19,9 @@ properties/2/path = NodePath(".:position")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="Squareenemy" type="CharacterBody2D" groups=["Persist"]]
+[node name="Squareenemy" type="CharacterBody2D" node_paths=PackedStringArray("PersistHandler")]
 script = ExtResource("1_hgl2n")
+PersistHandler = NodePath("PersistHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_snuj2")
@@ -39,3 +41,7 @@ text = "[center]Squareneemy [color=green]69/420[color=red]♥"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_50bw6")
+
+[node name="PersistHandler" type="Node" parent="." node_paths=PackedStringArray("Squareenemy")]
+script = ExtResource("4_ni2j1")
+Squareenemy = NodePath("..")

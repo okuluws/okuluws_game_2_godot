@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 
+@export var PersistHandler: Node
+
 # TODO: better static typing
 @onready var World: Node = get_viewport().get_child(0)
 @onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
@@ -129,21 +131,4 @@ func spawn_punch(_position: Vector2, _rotation: float, _velocity: Vector2):
 		}
 	})
 
-func get_persistent():
-	return {
-		"data": {
-			"position": position,
-			"healthpoints_max": healthpoints_max,
-			"healthpoints": healthpoints,
-			"coins": coins,
-			"player_type": player_type,
-			#"peer_owner_network_address": (multiplayer.multiplayer_peer as ENetMultiplayerPeer).get_peer(1).get_remote_address()
-		},
-		"handler": get_script().get_path()
-	}
-
-func load_persistent(_data, _World):
-	#healthpoints_max = data.healthpoints_max
-	#healthpoints = data.healthpoints
-	pass
 

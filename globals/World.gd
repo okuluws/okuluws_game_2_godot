@@ -28,15 +28,33 @@ var config = {
 }
 
 const FuncU = preload("res://globals/FuncU.gd")
-@onready var Main: Node = $"/root/Main"
-@onready var GUIs: CanvasLayer = Main.GUIs
+@onready var main: Main = $"/root/Main"
+@onready var GUIs: CanvasLayer = main.GUIs
 @onready var EntitySpawner: MultiplayerSpawner = $"MultiplayerSpawner"
 @onready var Level: Node2D = $"Level"
-var WORLD_FOLDER: String
 var enet = ENetMultiplayerPeer.new()
 var smapi = SceneMultiplayer.new()
 var player_nodes = {}
+var world_folder_name: String
+var world_folder: String:
+	get:
+		return "%s/%s" % [main.worlds_folder, world_folder_name]
+	set(_val):
+		printerr("property is readonly")
 
+const LEVEL_FILENAME = "level.cfg"
+var level_file: String:
+	get:
+		return "%s/%s" % [world_folder, LEVEL_FILENAME]
+	set(_val):
+		printerr("property is readonly")
+
+const CONFIG_FILENAME = "config.cfg"
+var config_file: String:
+	get:
+		return "%s/%s" % [world_folder, CONFIG_FILENAME]
+	set(_val):
+		printerr("property is readonly")
 
 
 func _process(_delta):
@@ -54,20 +72,20 @@ func start_client(full_server_address: String):
 	get_tree().set_multiplayer(smapi, get_path())
 	
 	multiplayer.connected_to_server.connect(func(): print("connected to server peer"))
+	multiplayer.server_disconnected.connect(func(): print("disconnected from server peer"))
 	
 
 
 ## world_folder should be an absolute path
-## server_address must contain port
-func start_server(world_folder: String, full_server_address: String):
+func start_server(_world_folder_name: String, full_server_address: String):
 	print("Starting Server...")
 	
+	world_folder_name = _world_folder_name
 	var cam = Camera2D.new()
 	cam.zoom = Vector2.ONE * 0.2
 	add_child(cam)
 	
-	if not DirAccess.dir_exists_absolute(world_folder): print("couldn't find folder >%s<" % world_folder); return
-	WORLD_FOLDER = world_folder
+	if not DirAccess.dir_exists_absolute(world_folder): printerr("couldn't find world folder >%s<" % world_folder); return
 	
 	var _server_address = full_server_address.get_slice(":", 0)
 	var server_port = int(full_server_address.get_slice(":", 1))
@@ -89,7 +107,7 @@ func start_server(world_folder: String, full_server_address: String):
 		player_nodes.erase(peer_id)
 	)
 	
-	if FileAccess.file_exists("%s/level.cfg" % WORLD_FOLDER):
+	if FileAccess.file_exists(level_file):
 		load_level()
 	else:
 		# initial world
@@ -111,30 +129,33 @@ func assign_player(node_name: String):
 	
 
 
-## Creates new empty file if doesnt exist, else clears it, should proly make backup of the file :o
+## deletes current save, should proly make backup :o
 func save_level():
-	var savefile = FuncU.BetterConfigFile.new("%s/level.cfg" % WORLD_FOLDER)
-	for node in get_tree().get_nodes_in_group("Persist"):
-		var pers_cfg = node.get_persistent()
-		savefile.set_value(Level.get_path_to(node), "handler", pers_cfg.handler)
-		savefile.set_value(Level.get_path_to(node), "data", pers_cfg.data)
+	if not multiplayer.is_server(): printerr("can't save level as client"); return
+	print("Saving Level...")
+	DirAccess.remove_absolute(level_file)
+	var savefile = FuncU.BetterConfigFile.new(level_file)
+	for node in Level.get_children():
+		if not "PersistHandler" in node: continue
+		savefile.set_value(Level.get_path_to(node), "handler", node.PersistHandler.get_script().get_path())
+		savefile.set_value(Level.get_path_to(node), "data", node.PersistHandler.get_persistent())
 	savefile.save()
 
 
 func load_level():
 	var savefile = ConfigFile.new()
-	savefile.load("%s/level.cfg" % WORLD_FOLDER)
+	savefile.load(level_file)
 	for section_key in savefile.get_sections():
-		load(savefile.get_value(section_key, "handler")).new().load_persistent(savefile.get_value(section_key, "data"), self)
+		load(savefile.get_value(section_key, "handler")).load_persistent(savefile.get_value(section_key, "data"), self)
 	
 
-static func create_world_folder(world_name: String) -> String:
+static func create_world_folder(_main: Main, world_name: String) -> String:
 	var world_name_converted = world_name.replace(" ", "_")
-	var worlds_dir = DirAccess.open("user://worlds")
-	if DirAccess.dir_exists_absolute(world_name_converted): print("folder >%s< already exists" % world_name_converted); return ""
+	var worlds_dir = DirAccess.open(_main.worlds_folder)
+	if worlds_dir.dir_exists(world_name_converted): printerr("World Folder >%s< already exists" % world_name_converted); return ""
 	worlds_dir.make_dir(world_name_converted)
 	var world_dir = DirAccess.open("%s/%s" % [worlds_dir.get_current_dir(), world_name_converted])
-	var world_config = FuncU.BetterConfigFile.new("%s/config.cfg" % world_dir.get_current_dir())
+	var world_config = FuncU.BetterConfigFile.new("%s/%s" % [world_dir.get_current_dir(), CONFIG_FILENAME])
 	
 	world_config.set_base_value("name", world_name)
 	world_config.set_base_value("playtime", 0.0)
@@ -146,12 +167,13 @@ static func create_world_folder(world_name: String) -> String:
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		save_level()
+		if multiplayer.has_multiplayer_peer() and multiplayer.is_server() :
+			save_level()
 
 
 
 
 
 func _on_quit_pressed():
-	GUIs.add_child(preload("res://gui/home.tscn").instantiate())
+	GUIs.add_child(main.home_scene.instantiate())
 	queue_free()

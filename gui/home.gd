@@ -1,17 +1,17 @@
 extends CanvasLayer
 
 
-@onready var GUIs = $"../"
+@onready var main: Main = $"/root/Main"
 
 
 func _on_multiplayer_pressed():
-	GUIs.add_child(preload("res://gui/server_selection.tscn").instantiate())
+	get_parent().add_child(main.server_selection_scene.instantiate())
 	queue_free()
 	
 
 
 func _on_singleplayer_pressed():
-	GUIs.add_child(preload("res://gui/world_selection.tscn").instantiate())
+	get_parent().add_child(main.world_selection_scene.instantiate())
 	queue_free()
 	
 

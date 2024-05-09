@@ -1,6 +1,8 @@
 extends Node2D
 
 
+@export var PersistHandler: Node
+
 @onready var World: Node = get_viewport().get_child(0)
 @onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
 
@@ -33,15 +35,6 @@ func _ready():
 		#})
 
 
-func get_persistent():
-	return {
-		"data": {},
-		"handler": get_script().get_path(),
-	}
 
-func load_persistent(_data, _World):
-	_World.EntitySpawner.spawn({
-		"id": "overworld"
-	})
 	
 

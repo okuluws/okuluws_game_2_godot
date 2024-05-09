@@ -1,10 +1,27 @@
 # LOL
 
 
+class_name Main
+
 extends Node
 
 
 @export var GUIs: CanvasLayer
+
+@export var world_scene: PackedScene
+@export var world_script: Script
+@export var home_scene: PackedScene
+@export var server_selection_scene: PackedScene
+@export var world_selection_scene: PackedScene
+@export var world_edit_scene: PackedScene
+@export var world_display_scene: PackedScene
+
+@export var worlds_folder_name: String = "worlds"
+var worlds_folder: String:
+	get:
+		return "user://%s" % worlds_folder_name
+	set(_val):
+		printerr("property is readonly")
 
 
 # definitly not stolen code
@@ -20,20 +37,20 @@ func parse_os_arguments():
 func _ready():
 	print(OS.get_cmdline_args())
 	
-	if not DirAccess.dir_exists_absolute("user://worlds"):
-		DirAccess.make_dir_absolute("user://worlds")
+	if not DirAccess.dir_exists_absolute(worlds_folder):
+		DirAccess.make_dir_absolute(worlds_folder)
 	
 	var args = parse_os_arguments()
 	if args.has("server") and args.has("world"):
-		var World = preload("res://globals/World.tscn").instantiate()
-		add_child(World)
-		if not DirAccess.dir_exists_absolute(args.world):
-			World.start_server(World.create_world_folder(Array(args.world.split("/")).back()), args.server)
-		else:
-			World.start_server(args.world, args.server)
+		var world = world_scene.instantiate()
+		add_child(world)
+		if not DirAccess.dir_exists_absolute("%s/%s" % [worlds_folder, args.world]):
+			world_script.create_world_folder(self, args.world)
+		
+		world.start_server(args.world, args.server)
 		return
 	
-	$"GUIs".add_child(preload("res://gui/home.tscn").instantiate())
+	$"GUIs".add_child(home_scene.instantiate())
 	
 
 func _notification(what):

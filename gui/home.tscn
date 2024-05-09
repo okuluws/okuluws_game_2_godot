@@ -13,7 +13,7 @@ offset_top = 61.0
 offset_bottom = 181.0
 grow_horizontal = 2
 theme = ExtResource("1_ll8v3")
-theme_override_font_sizes/normal_font_size = 96
+theme_override_font_sizes/normal_font_size = 100
 bbcode_enabled = true
 text = "[center]okuluws-game-2"
 
@@ -32,7 +32,7 @@ custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 2
 theme = ExtResource("1_ll8v3")
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 30
 text = "Singleplayer"
 
 [node name="Multiplayer" type="Button" parent="VBoxContainer"]
@@ -40,7 +40,7 @@ custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 6
 theme = ExtResource("1_ll8v3")
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 30
 text = "Multiplayer"
 
 [node name="Options" type="Button" parent="VBoxContainer"]
@@ -48,7 +48,7 @@ custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 10
 theme = ExtResource("1_ll8v3")
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 30
 text = "Options"
 
 [node name="Quit" type="Button" parent="."]
@@ -64,7 +64,7 @@ offset_bottom = -16.0
 grow_horizontal = 0
 grow_vertical = 0
 theme = ExtResource("1_ll8v3")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 30
 text = "Quit ;("
 
 [connection signal="pressed" from="VBoxContainer/Singleplayer" to="." method="_on_singleplayer_pressed"]
