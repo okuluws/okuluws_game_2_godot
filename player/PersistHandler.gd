@@ -1,9 +1,9 @@
 extends Node
 
 
-@export var Player: Node
-
 const FunU = preload("res://globals/FuncU.gd")
+const World = preload("res://world/World.gd")
+@export var Player: Node
 
 
 func get_persistent() -> Dictionary:
@@ -18,7 +18,7 @@ func get_persistent() -> Dictionary:
 	}
 
 
-static func load_persistent(_data: Dictionary, _World: Main.world_class) -> void:
+static func load_persistent(_data: Dictionary, _world: World) -> void:
 	#healthpoints_max = data.healthpoints_max
 	#healthpoints = data.healthpoints
 	pass

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c4by3skeseg0c"]
 
-[ext_resource type="Script" path="res://main/world_edit.gd" id="1_suxo1"]
+[ext_resource type="Script" path="res://home/world_edit.gd" id="1_suxo1"]
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_y01jw"]
 
 [node name="World Edit" type="CanvasLayer"]

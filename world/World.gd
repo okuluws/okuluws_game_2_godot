@@ -28,16 +28,19 @@ var config := {
 }
 
 const FuncU = preload("res://globals/FuncU.gd")
+const WORLDS_FOLDER = "user://worlds"
+const WORLD_CONFIG_FILENAME = "config.cfg"
+const home_scene = preload("res://home/home.tscn")
 @onready var main: Main = $"/root/Main"
-@onready var GUIs: CanvasLayer = main.GUIs
 @onready var EntitySpawner: MultiplayerSpawner = $"MultiplayerSpawner"
 @onready var Level: Node2D = $"Level"
+@onready var in_world_options: CanvasLayer = $"In World Options"
 var enet := ENetMultiplayerPeer.new()
 var smapi := SceneMultiplayer.new()
 var player_nodes := {}
 var world_folder_name: String
 var world_folder: String:
-	get: return "%s/%s" % [main.worlds_folder, world_folder_name]
+	get: return "%s/%s" % [WORLDS_FOLDER, world_folder_name]
 	set(_val): printerr("property is readonly")
 
 const LEVEL_FILENAME = "level.cfg"
@@ -46,13 +49,13 @@ var level_file: String:
 	set(_val): printerr("property is readonly")
 
 var config_file: String:
-	get: return "%s/%s" % [world_folder, main.WORLD_CONFIG_FILENAME]
+	get: return "%s/%s" % [world_folder, WORLD_CONFIG_FILENAME]
 	set(_val): printerr("property is readonly")
 
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("escape"):
-		($"In World Options" as CanvasLayer).visible = not ($"In World Options" as CanvasLayer).visible
+		in_world_options.visible = not in_world_options.visible
 	
 
 
@@ -142,13 +145,13 @@ func load_level() -> void:
 		load(savefile.get_value(section_key, "handler") as String).call("load_persistent", (savefile.get_value(section_key, "data")), self)
 	
 
-static func create_world_folder(_main: Main, world_name: String) -> String:
+static func create_world_folder(world_name: String) -> String:
 	var world_name_converted := world_name.replace(" ", "_")
-	var worlds_dir := DirAccess.open(_main.worlds_folder)
+	var worlds_dir := DirAccess.open(WORLDS_FOLDER)
 	if worlds_dir.dir_exists(world_name_converted): printerr("world folder >%s< already exists" % world_name_converted); return ""
 	worlds_dir.make_dir(world_name_converted)
 	var world_dir := DirAccess.open("%s/%s" % [worlds_dir.get_current_dir(), world_name_converted])
-	var world_config := FuncU.BetterConfigFile.new("%s/%s" % [world_dir.get_current_dir(), _main.WORLD_CONFIG_FILENAME])
+	var world_config := FuncU.BetterConfigFile.new("%s/%s" % [world_dir.get_current_dir(), WORLD_CONFIG_FILENAME])
 	
 	world_config.set_base_value("name", world_name)
 	world_config.set_base_value("playtime", 0.0)
@@ -168,5 +171,5 @@ func _notification(what: int) -> void:
 
 
 func _on_quit_pressed() -> void:
-	GUIs.add_child(main.home_scene.instantiate())
+	main.GUIs.add_child(home_scene.instantiate())
 	queue_free()

@@ -1,6 +1,7 @@
 extends Node
 
 
+const World = preload("res://world/World.gd")
 @export var Squareenemy: Node
 
 
@@ -11,8 +12,8 @@ func get_persistent() -> Dictionary:
 		"healthpoints": Squareenemy.get("healthpoints"),
 	}
 
-static func load_persistent(data: Dictionary, World: Main.world_class) -> void:
-	var squareenemy := World.EntitySpawner.spawn({
+static func load_persistent(data: Dictionary, world: World) -> void:
+	var squareenemy := world.EntitySpawner.spawn({
 		"id": "squareenemy",
 		"properties": { "position": data.position }
 	})

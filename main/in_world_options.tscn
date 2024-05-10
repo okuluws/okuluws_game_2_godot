@@ -1,10 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://n8daocod2i0i"]
+[gd_scene load_steps=3 format=3 uid="uid://r50gkdot6yen"]
 
-[ext_resource type="Script" path="res://main/in_world_options.gd" id="1_jiqea"]
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="2_rwka7"]
 
+[sub_resource type="GDScript" id="GDScript_2x5xq"]
+script/source = "extends CanvasLayer
+
+
+@onready var GUIs: CanvasLayer = $\"/root/Main/GUIs\"
+@onready var World = $\"/root/Main/World\"
+@onready var Main: Node = $\"/root/Main\"
+
+
+func _on_leave_world_pressed():
+	for node in World.get_children():
+		World.remove_child(node)
+	
+	multiplayer.multiplayer_peer.close()
+	for pid in Main.config.child_processes_pid:
+		OS.kill(pid)
+	
+	GUIs.add_child(preload(\"res://gui/home.tscn\").instantiate())
+	queue_free()
+	
+"
+
 [node name="In World Options" type="CanvasLayer"]
-script = ExtResource("1_jiqea")
+script = SubResource("GDScript_2x5xq")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchors_preset = 15

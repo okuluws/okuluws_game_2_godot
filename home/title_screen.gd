@@ -1,16 +1,18 @@
 extends CanvasLayer
 
 
-@onready var main: Main = $"/root/Main"
+const Home = preload("./home.gd")
+@onready var home: Home = get_parent()
+
 
 func _on_multiplayer_pressed() -> void:
-	get_parent().add_child(main.server_selection_scene.instantiate())
+	home.add_child(home.server_selection_scene.instantiate())
 	queue_free()
 	
 
 
 func _on_singleplayer_pressed() -> void:
-	get_parent().add_child(main.world_selection_scene.instantiate())
+	home.add_child(home.world_selection_scene.instantiate())
 	queue_free()
 	
 

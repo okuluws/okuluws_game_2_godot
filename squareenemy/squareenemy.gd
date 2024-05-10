@@ -3,8 +3,9 @@ extends CharacterBody2D
 
 @export var PersistHandler: Node
 
-@onready var World: Main.world_class = get_viewport().get_child(0)
-@onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
+const World = preload("res://world/World.gd")
+@onready var world: World = get_viewport().get_child(0)
+@onready var EntitySpawner: MultiplayerSpawner = world.EntitySpawner
 
 var healthpoints_max: int = 20
 var healthpoints: int = 20

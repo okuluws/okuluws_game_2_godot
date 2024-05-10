@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://bqtr7tqdd75x5"]
 
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_ll8v3"]
-[ext_resource type="Script" path="res://main/home.gd" id="1_w624d"]
+[ext_resource type="Script" path="res://home/title_screen.gd" id="1_44pfs"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="2_q8lmu"]
 
-[node name="Home" type="CanvasLayer"]
-script = ExtResource("1_w624d")
+[node name="TitleScreen" type="CanvasLayer"]
+script = ExtResource("1_44pfs")
 
 [node name="Title" type="RichTextLabel" parent="."]
 anchors_preset = 10
@@ -12,7 +12,7 @@ anchor_right = 1.0
 offset_top = 61.0
 offset_bottom = 181.0
 grow_horizontal = 2
-theme = ExtResource("1_ll8v3")
+theme = ExtResource("2_q8lmu")
 theme_override_font_sizes/normal_font_size = 100
 bbcode_enabled = true
 text = "[center]okuluws-game-2"
@@ -31,7 +31,7 @@ grow_horizontal = 2
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 2
-theme = ExtResource("1_ll8v3")
+theme = ExtResource("2_q8lmu")
 theme_override_font_sizes/font_size = 30
 text = "Singleplayer"
 
@@ -39,7 +39,7 @@ text = "Singleplayer"
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("1_ll8v3")
+theme = ExtResource("2_q8lmu")
 theme_override_font_sizes/font_size = 30
 text = "Multiplayer"
 
@@ -47,7 +47,7 @@ text = "Multiplayer"
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 10
-theme = ExtResource("1_ll8v3")
+theme = ExtResource("2_q8lmu")
 theme_override_font_sizes/font_size = 30
 text = "Options"
 
@@ -63,7 +63,7 @@ offset_right = -28.0
 offset_bottom = -16.0
 grow_horizontal = 0
 grow_vertical = 0
-theme = ExtResource("1_ll8v3")
+theme = ExtResource("2_q8lmu")
 theme_override_font_sizes/font_size = 30
 text = "Quit ;("
 
