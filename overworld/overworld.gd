@@ -3,13 +3,13 @@ extends Node2D
 
 @export var PersistHandler: Node
 
-@onready var World: Node = get_viewport().get_child(0)
+@onready var World: Main.world_class = get_viewport().get_child(0)
 @onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
 
 var entity_id: String
 
 
-func _ready():
+func _ready() -> void:
 	if multiplayer.is_server():
 		pass
 		#

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://squareenemy/squareenemy.gd" id="1_hgl2n"]
 [ext_resource type="Texture2D" uid="uid://c32brgefmkhb5" path="res://squareenemy/squareenemy.png" id="1_r3ses"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="3_gqxut"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="3_gqxut"]
 [ext_resource type="Script" path="res://squareenemy/PersistHandler.gd" id="4_ni2j1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_snuj2"]

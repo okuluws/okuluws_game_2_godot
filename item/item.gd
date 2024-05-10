@@ -1,7 +1,7 @@
 extends Area2D
 
 
-@export var data = {
+@export var data := {
 	"display_name": null,
 	"type_id": null,
 	"stack": 1

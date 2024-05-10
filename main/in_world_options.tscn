@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://n8daocod2i0i"]
 
-[ext_resource type="Script" path="res://gui/in_world_options.gd" id="1_jiqea"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="2_rwka7"]
+[ext_resource type="Script" path="res://main/in_world_options.gd" id="1_jiqea"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="2_rwka7"]
 
 [node name="In World Options" type="CanvasLayer"]
 script = ExtResource("1_jiqea")

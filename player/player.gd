@@ -3,8 +3,7 @@ extends CharacterBody2D
 
 @export var PersistHandler: Node
 
-# TODO: better static typing
-@onready var World: Node = get_viewport().get_child(0)
+@onready var World: Main.world_class = get_viewport().get_child(0)
 @onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
 
 var facing_direction: Vector2 = Vector2.DOWN
@@ -18,13 +17,13 @@ var peer_owner: int
 var entity_id: String
 
 
-func _ready():
+func _ready() -> void:
 	peer_owner = name.to_int()
 	if multiplayer.is_server():
-		$IdleTimer.start()
+		($IdleTimer as Timer).start()
 
 
-func _process(_delta):
+func _process(_delta: float) -> void:
 	if multiplayer.is_server():
 		display_text = "[center][color=green]Player %s" % name
 		if is_idle:
@@ -32,51 +31,51 @@ func _process(_delta):
 	
 	match player_type:
 		"square":
-			$CollisionAnimationPlayer.play("collision_square")
+			($CollisionAnimationPlayer as AnimationPlayer).play("collision_square")
 		"widesquare":
-			$CollisionAnimationPlayer.play("collision_widesquare")
+			($CollisionAnimationPlayer as AnimationPlayer).play("collision_widesquare")
 		"triangle":
-			$CollisionAnimationPlayer.play("collision_triangle")
+			($CollisionAnimationPlayer as AnimationPlayer).play("collision_triangle")
 	
 	
 	match [player_type, facing_direction]:
 		["square", Vector2.LEFT]:
-			$AnimationPlayer.play("square_left")
+			($AnimationPlayer as AnimationPlayer).play("square_left")
 		["square", Vector2.RIGHT]:
-			$AnimationPlayer.play("square_right")
+			($AnimationPlayer as AnimationPlayer).play("square_right")
 		["square", Vector2.UP], ["square", Vector2.DOWN]:
-			$AnimationPlayer.play("square")
+			($AnimationPlayer as AnimationPlayer).play("square")
 		
 		["widesquare", Vector2.LEFT]:
-			$AnimationPlayer.play("widesquare_left")
+			($AnimationPlayer as AnimationPlayer).play("widesquare_left")
 		["widesquare", Vector2.RIGHT]:
-			$AnimationPlayer.play("widesquare_right")
+			($AnimationPlayer as AnimationPlayer).play("widesquare_right")
 		["widesquare", Vector2.UP], ["widesquare", Vector2.DOWN]:
-			$AnimationPlayer.play("widesquare")
+			($AnimationPlayer as AnimationPlayer).play("widesquare")
 	
 		["triangle", Vector2.LEFT]:
-			$AnimationPlayer.play("triangle_left")
+			($AnimationPlayer as AnimationPlayer).play("triangle_left")
 		["triangle", Vector2.RIGHT]:
-			$AnimationPlayer.play("triangle_right")
+			($AnimationPlayer as AnimationPlayer).play("triangle_right")
 		["triangle", Vector2.UP], ["triangle", Vector2.DOWN]:
-			$AnimationPlayer.play("triangle")
+			($AnimationPlayer as AnimationPlayer).play("triangle")
 	
 	
-	$RichTextLabel.text = display_text
-	$RichTextLabel2.text = "[center]  %d[color=red]♥ " % healthpoints
+	($RichTextLabel as RichTextLabel).text = display_text
+	($RichTextLabel2 as RichTextLabel).text = "[center]  %d[color=red]♥ " % healthpoints
 	
 
 
 
-func _physics_process(_delta):
+func _physics_process(_delta: float) -> void:
 	if multiplayer.is_server():
-		if $IdleTimer.time_left == 0:
+		if ($IdleTimer as Timer).time_left == 0:
 			is_idle = true
 	
 	else:
 		if peer_owner == multiplayer.get_unique_id():
-			var move_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-			var move_direction_signed = move_direction.sign()
+			var move_direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+			var move_direction_signed := move_direction.sign()
 			
 			if move_direction_signed.x == -1:
 				set_player_facing_direction.rpc_id(1, Vector2.LEFT)
@@ -94,7 +93,7 @@ func _physics_process(_delta):
 				spawn_punch.rpc_id(1, position + get_local_mouse_position().normalized() * 80, get_local_mouse_position().angle() + PI / 2, get_local_mouse_position().normalized() * 1000)
 				
 			
-			if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action): return Input.is_action_pressed(_action)):
+			if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action: String) -> bool: return Input.is_action_pressed(_action)):
 				i_am_not_idle.rpc_id(1)
 			#
 			#if Input.is_action_just_pressed("open_inventory"):
@@ -104,23 +103,23 @@ func _physics_process(_delta):
 
 
 @rpc("any_peer")
-func i_am_not_idle():
+func i_am_not_idle() -> void:
 	assert(multiplayer.is_server())
 	is_idle = false
-	$IdleTimer.start()
+	($IdleTimer as Timer).start()
 
 @rpc("any_peer")
-func set_player_velocity(_velocity):
+func set_player_velocity(_velocity: Vector2) -> void:
 	assert(multiplayer.is_server())
 	velocity = _velocity
 
 @rpc("any_peer")
-func set_player_facing_direction(_facing_direction):
+func set_player_facing_direction(_facing_direction: Vector2) -> void:
 	assert(multiplayer.is_server())
 	facing_direction = _facing_direction
 
 @rpc("any_peer")
-func spawn_punch(_position: Vector2, _rotation: float, _velocity: Vector2):
+func spawn_punch(_position: Vector2, _rotation: float, _velocity: Vector2) -> void:
 	EntitySpawner.spawn({
 		"id": "punch",
 		"properties": {

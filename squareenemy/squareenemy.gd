@@ -3,7 +3,7 @@ extends CharacterBody2D
 
 @export var PersistHandler: Node
 
-@onready var World: Node = get_viewport().get_child(0)
+@onready var World: Main.world_class = get_viewport().get_child(0)
 @onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
 
 var healthpoints_max: int = 20
@@ -12,15 +12,15 @@ var already_dead: bool = false
 var entity_id: String
 
 
-func _process(_delta):
+func _process(_delta: float) -> void:
 	if float(healthpoints) / healthpoints_max > 0.5:
-		%Health.text = "[center]Squareenemy [color=green]%d/%d[color=red]♥" % [healthpoints, healthpoints_max]
+		(%Health as RichTextLabel).text = "[center]Squareenemy [color=green]%d/%d[color=red]♥" % [healthpoints, healthpoints_max]
 	elif float(healthpoints) / healthpoints_max > 0.2:
-		%Health.text = "[center]Squareenemy [color=orange]%d/%d[color=red]♥" % [healthpoints, healthpoints_max]
+		(%Health as RichTextLabel).text = "[center]Squareenemy [color=orange]%d/%d[color=red]♥" % [healthpoints, healthpoints_max]
 	else:
-		%Health.text = "[center]Squareenemy [color=red]%d/%d[color=red]♥" % [healthpoints, healthpoints_max]
+		(%Health as RichTextLabel).text = "[center]Squareenemy [color=red]%d/%d[color=red]♥" % [healthpoints, healthpoints_max]
 
-func take_damage(damagepoints, rewards_peer_):
+func take_damage(damagepoints: int, rewards_peer_: int) -> void:
 	assert(multiplayer.is_server())
 	healthpoints = clampi(healthpoints - damagepoints, 0, healthpoints_max)
 	if healthpoints <= 0 and not already_dead:

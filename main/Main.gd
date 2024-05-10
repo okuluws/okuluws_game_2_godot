@@ -1,6 +1,7 @@
 # LOL
 
 
+
 class_name Main
 
 extends Node
@@ -8,8 +9,10 @@ extends Node
 
 @export var GUIs: CanvasLayer
 
-@export var world_scene: PackedScene
-@export var world_script: Script
+const world_scene = preload("res://world/World.tscn")
+const world_class = preload("res://world/World.gd")
+const world_edit_class = preload("res://main/world_edit.gd")
+const world_display_class = preload("res://main/world_display.gd")
 @export var home_scene: PackedScene
 @export var server_selection_scene: PackedScene
 @export var world_selection_scene: PackedScene
@@ -23,36 +26,37 @@ var worlds_folder: String:
 	set(_val):
 		printerr("property is readonly")
 
+const WORLD_CONFIG_FILENAME = "config.cfg"
+
 
 # definitly not stolen code
-func parse_os_arguments():
-	var arguments = {}
+func parse_os_arguments() -> Dictionary:
+	var arguments := {}
 	for argument in OS.get_cmdline_args():
 		if argument.find("=") > -1:
-			var key_value = argument.split("=")
+			var key_value := argument.split("=")
 			arguments[key_value[0].lstrip("--")] = key_value[1]
 	return arguments
 
 
-func _ready():
+func _ready() -> void:
 	print(OS.get_cmdline_args())
 	
 	if not DirAccess.dir_exists_absolute(worlds_folder):
 		DirAccess.make_dir_absolute(worlds_folder)
 	
-	var args = parse_os_arguments()
+	var args := parse_os_arguments()
 	if args.has("server") and args.has("world"):
-		var world = world_scene.instantiate()
+		var world: world_class = world_scene.instantiate()
 		add_child(world)
 		if not DirAccess.dir_exists_absolute("%s/%s" % [worlds_folder, args.world]):
-			world_script.create_world_folder(self, args.world)
-		
-		world.start_server(args.world, args.server)
+			world_class.create_world_folder(self, args.get("world") as String)
+		world.start_server(args.get("world") as String, args.get("server") as String)
 		return
 	
 	$"GUIs".add_child(home_scene.instantiate())
 	
 
-func _notification(what):
+func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		get_tree().quit()

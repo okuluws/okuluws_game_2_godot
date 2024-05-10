@@ -66,7 +66,7 @@ extends Node
 
 
 class BetterConfigFile:
-	var cfg = ConfigFile.new()
+	var cfg := ConfigFile.new()
 	var filepath: String
 	
 	func _init(_filepath: String) -> void:
@@ -77,10 +77,10 @@ class BetterConfigFile:
 		
 		filepath = _filepath
 	
-	func set_value(section: String, key: String, val) -> void:
+	func set_value(section: String, key: String, val: Variant) -> void:
 		cfg.set_value(section, key, val)
 	
-	func get_value(section: String, key: String, default = null):
+	func get_value(section: String, key: String, default: Variant = null) -> Variant:
 		return cfg.get_value(section, key, default)
 	
 	func save() -> int:
@@ -88,10 +88,10 @@ class BetterConfigFile:
 	
 	
 	
-	func set_base_value(key: String, val) -> void:
+	func set_base_value(key: String, val: Variant) -> void:
 		return set_value("", key, val)
 	
-	func get_base_value(key: String, default = null):
+	func get_base_value(key: String, default: Variant = null) -> Variant:
 		return get_value("", key, default)
 
 

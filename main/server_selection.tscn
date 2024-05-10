@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bu5sofg6f5shv"]
 
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="1_7ygn6"]
-[ext_resource type="Script" path="res://gui/server_selection.gd" id="1_lqv63"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_7ygn6"]
+[ext_resource type="Script" path="res://main/server_selection.gd" id="1_lqv63"]
 
 [node name="Server Selection" type="CanvasLayer"]
 script = ExtResource("1_lqv63")

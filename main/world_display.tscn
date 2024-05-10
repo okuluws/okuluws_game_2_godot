@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b75h5pk7slpam"]
 
-[ext_resource type="Script" path="res://gui/world_display.gd" id="1_541gy"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="1_hit25"]
+[ext_resource type="Script" path="res://main/world_display.gd" id="1_541gy"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_hit25"]
 
 [node name="World Display" type="Button" node_paths=PackedStringArray("world_name", "playtime", "version")]
 custom_minimum_size = Vector2(0, 120)

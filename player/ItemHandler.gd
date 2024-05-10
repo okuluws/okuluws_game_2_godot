@@ -1,20 +1,21 @@
 extends Node2D
 
 
-func _physics_process(_delta):
+func _physics_process(_delta: float) -> void:
 	if not multiplayer.is_server():
 		return
 	
-	for node: Area2D in $"AttractionArea".get_overlapping_areas():
-		if "is_player_pickupable" in node and node.is_player_pickupable:
+	for node: Area2D in ($"AttractionArea" as Area2D).get_overlapping_areas():
+		
+		if "is_player_pickupable" in node and node.get("is_player_pickupable") == true:
 			node.global_position = node.global_position.lerp(global_position, 0.1)
 
 
-func _on_pickup_area_area_entered(body):
+func _on_pickup_area_area_entered(body: Area2D) -> void:
 	if not multiplayer.is_server():
 		return
 	
-	if not ("is_player_pickupable" in body and body.is_player_pickupable):
+	if "is_player_pickupable" in body and body.get("is_player_pickupable") == true:
 		return
 	
 	#body.visible = false

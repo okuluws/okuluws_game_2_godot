@@ -1,15 +1,15 @@
 [gd_scene load_steps=4 format=3 uid="uid://l0amv7p2h58v"]
 
-[ext_resource type="Script" path="res://globals/World.gd" id="1_el4op"]
-[ext_resource type="Script" path="res://globals/EntitySpawner.gd" id="2_be7pc"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://gui/pixel_theme.tres" id="3_k050s"]
+[ext_resource type="Script" path="res://world/World.gd" id="1_wnkwm"]
+[ext_resource type="Script" path="res://world/EntitySpawner.gd" id="2_uqixc"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="3_hfylm"]
 
 [node name="World" type="Node"]
-script = ExtResource("1_el4op")
+script = ExtResource("1_wnkwm")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 spawn_path = NodePath("../Level")
-script = ExtResource("2_be7pc")
+script = ExtResource("2_uqixc")
 
 [node name="Level" type="Node2D" parent="."]
 
@@ -33,7 +33,7 @@ offset_top = 433.0
 offset_right = 212.0
 offset_bottom = 477.0
 grow_horizontal = 2
-theme = ExtResource("3_k050s")
+theme = ExtResource("3_hfylm")
 text = "Quit"
 
 [connection signal="pressed" from="In World Options/Quit" to="." method="_on_quit_pressed"]
