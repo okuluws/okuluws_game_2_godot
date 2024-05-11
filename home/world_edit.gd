@@ -1,19 +1,16 @@
 extends CanvasLayer
 
 
-const FuncU = preload("res://globals/FuncU.gd")
-const WORLD_CONFIG_FILENAME = "config.cfg"
-
-
-const Home = preload("res://home/home.gd")
-var home: Home
-@onready var config_title: Label = $"Config Title"
+@export var FuncU: Script
+@export var world_selection_scene: PackedScene
+@export var WORLD_CONFIG_FILENAME: String = "config.cfg"
+@export var config_title: Label
 
 var world_folder_absolute: String
 
 
 func _on_back_pressed() -> void:
-	home.add_child(home.world_selection_scene.instantiate())
+	get_parent().add_child(world_selection_scene.instantiate())
 	queue_free()
 	
 
@@ -22,7 +19,7 @@ func _on_delete_world_pressed() -> void:
 	for file in DirAccess.get_files_at(world_folder_absolute):
 		DirAccess.remove_absolute("%s/%s" % [world_folder_absolute, file])
 	DirAccess.remove_absolute(world_folder_absolute)
-	home.add_child(home.world_selection_scene.instantiate())
+	get_parent().add_child(world_selection_scene.instantiate())
 	queue_free()
 	
 
@@ -31,6 +28,6 @@ func setup(_world_folder_absolute: String) -> void:
 
 func _ready() -> void:
 	var world_folder := DirAccess.open(world_folder_absolute)
-	var world_config := FuncU.BetterConfigFile.new("%s/%s" % [world_folder.get_current_dir(), WORLD_CONFIG_FILENAME])
+	var world_config = FuncU.BetterConfigFile.new("%s/%s" % [world_folder.get_current_dir(), WORLD_CONFIG_FILENAME])
 	config_title.text = "%s - Config" % world_config.get_base_value("name")
 	

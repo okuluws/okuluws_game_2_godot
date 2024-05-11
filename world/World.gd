@@ -30,7 +30,7 @@ var config := {
 const FuncU = preload("res://globals/FuncU.gd")
 const WORLDS_FOLDER = "user://worlds"
 const WORLD_CONFIG_FILENAME = "config.cfg"
-const home_scene = preload("res://home/home.tscn")
+@export var title_screen_scene: PackedScene
 @onready var main: Main = $"/root/Main"
 @onready var EntitySpawner: MultiplayerSpawner = $"MultiplayerSpawner"
 @onready var Level: Node2D = $"Level"
@@ -171,5 +171,5 @@ func _notification(what: int) -> void:
 
 
 func _on_quit_pressed() -> void:
-	main.GUIs.add_child(home_scene.instantiate())
+	main.GUIs.add_child(title_screen_scene.instantiate())
 	queue_free()

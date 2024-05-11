@@ -2,9 +2,11 @@
 
 class_name Main extends Node
 
-
+ 
 @export var GUIs: CanvasLayer
 
+
+@export_dir var startup_scripts_folder: String
 #const world_scene = preload("res://world/World.tscn")
 #const world_class = preload("res://world/World.gd")
 #const world_edit_class = preload("res://main/world_edit.gd")
@@ -50,12 +52,12 @@ func _ready() -> void:
 		#return
 	
 	print("loading startup scripts...")
-	for script in DirAccess.get_files_at("res://startup/"):
-		print("res://startup/%s" % script)
+	for script in DirAccess.get_files_at(startup_scripts_folder):
+		print("%s/%s" % [startup_scripts_folder, script])
 		
 		# TODO: remove @warning_ignore by figuring out what type load() returns
 		@warning_ignore("unsafe_method_access")
-		load("res://startup/%s" % script).new(self)
+		load("%s/%s" % [startup_scripts_folder, script]).new(self)
 	print("loaded startup scripts")
 
 func _notification(what: int) -> void:
