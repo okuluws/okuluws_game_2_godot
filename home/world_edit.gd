@@ -2,7 +2,7 @@ extends CanvasLayer
 
 
 @export var FuncU: Script
-@export var world_selection_scene: PackedScene
+@export_file("*.tscn") var world_selection_file
 @export var WORLD_CONFIG_FILENAME: String = "config.cfg"
 @export var config_title: Label
 
@@ -10,7 +10,7 @@ var world_folder_absolute: String
 
 
 func _on_back_pressed() -> void:
-	get_parent().add_child(world_selection_scene.instantiate())
+	get_parent().add_child(load(world_selection_file).instantiate())
 	queue_free()
 	
 
@@ -19,7 +19,7 @@ func _on_delete_world_pressed() -> void:
 	for file in DirAccess.get_files_at(world_folder_absolute):
 		DirAccess.remove_absolute("%s/%s" % [world_folder_absolute, file])
 	DirAccess.remove_absolute(world_folder_absolute)
-	get_parent().add_child(world_selection_scene.instantiate())
+	get_parent().add_child(load(world_selection_file).instantiate())
 	queue_free()
 	
 

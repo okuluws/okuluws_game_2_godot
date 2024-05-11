@@ -1,14 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqtr7tqdd75x5"]
+[gd_scene load_steps=4 format=3 uid="uid://bqtr7tqdd75x5"]
 
 [ext_resource type="Script" path="res://home/title_screen.gd" id="1_44pfs"]
+[ext_resource type="PackedScene" uid="uid://bus6e712ij5qc" path="res://home/world_selection.tscn" id="2_c5wgl"]
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="2_q8lmu"]
-[ext_resource type="PackedScene" uid="uid://bu5sofg6f5shv" path="res://home/server_selection.tscn" id="2_uh6jb"]
-[ext_resource type="PackedScene" uid="uid://bus6e712ij5qc" path="res://home/world_selection.tscn" id="3_7oapq"]
 
 [node name="TitleScreen" type="CanvasLayer"]
 script = ExtResource("1_44pfs")
-server_selection_scene = ExtResource("2_uh6jb")
-world_selection_scene = ExtResource("3_7oapq")
+world_selection_scene = ExtResource("2_c5wgl")
+server_selection_file = "res://home/server_selection.tscn"
+world_selection_file = "res://home/world_selection.tscn"
 
 [node name="Title" type="RichTextLabel" parent="."]
 anchors_preset = 10

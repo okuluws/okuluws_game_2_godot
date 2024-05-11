@@ -5,6 +5,9 @@
 
 [node name="Server Selection" type="CanvasLayer"]
 script = ExtResource("1_lqv63")
+world_script = "res://world/World.gd"
+world_file = "res://world/World.tscn"
+title_screen_file = "res://home/title_screen.tscn"
 
 [node name="Title" type="RichTextLabel" parent="."]
 anchors_preset = 10

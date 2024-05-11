@@ -1,14 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://c4by3skeseg0c"]
+[gd_scene load_steps=4 format=3 uid="uid://c4by3skeseg0c"]
 
 [ext_resource type="Script" path="res://home/world_edit.gd" id="1_suxo1"]
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_y01jw"]
 [ext_resource type="Script" path="res://globals/FuncU.gd" id="2_km20n"]
-[ext_resource type="PackedScene" uid="uid://bus6e712ij5qc" path="res://home/world_selection.tscn" id="3_cf7x6"]
 
 [node name="World Edit" type="CanvasLayer" node_paths=PackedStringArray("config_title")]
 script = ExtResource("1_suxo1")
 FuncU = ExtResource("2_km20n")
-world_selection_scene = ExtResource("3_cf7x6")
+world_selection_file = "res://home/world_selection.tscn"
 config_title = NodePath("Config Title")
 
 [node name="Config Title" type="Label" parent="."]

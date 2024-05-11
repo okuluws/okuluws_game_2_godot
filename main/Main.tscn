@@ -4,8 +4,8 @@
 
 [node name="Main" type="Node" node_paths=PackedStringArray("GUIs")]
 script = ExtResource("1_6dk3d")
-GUIs = NodePath("GUIs")
 startup_scripts_folder = "res://startup"
+GUIs = NodePath("GUIs")
 
 [node name="GUIs" type="CanvasLayer" parent="."]
 

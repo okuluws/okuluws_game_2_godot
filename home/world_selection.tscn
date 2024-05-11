@@ -1,20 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://bus6e712ij5qc"]
+[gd_scene load_steps=5 format=3 uid="uid://bus6e712ij5qc"]
 
 [ext_resource type="Script" path="res://home/world_selection.gd" id="1_cep2k"]
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_m1hu2"]
-[ext_resource type="Script" path="res://world/World.gd" id="2_ab0ro"]
-[ext_resource type="PackedScene" uid="uid://l0amv7p2h58v" path="res://world/World.tscn" id="3_wkh5f"]
-[ext_resource type="PackedScene" uid="uid://bqtr7tqdd75x5" path="res://home/title_screen.tscn" id="4_n54hh"]
-[ext_resource type="PackedScene" uid="uid://c4by3skeseg0c" path="res://home/world_edit.tscn" id="5_c7qw7"]
-[ext_resource type="PackedScene" uid="uid://b75h5pk7slpam" path="res://home/world_display.tscn" id="6_otdfd"]
+[ext_resource type="Script" path="res://globals/FuncU.gd" id="2_xoh8a"]
 
 [node name="World Selection" type="CanvasLayer" node_paths=PackedStringArray("world_display_vbox")]
 script = ExtResource("1_cep2k")
-world_script = ExtResource("2_ab0ro")
-world_scene = ExtResource("3_wkh5f")
-title_screen_scene = ExtResource("4_n54hh")
-world_edit_scene = ExtResource("5_c7qw7")
-world_display_scene = ExtResource("6_otdfd")
+FuncU = ExtResource("2_xoh8a")
+world_script = "res://world/World.gd"
+world_file = "res://world/World.tscn"
+title_screen_file = "res://home/title_screen.tscn"
+world_edit_file = "res://home/world_edit.tscn"
+world_display_file = "res://home/world_display.tscn"
 world_display_vbox = NodePath("ScrollContainer/VBoxContainer")
 
 [node name="Title" type="RichTextLabel" parent="."]
