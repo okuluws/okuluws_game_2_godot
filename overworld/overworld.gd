@@ -1,8 +1,6 @@
 extends Node2D
 
 
-@export var PersistHandler: Node
-
 #@onready var World: world_class = get_viewport().get_child(0)
 #@onready var EntitySpawner: MultiplayerSpawner = World.EntitySpawner
 

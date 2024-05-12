@@ -1,18 +1,15 @@
 extends MultiplayerSpawner
 
 
-const World = preload("res://world/World.gd")
-@onready var world: World = get_parent()
-@onready var Level := world.Level
+@export var world: Node
 
 
 func _spawn_function(data: Dictionary) -> Node:
 	for k: String in data:
 		assert(k in ["id", "properties"], "unknown argument >%s<" % k)
 	
-	var entity: Node2D = ((world.config.get("entities") as Dictionary).get(data["id"]) as PackedScene).instantiate()
-	
-	entity.set("entity_id", data["id"])
+	var entity: Node2D = load(world.spawnables[data["id"]]).instantiate()
+	entity.spawnable_id = data["id"]
 	
 	if data.has("properties"):
 		for k: String in data["properties"]:

@@ -1,55 +1,31 @@
 extends Node
 
 
-var config := {
-	"entities": {
-		"overworld": preload("res://overworld/overworld.tscn"),
-		"player": preload("res://player/player.tscn"),
-		"punch": preload("res://player/punch.tscn"),
-		"squareenemy": preload("res://squareenemy/squareenemy.tscn"),
-	},
-	"items": {
-		"square_fragment": {
-			"display_name": "Square Fragment",
-			"texture": preload("res://player/square/square_fragment.png"),
-			"slot_size": 1,
-		},
-		"widesquare_fragment": {
-			"display_name": "Widesquare Fragment",
-			"texture": preload("res://player/widesquare/widesquare_fragment.png"),
-			"slot_size": 1,
-		},
-		"triangle_fragment": {
-			"display_name": "Triangle Fragment",
-			"texture": preload("res://player/triangle/triangle_fragment.png"),
-			"slot_size": 1,
-		},
-	}
-}
-
 const FuncU = preload("res://globals/FuncU.gd")
+const home_file = "res://home/home.tscn"
 const WORLDS_FOLDER = "user://worlds"
-const WORLD_CONFIG_FILENAME = "config.cfg"
-@export var title_screen_scene: PackedScene
-@onready var main: Main = $"/root/Main"
-@onready var EntitySpawner: MultiplayerSpawner = $"MultiplayerSpawner"
-@onready var Level: Node2D = $"Level"
-@onready var in_world_options: CanvasLayer = $"In World Options"
+const LEVEL_FILENAME = "level.cfg"
+const CONFIG_FILENAME = "config.cfg"
+const MODS_DIRNAME = "mods"
+@export var EntitySpawner: MultiplayerSpawner 
+@export var Level: Node2D
+@export var in_world_options: CanvasLayer
 var enet := ENetMultiplayerPeer.new()
 var smapi := SceneMultiplayer.new()
 var player_nodes := {}
 var world_folder_name: String
+var spawnables := {}
+
 var world_folder: String:
 	get: return "%s/%s" % [WORLDS_FOLDER, world_folder_name]
 	set(_val): printerr("property is readonly")
 
-const LEVEL_FILENAME = "level.cfg"
 var level_file: String:
 	get: return "%s/%s" % [world_folder, LEVEL_FILENAME]
 	set(_val): printerr("property is readonly")
 
 var config_file: String:
-	get: return "%s/%s" % [world_folder, WORLD_CONFIG_FILENAME]
+	get: return "%s/%s" % [world_folder, CONFIG_FILENAME]
 	set(_val): printerr("property is readonly")
 
 
@@ -57,7 +33,6 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("escape"):
 		in_world_options.visible = not in_world_options.visible
 	
-
 
 func start_client(full_server_address: String) -> void:
 	print("Starting Client...")
@@ -151,12 +126,15 @@ static func create_world_folder(world_name: String) -> String:
 	if worlds_dir.dir_exists(world_name_converted): printerr("world folder >%s< already exists" % world_name_converted); return ""
 	worlds_dir.make_dir(world_name_converted)
 	var world_dir := DirAccess.open("%s/%s" % [worlds_dir.get_current_dir(), world_name_converted])
-	var world_config := FuncU.BetterConfigFile.new("%s/%s" % [world_dir.get_current_dir(), WORLD_CONFIG_FILENAME])
+	var world_config := FuncU.BetterConfigFile.new("%s/%s" % [world_dir.get_current_dir(), CONFIG_FILENAME])
 	
 	world_config.set_base_value("name", world_name)
 	world_config.set_base_value("playtime", 0.0)
 	world_config.set_base_value("version", "0.0.1")
 	world_config.save()
+	
+	worlds_dir.make_dir(MODS_DIRNAME)
+	var mods_dir := DirAccess.open("%s/%s" % [world_dir.get_current_dir(), MODS_DIRNAME])
 	
 	return world_dir.get_current_dir()
 
@@ -165,11 +143,8 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
 			save_level()
-
-
-
-
+	
 
 func _on_quit_pressed() -> void:
-	main.GUIs.add_child(title_screen_scene.instantiate())
+	$"/root/Main/GUIs".add_child(load(home_file).instantiate())
 	queue_free()

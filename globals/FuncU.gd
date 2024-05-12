@@ -86,13 +86,24 @@ class BetterConfigFile:
 	func save() -> int:
 		return cfg.save(filepath)
 	
+	func get_section_keys(section: String) -> Array:
+		return cfg.get_section_keys(section)
 	
+	func empty() -> int:
+		cfg.clear()
+		return cfg.save(filepath)
 	
+	func get_base_section_keys() -> Array:
+		return cfg.get_section_keys("")
+
 	func set_base_value(key: String, val: Variant) -> void:
 		return set_value("", key, val)
 	
 	func get_base_value(key: String, default: Variant = null) -> Variant:
 		return get_value("", key, default)
+	
+	func to_text() -> String:
+		return cfg.encode_to_text()
 
 
 # pssst, not stolen

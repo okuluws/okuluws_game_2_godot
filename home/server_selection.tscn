@@ -3,11 +3,9 @@
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_7ygn6"]
 [ext_resource type="Script" path="res://home/server_selection.gd" id="1_lqv63"]
 
-[node name="Server Selection" type="CanvasLayer"]
+[node name="Server Selection" type="CanvasLayer" node_paths=PackedStringArray("server_address")]
 script = ExtResource("1_lqv63")
-world_script = "res://world/World.gd"
-world_file = "res://world/World.tscn"
-title_screen_file = "res://home/title_screen.tscn"
+server_address = NodePath("Server Address")
 
 [node name="Title" type="RichTextLabel" parent="."]
 anchors_preset = 10
