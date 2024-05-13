@@ -1,13 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://8wl5lpudm7g6"]
 
 [ext_resource type="Script" path="res://worlds/server.gd" id="1_fslfu"]
-[ext_resource type="Script" path="res://worlds/server_spawner.gd" id="2_wh86m"]
+[ext_resource type="PackedScene" uid="uid://bn3a8m5cg1baf" path="res://overworld/main.tscn" id="2_6s53j"]
 
 [node name="Server" type="SubViewport"]
 script = ExtResource("1_fslfu")
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-spawn_path = NodePath("../Level")
-script = ExtResource("2_wh86m")
-
 [node name="Level" type="Node2D" parent="."]
+
+[node name="Overworld" parent="." instance=ExtResource("2_6s53j")]

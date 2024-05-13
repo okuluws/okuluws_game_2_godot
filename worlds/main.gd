@@ -5,8 +5,9 @@ const FuncU = preload("res://globals/FuncU.gd")
 const WORLDS_DIR = "user://worlds"
 const WORLD_CONFIG_FILENAME = "config.cfg"
 const WORLD_LEVEL_FILENAME = "level.cfg"
-const WORLD_MODS_FILENAME = "mods.cfg"
-const CLIENT_MODS_FILENAME = "remote_worlds.cfg"
+const client_world_file = "res://worlds/client.tscn"
+const server_world_file = "res://worlds/server.tscn"
+
 
 
 func _ready():
@@ -26,25 +27,22 @@ func create_world_folder(world_name: String) -> int:
 	world_config.set_base_value("version", "0.0.1")
 	world_config.save()
 	
-	FileAccess.open("%s/%s" % [world_dir.get_current_dir(), WORLD_MODS_FILENAME], FileAccess.WRITE)
-	
 	return OK
 
 
 func make_client(server_address: String) -> Node:
-	var client = preload("res://worlds/client.tscn").instantiate()
+	var client = load(client_world_file).instantiate()
 	client.server_address = server_address
 	$"SubViewportContainer".add_child(client)
 	return client
 
 
 func make_server(world_dir: String, port: int = 42000) -> Node:
-	var server = preload("res://worlds/server.tscn").instantiate()
+	var server = load(server_world_file).instantiate()
 	server.world_dir = world_dir
 	server.port = port
 	server.CONFIG_FILENAME = WORLD_CONFIG_FILENAME
 	server.LEVEL_FILENAME = WORLD_LEVEL_FILENAME
-	server.MODS_FILENAME = WORLD_MODS_FILENAME
 	add_child(server)
 	return server
 
