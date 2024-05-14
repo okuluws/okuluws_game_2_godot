@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dde62wcnhs6gv"]
+[gd_scene load_steps=4 format=3 uid="uid://dde62wcnhs6gv"]
 
 [ext_resource type="Script" path="res://worlds/client.gd" id="1_wnrgn"]
 [ext_resource type="PackedScene" uid="uid://bn3a8m5cg1baf" path="res://overworld/main.tscn" id="2_itsqq"]
+[ext_resource type="PackedScene" uid="uid://c4baas5tuml2c" path="res://player/main.tscn" id="3_nphme"]
 
 [node name="Client" type="SubViewport"]
 script = ExtResource("1_wnrgn")
@@ -9,3 +10,5 @@ script = ExtResource("1_wnrgn")
 [node name="Level" type="Node2D" parent="."]
 
 [node name="Overworld" parent="." instance=ExtResource("2_itsqq")]
+
+[node name="Players" parent="." instance=ExtResource("3_nphme")]

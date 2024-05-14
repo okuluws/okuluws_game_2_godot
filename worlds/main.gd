@@ -37,12 +37,12 @@ func make_client(server_address: String) -> Node:
 	return client
 
 
-func make_server(world_dir: String, port: int = 42000) -> Node:
+func make_server(_world_dir: String, port: int = 42000) -> Node:
 	var server = load(server_world_file).instantiate()
-	server.world_dir = world_dir
+	#server.world_dir = world_dir
 	server.port = port
-	server.CONFIG_FILENAME = WORLD_CONFIG_FILENAME
-	server.LEVEL_FILENAME = WORLD_LEVEL_FILENAME
+	#server.CONFIG_FILENAME = WORLD_CONFIG_FILENAME
+	#server.LEVEL_FILENAME = WORLD_LEVEL_FILENAME
 	add_child(server)
 	return server
 

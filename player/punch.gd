@@ -21,7 +21,7 @@ func _on_timer_timeout() -> void:
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if multiplayer.is_server():
-		if not ("peer_owner" in body and body.get("peer_owner") != peer_owner) and body.has_method("take_damage"):
-			body.call("take_damage", 3, peer_owner)
+		if not ("peer_owner" in body and body.peer_owner != peer_owner) and body.has_method("take_damage"):
+			body.take_damage(3, peer_owner)
 			
 			#despawn
