@@ -14,23 +14,25 @@ func _ready():
 	print("starting client...")
 	
 	
-	if server_ip != "127.0.0.1":
+	if $"/root/Main/Worlds".servers.has("%s:%d" % [server_ip, server_port]):
+		smapi.peer_authenticating.connect(func(_peer):
+			smapi.send_auth(1, [0])
+			smapi.complete_auth(1)
+		)
+	else:
 		var res = await $"/root/Main/Pocketbase".api_POST("myapp/server_join", { "server_address": "%s:%d" % [server_ip, server_port] }, true)
 		if res.response_code != 200:
 			printerr("couldnt request server_join")
 			return
-		
 		token = res.body.token
+		
+		smapi.peer_authenticating.connect(func(_peer):
+			smapi.send_auth(1, JSON.stringify({ "token": token, "user_id": $"/root/Main/Pocketbase".user_id }).to_ascii_buffer())
+			smapi.complete_auth(1)
+		)
 	
 	enet.create_client(server_ip, server_port)
 	smapi.multiplayer_peer = enet
-	smapi.peer_authenticating.connect(func(_peer):
-		if server_ip == "127.0.0.1":
-			smapi.send_auth(1, [0])
-		else:
-			smapi.send_auth(1, JSON.stringify({ "token": token, "user_id": $"/root/Main/Pocketbase".user_id }).to_ascii_buffer())
-		smapi.complete_auth(1)
-	)
 	smapi.set_auth_callback(func(_peer): pass)
 	smapi.connected_to_server.connect(func(): print("connected to server peer"))
 	smapi.server_disconnected.connect(func(): print("disconnected from server peer"))
@@ -39,5 +41,6 @@ func _ready():
 	
 	print("starting client done.")
 	
+
 
 
