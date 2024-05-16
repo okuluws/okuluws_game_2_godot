@@ -22,7 +22,7 @@ func _on_back_pressed() -> void:
 	
 
 func _on_join_world_pressed() -> void:
-	$"../../Worlds".make_server_and_client("%s/%s" % [$"../../Worlds".WORLDS_DIR, selected_world_folder_name])
+	$"../../Worlds".make_singleplayer("%s/%s" % [$"../../Worlds".WORLDS_DIR, selected_world_folder_name])
 	queue_free()
 	
 

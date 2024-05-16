@@ -1,9 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dug2d3hft7e68"]
+[gd_scene load_steps=2 format=3 uid="uid://dug2d3hft7e68"]
 
 [ext_resource type="Script" path="res://home/main.gd" id="1_hxnvk"]
-[ext_resource type="PackedScene" uid="uid://bqtr7tqdd75x5" path="res://home/title_screen.tscn" id="2_s7dqd"]
 
 [node name="Home" type="CanvasLayer"]
 script = ExtResource("1_hxnvk")
-
-[node name="TitleScreen" parent="." instance=ExtResource("2_s7dqd")]

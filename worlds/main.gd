@@ -8,6 +8,8 @@ const WORLD_LEVEL_FILENAME = "level.cfg"
 const client_world_file = "res://worlds/client.tscn"
 const server_world_file = "res://worlds/server.tscn"
 
+var clients = {}
+var servers = {}
 
 
 func _ready():
@@ -32,20 +34,31 @@ func create_world_folder(world_name: String) -> int:
 
 func make_client(server_address: String) -> Node:
 	var client = load(client_world_file).instantiate()
-	client.server_address = server_address
+	client.server_ip = server_address.get_slice(":", 0)
+	client.server_port = int(server_address.get_slice(":", 1))
 	$"SubViewportContainer".add_child(client)
+	if clients.has(server_address):
+		clients[server_address].append(client)
+	else:
+		clients[server_address] = [client]
 	return client
 
 
-func make_server(_world_dir: String, port: int = 42000) -> Node:
+func make_server(_world_dir: String, server_address: String) -> Node:
 	var server = load(server_world_file).instantiate()
 	#server.world_dir = world_dir
-	server.port = port
+	server.server_ip = server_address.get_slice(":", 0)
+	server.server_port = int(server_address.get_slice(":", 1))
 	#server.CONFIG_FILENAME = WORLD_CONFIG_FILENAME
 	#server.LEVEL_FILENAME = WORLD_LEVEL_FILENAME
 	add_child(server)
+	if servers.has(server_address):
+		servers[server_address].append(server)
+	else:
+		servers[server_address] = [server]
 	return server
 
 
-func make_server_and_client(world_dir: String, port: int = 42000) -> Dictionary:
-	return { "server": make_server(world_dir, port), "client": make_client("127.0.0.1:%d" % port) }
+func make_singleplayer(world_dir: String) -> Dictionary:
+	return { "server": make_server(world_dir, "127.0.0.1:42000"), "client": make_client("127.0.0.1:42000") }
+

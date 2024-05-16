@@ -15,7 +15,7 @@ func _on_join_server_pressed() -> void:
 	
 
 func _on_host_locally_pressed() -> void:
-	$"../../Worlds".make_server("%s/New World" % $"../../Worlds".WORLDS_DIR)
+	$"../../Worlds".make_server("%s/New World" % $"../../Worlds".WORLDS_DIR, server_address.text)
 	queue_free()
 	
 
