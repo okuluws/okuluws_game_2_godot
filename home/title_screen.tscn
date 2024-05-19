@@ -87,11 +87,10 @@ text = "Account
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -397.0
-offset_top = 128.0
-offset_right = 460.0
-offset_bottom = 158.0
-grow_horizontal = 2
+offset_left = -398.0
+offset_top = 130.0
+offset_right = -174.0
+offset_bottom = 160.0
 theme = ExtResource("2_q8lmu")
 
 [node name="Account Manage Panel" type="ColorRect" parent="."]

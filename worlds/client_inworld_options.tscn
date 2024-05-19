@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://bueen1crlh8ea"]
+
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_ep3dy"]
+[ext_resource type="Script" path="res://worlds/client_inworld_options.gd" id="1_nyybn"]
+
+[node name="Client Inworld Options" type="CanvasLayer" node_paths=PackedStringArray("quit_world_button")]
+script = ExtResource("1_nyybn")
+quit_world_button = NodePath("Quit World")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Resume" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -256.0
+offset_top = 121.0
+offset_right = 256.0
+offset_bottom = 191.0
+grow_horizontal = 2
+theme = ExtResource("1_ep3dy")
+text = "Resume"
+
+[node name="Open LAN" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -256.0
+offset_top = 201.0
+offset_right = 256.0
+offset_bottom = 271.0
+grow_horizontal = 2
+theme = ExtResource("1_ep3dy")
+text = "Open to LAN"
+
+[node name="Quit World" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -256.0
+offset_top = 283.0
+offset_right = 256.0
+offset_bottom = 353.0
+grow_horizontal = 2
+theme = ExtResource("1_ep3dy")
+text = "Quit"
+
+[connection signal="pressed" from="Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Open LAN" to="." method="_on_open_lan_pressed"]
+[connection signal="pressed" from="Quit World" to="." method="_on_quit_world_pressed"]

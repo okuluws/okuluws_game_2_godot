@@ -34,8 +34,8 @@ func _on_edit_world_pressed() -> void:
 	
 
 func load_world_displays() -> void:
-	for c in $"ScrollContainer/VBoxContainer".get_children():
-		$"ScrollContainer/VBoxContainer".remove_child(c)
+	for c in world_display_vbox.get_children():
+		world_display_vbox.remove_child(c)
 	
 	var worlds_folder := DirAccess.open($"../../Worlds".WORLDS_DIR)
 	for dir_name in worlds_folder.get_directories():
@@ -48,6 +48,12 @@ func load_world_displays() -> void:
 			selected_world_folder_name = dir_name
 			$"Join World".disabled = false
 			$"Edit World".disabled = false
+			$"Host World".disabled = false
 		)
-		$"ScrollContainer/VBoxContainer".add_child(world_display)
+		world_display_vbox.add_child(world_display)
 	
+
+
+func _on_host_world_pressed():
+	$"../../Worlds".make_server("%s/%s" % [$"../../Worlds".WORLDS_DIR, selected_world_folder_name], "*:42000")
+	queue_free()

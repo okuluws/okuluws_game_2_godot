@@ -74,6 +74,8 @@ func api_GET(rel_url: String, auth_request: bool = false):
 func create_record(collection_name: String, data: Dictionary = {}):
 	return await api_POST("collections/%s" % collection_name, data)
 
+func delete_record(collection_name: String, record_id: String, auth_request: bool = false):
+	return await _fetch("%s/api/%s/%s" % [pb_url, collection_name, record_id], ["Authorization: %s" % authtoken] if auth_request else [], HTTPClient.METHOD_DELETE, {})
 
 
 func refresh_auth():

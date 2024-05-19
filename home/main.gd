@@ -11,7 +11,7 @@ var world_display_file: String = "res://home/world_display.tscn"
 
 
 func _ready():
-	pocketbase.finished_ready.connect(func(): add_child(load("res://home/title_screen.tscn").instantiate()))
+	pocketbase.finished_ready.connect(func(): add_child(load(title_screen_file).instantiate()))
 	
 
 

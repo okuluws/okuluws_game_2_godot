@@ -1,3 +1,5 @@
+# TODO: Support shortened / shortcut ip addresses like 0.0.0.0 or ::1
+
 extends Node
 
 
@@ -8,8 +10,8 @@ const WORLD_LEVEL_FILENAME = "level.cfg"
 const client_world_file = "res://worlds/client.tscn"
 const server_world_file = "res://worlds/server.tscn"
 
-var clients = {}
-var servers = {}
+var clients = []
+var servers = []
 
 
 func _ready():
@@ -19,7 +21,7 @@ func _ready():
 
 func create_world_folder(world_name: String) -> int:
 	var worlds_dir = DirAccess.open(WORLDS_DIR)
-	if worlds_dir.dir_exists(world_name): printerr("world folder >%s< already exists" % world_name); return FAILED
+	if worlds_dir.dir_exists(world_name): print_debug("world folder >%s< already exists" % world_name); return FAILED
 	worlds_dir.make_dir(world_name)
 	var world_dir = DirAccess.open("%s/%s" % [worlds_dir.get_current_dir(), world_name])
 	
@@ -33,32 +35,49 @@ func create_world_folder(world_name: String) -> int:
 
 
 func make_client(server_address: String) -> Node:
-	var client = load(client_world_file).instantiate()
-	client.server_ip = server_address.get_slice(":", 0)
-	client.server_port = int(server_address.get_slice(":", 1))
+	var client = _setup_client_w_addr(server_address)
 	$"SubViewportContainer".add_child(client)
-	if clients.has(server_address):
-		clients[server_address].append(client)
-	else:
-		clients[server_address] = [client]
+	clients.append(client)
+	return client
+
+
+func _setup_client_w_addr(server_address: String) -> Node:
+	var client = load(client_world_file).instantiate()
+	var a = _parse_server_address(server_address)
+	client.server_ip = a.ip
+	client.server_port = a.port
 	return client
 
 
 func make_server(_world_dir: String, server_address: String) -> Node:
 	var server = load(server_world_file).instantiate()
 	#server.world_dir = world_dir
-	server.server_ip = server_address.get_slice(":", 0)
-	server.server_port = int(server_address.get_slice(":", 1))
+	var a = _parse_server_address(server_address)
+	server.server_ip = a.ip
+	server.server_port = a.port
 	#server.CONFIG_FILENAME = WORLD_CONFIG_FILENAME
 	#server.LEVEL_FILENAME = WORLD_LEVEL_FILENAME
 	add_child(server)
-	if servers.has(server_address):
-		servers[server_address].append(server)
-	else:
-		servers[server_address] = [server]
+	servers.append(server)
 	return server
 
 
 func make_singleplayer(world_dir: String) -> Dictionary:
-	return { "server": make_server(world_dir, "127.0.0.1:42000"), "client": make_client("127.0.0.1:42000") }
+	var offline_token = Marshalls.raw_to_base64(Crypto.new().generate_random_bytes(2048))
+	var server = make_server(world_dir, "127.0.0.1:42000")
+	server.tickets["-1"] = { "user_id": $"/root/Main/Pocketbase".user_id, "username": $"/root/Main/Pocketbase".username, "token": offline_token, "date": Time.get_unix_time_from_system() }
+	var client = _setup_client_w_addr("127.0.0.1:42000")
+	client.ticket_id = "-1"
+	client.ticket_token = offline_token
+	$"SubViewportContainer".add_child(client)
+	clients.append(client)
+	return { "server": server, "client": client }
+
+
+func _parse_server_address(s: String):
+	var port_str = s.split(":")[-1]
+	return { "ip": s.trim_suffix(":%s" % port_str).lstrip("[").rstrip("]"), "port": int(port_str) }
+
+
+
 

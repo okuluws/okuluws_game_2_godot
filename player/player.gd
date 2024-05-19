@@ -1,8 +1,9 @@
 extends CharacterBody2D
 
 
-var peer_owner: int
-var player_type: String
+var peer_owner = null
+var player_type = null
+var username = null
 
 var facing_direction: Vector2 = Vector2.DOWN
 var healthpoints_max: int = 10
@@ -21,7 +22,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if multiplayer.is_server():
-		display_text = "[center][color=green]Player %s" % name
+		display_text = "[center][color=green]%s" % username
 		if is_idle:
 			display_text += "[color=darkgray][AFK][/color]"
 	
