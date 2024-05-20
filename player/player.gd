@@ -4,6 +4,8 @@ extends CharacterBody2D
 var peer_owner = null
 var player_type = null
 var username = null
+var user_id = null
+var inventory_id = null
 
 var facing_direction: Vector2 = Vector2.DOWN
 var healthpoints_max: int = 10
@@ -82,8 +84,9 @@ func _physics_process(_delta: float) -> void:
 		elif move_direction_signed.y == 1:
 			set_player_facing_direction.rpc_id(1, Vector2.DOWN)
 		
-		set_player_velocity.rpc_id(1, move_direction * 400)
-		velocity = move_direction * 400
+		if move_direction != Vector2.ZERO or ["move_left", "move_right", "move_up", "move_down"].any(func(a): return Input.is_action_just_released(a)):
+			set_player_velocity.rpc_id(1, move_direction * 400)
+		#velocity = move_direction * 400
 		
 		if Input.is_action_just_pressed("attack"):
 			spawn_punch.rpc_id(1, position + get_local_mouse_position().normalized() * 80, get_local_mouse_position().angle() + PI / 2, get_local_mouse_position().normalized() * 1000)
@@ -100,24 +103,25 @@ func _physics_process(_delta: float) -> void:
 
 @rpc("any_peer", "reliable")
 func i_am_not_idle() -> void:
-	assert(multiplayer.is_server())
+	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
 	is_idle = false
 	$IdleTimer.start()
 
 @rpc("any_peer")
 func set_player_velocity(_velocity: Vector2) -> void:
-	assert(multiplayer.is_server())
+	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
 	velocity = _velocity
 
 @rpc("any_peer", "reliable")
 func set_player_facing_direction(_facing_direction: Vector2) -> void:
-	assert(multiplayer.is_server())
+	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
 	facing_direction = _facing_direction
 
 @rpc("any_peer", "reliable")
 func spawn_punch(_position: Vector2, _rotation: float, _velocity: Vector2) -> void:
+	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
 	var new_punch = load("res://player/punch.tscn").instantiate()
-	new_punch.peer_owner = multiplayer.get_remote_sender_id()
+	new_punch.peer_owner = peer_owner
 	new_punch.position = _position
 	new_punch.rotation = _rotation
 	new_punch.velocity = _velocity
@@ -125,3 +129,12 @@ func spawn_punch(_position: Vector2, _rotation: float, _velocity: Vector2) -> vo
 	
 
 
+func _on_item_pickup_area_area_entered(item):
+	if not multiplayer.is_server(): return
+	if not $"../../Items".items.has(item): return
+	var fake_pickup_item = preload("res://player/fake_pickup_item.tscn").instantiate()
+	fake_pickup_item.position = item.position
+	fake_pickup_item.target_position = position
+	fake_pickup_item.item_id = item.id
+	$"../".add_child(fake_pickup_item, true)
+	$"../../Inventories".push_item_to_inventory(item, inventory_id)

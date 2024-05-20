@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://worlds/client_inworld_options.gd" id="1_nyybn"]
 
 [node name="Client Inworld Options" type="CanvasLayer" node_paths=PackedStringArray("quit_world_button")]
+visible = false
 script = ExtResource("1_nyybn")
 quit_world_button = NodePath("Quit World")
 

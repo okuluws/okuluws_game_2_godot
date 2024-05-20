@@ -4,3 +4,7 @@
 
 [node name="Items" type="Node"]
 script = ExtResource("1_nrmyb")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://items/item.tscn")
+spawn_path = NodePath("../../Level")

@@ -35,13 +35,13 @@ func create_world_folder(world_name: String) -> int:
 
 
 func make_client(server_address: String) -> Node:
-	var client = _setup_client_w_addr(server_address)
+	var client = _setup_client(server_address)
 	$"SubViewportContainer".add_child(client)
 	clients.append(client)
 	return client
 
 
-func _setup_client_w_addr(server_address: String) -> Node:
+func _setup_client(server_address: String) -> Node:
 	var client = load(client_world_file).instantiate()
 	var a = _parse_server_address(server_address)
 	client.server_ip = a.ip
@@ -49,28 +49,36 @@ func _setup_client_w_addr(server_address: String) -> Node:
 	return client
 
 
-func make_server(_world_dir: String, server_address: String) -> Node:
-	var server = load(server_world_file).instantiate()
-	#server.world_dir = world_dir
-	var a = _parse_server_address(server_address)
-	server.server_ip = a.ip
-	server.server_port = a.port
-	#server.CONFIG_FILENAME = WORLD_CONFIG_FILENAME
-	#server.LEVEL_FILENAME = WORLD_LEVEL_FILENAME
+func make_server(world_dir: String, server_address: String) -> Node:
+	var server = _setup_server(world_dir, server_address)
 	add_child(server)
 	servers.append(server)
+	return server
+
+func _setup_server(world_dir: String, server_address: String) -> Node:
+	var server = load(server_world_file).instantiate()
+	var a = _parse_server_address(server_address)
+	server.world_dir = world_dir
+	server.server_ip = a.ip
+	server.server_port = a.port
 	return server
 
 
 func make_singleplayer(world_dir: String) -> Dictionary:
 	var offline_token = Marshalls.raw_to_base64(Crypto.new().generate_random_bytes(2048))
-	var server = make_server(world_dir, "127.0.0.1:42000")
+	
+	var server = _setup_server(world_dir, "127.0.0.1:42000")
 	server.tickets["-1"] = { "user_id": $"/root/Main/Pocketbase".user_id, "username": $"/root/Main/Pocketbase".username, "token": offline_token, "date": Time.get_unix_time_from_system() }
-	var client = _setup_client_w_addr("127.0.0.1:42000")
+	add_child(server)
+	servers.append(server)
+	
+	var client = _setup_client("127.0.0.1:42000")
 	client.ticket_id = "-1"
 	client.ticket_token = offline_token
+	client.quit_world_queued.connect(server.shutdown)
 	$"SubViewportContainer".add_child(client)
 	clients.append(client)
+	
 	return { "server": server, "client": client }
 
 

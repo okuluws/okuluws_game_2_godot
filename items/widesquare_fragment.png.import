@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://df80c8pnmcxle"
-path="res://.godot/imported/triangle_fragment.png-20c96bd9b6dd725840621e80edb1ff3b.ctex"
+uid="uid://c4qlkr1einhpv"
+path="res://.godot/imported/widesquare_fragment.png-c53d3c29bbdef0a28d3e484f3866001a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player/triangle/triangle_fragment.png"
-dest_files=["res://.godot/imported/triangle_fragment.png-20c96bd9b6dd725840621e80edb1ff3b.ctex"]
+source_file="res://items/widesquare_fragment.png"
+dest_files=["res://.godot/imported/widesquare_fragment.png-c53d3c29bbdef0a28d3e484f3866001a.ctex"]
 
 [params]
 

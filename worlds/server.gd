@@ -3,7 +3,7 @@ extends SubViewport
 
 const FuncU = preload("res://globals/FuncU.gd")
 
-#var world_dir: String
+var world_dir = null
 var server_ip = null
 var server_port = null
 #var CONFIG_FILENAME: String
@@ -13,12 +13,20 @@ var enet = ENetMultiplayerPeer.new()
 var smapi = SceneMultiplayer.new()
 var crypto = Crypto.new()
 var tickets = {}
-signal finished_loading
 var peer_users = {}
+signal load_queued
+signal start_queued
+signal save_queued
 
+
+func _enter_tree():
+	get_tree().set_multiplayer(smapi, get_path())
+
+func _exit_tree():
+	get_tree().set_multiplayer(MultiplayerAPI.create_default_interface(), get_path())
 
 func _ready():
-	print("starting server on %s:%d ..." % [server_ip, server_port])
+	_PRINT_STAMP("starting server with ip %s on port %d ..." % [server_ip, server_port])
 	
 	enet.set_bind_ip(server_ip)
 	enet.create_server(server_port)
@@ -27,7 +35,7 @@ func _ready():
 		var data = JSON.parse_string(raw_data.get_string_from_utf8())
 		if data.has("user_id"):
 			var res = await $"/root/Main/Pocketbase".api_POST("myapp/create_server_ticket", { "user_id": data.user_id })
-			if res.response_code != 200: print_debug("couldnt create server ticket"); return
+			if res.response_code != 200: push_error("couldnt create server ticket"); return
 			tickets[res.body.ticked_id] = { "user_id": res.body.user_id, "username": res.body.username, "token": res.body.token, "date": Time.get_unix_time_from_system() }
 			smapi.send_auth(p, res.body.ticked_id.to_utf8_buffer())
 			return
@@ -37,28 +45,45 @@ func _ready():
 				peer_users[p] = { "user_id": tickets[data.ticket_id].user_id, "username": tickets[data.ticket_id].username }
 				tickets.erase(data.ticket_id)
 				smapi.complete_auth(p)
-				print("ticket auth peer %d as %s" % [p, peer_users[p].username])
+				_PRINT_STAMP("ticket auth peer %d as %s" % [p, peer_users[p].username])
 				return
 			else:
 				smapi.disconnect_peer(p)
-				print_debug("ticket auth fail from peer %d (sus)" % p)
+				push_warning("ticket auth fail from peer %d (sus)" % p)
 				return
 		
 		print_debug("unknown request from peer %d, KICKED" % p)
 		smapi.disconnect_peer(p)
 	)
-	smapi.peer_connected.connect(func(peer_id): print("connected user %s, peer_id: %d" % [peer_users[peer_id].username, peer_id]))
+	smapi.peer_connected.connect(func(peer_id): _PRINT_STAMP("connected user %s, peer %d" % [peer_users[peer_id].username, peer_id]))
 	smapi.peer_authentication_failed.connect(func(peer_id):
-		print("peer %d failed auth" % peer_id)
+		_PRINT_STAMP("peer %d failed auth" % peer_id)
 		peer_users.erase(peer_id)
 	)
 	smapi.peer_disconnected.connect(func(peer_id):
-		print("disconnected client peer %d" % peer_id)
+		_PRINT_STAMP("disconnected user %s, peer %d" % [peer_users[peer_id].username, peer_id])
 		peer_users.erase(peer_id)
 	)
-	get_tree().set_multiplayer(smapi, get_path())
 	
-	finished_loading.emit()
-	print("starting server done.")
+	load_queued.emit()
+	
+	start_queued.emit()
+	
+	_PRINT_STAMP("starting server done.")
 
 
+func _PRINT_STAMP(s: String):
+	print("[%s][%s] %s" % [name, Time.get_time_string_from_system(), s])
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		shutdown()
+		
+	
+
+
+func shutdown():
+	save_queued.emit()
+	queue_free()
+	_PRINT_STAMP("shutdown server")

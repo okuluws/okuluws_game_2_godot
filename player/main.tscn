@@ -6,5 +6,5 @@
 script = ExtResource("1_klcd0")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://player/player.tscn", "res://player/punch.tscn")
+_spawnable_scenes = PackedStringArray("res://player/player.tscn", "res://player/punch.tscn", "res://player/fake_pickup_item.tscn")
 spawn_path = NodePath("../../Level")

@@ -1,10 +1,14 @@
 extends Area2D
 
 
-@export var data := {
-	"display_name": null,
-	"type_id": null,
-	"stack": 1
-}
+var id = null
+var stack = null:
+	set(val):
+		stack = val
+		if stack <= 0:
+			$"../../Items".despawn_item(self)
 
-const is_player_pickupable = true
+
+func _ready():
+	$"AnimatedSprite2D".sprite_frames = $"../../Items".config[id].sprite_frames
+	$"AnimatedSprite2D".play("default")
