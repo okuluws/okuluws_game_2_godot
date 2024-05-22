@@ -1,7 +1,4 @@
-class_name Main extends Node
-
-
-const FunU = preload("res://globals/FuncU.gd")
+extends Node
 
 
 func _ready():
