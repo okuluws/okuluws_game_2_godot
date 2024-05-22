@@ -4,7 +4,7 @@ extends CanvasLayer
 @onready var player = $"../"
 @onready var all_slots = $"Hotbar".get_children() + $"Inventory".get_children()
 
-var last_pressed_slot_id
+var action_slot_id
 
 
 func _ready():
@@ -27,13 +27,15 @@ func _process(_delta):
 
 
 func _on_slot_pressed(slot_id):
-	if last_pressed_slot_id == null: last_pressed_slot_id = slot_id; return
-	match [player.client_inventory[last_pressed_slot_id].item_id != null, player.client_inventory[slot_id].item_id != null]:
-		[true, false]:
-			player.do_action_slot.rpc_id(1, last_pressed_slot_id, slot_id)
-			
-	last_pressed_slot_id = null
+	if action_slot_id == null:
+		if player.client_inventory[slot_id].item_id != null:
+			action_slot_id = slot_id
+		return
 	
+	match [player.client_inventory[action_slot_id].item_id != null, player.client_inventory[slot_id].item_id != null]:
+		[true, false]:
+			player.do_action_slot.rpc_id(1, action_slot_id, slot_id)
+	action_slot_id = null
 
 
 func _on_open_inventory_toggled(toggled_on):

@@ -54,85 +54,72 @@ func create_default_inventory(slot_count: int):
 	inventories[inventory_id] = {}
 	for i in range(slot_count):
 		inventories[inventory_id]["%d" % i] = {
-			"stack": null,
+			"stack": 0,
 			"capacity": 64.0,
 			"item_id": null,
 		}
 	return inventory_id
 
-func get_slot(inventory_id, slot_id):
-	return inventories[inventory_id][slot_id]
 
-func set_slot(inventory_id, slot_id, slot):
-	inventories[inventory_id][slot_id] = slot
-
-func set_slot_stack(inventory_id, slot_id, stack):
-	if stack > 0:
-		inventories[inventory_id][slot_id].stack = stack
-	else:
+func add_stack_to_slot(inventory_id, slot_id, amount):
+	_ERR_SLOT_EXISTS(inventory_id, slot_id)
+	
+	inventories[inventory_id][slot_id].stack += amount
+	if inventories[inventory_id][slot_id].stack <= 0:
 		inventories[inventory_id][slot_id].item_id = null
-		inventories[inventory_id][slot_id].stack = null
-
 
 
 func push_item_to_slot(item: Node, inventory_id: String, slot_id: String):
-	if not inventories.has(inventory_id): push_error("couldn't find inventory %s" % inventory_id); return
-	if not inventories[inventory_id].has(slot_id): push_error("couldn't find slot %s in inventory %s" % [slot_id, inventory_id]); return
+	_ERR_SLOT_EXISTS(inventory_id, slot_id)
 	
-	var pushable_count = get_pushable_count(item.stack, item.id, inventories[inventory_id][slot_id].stack, inventories[inventory_id][slot_id].capacity, inventories[inventory_id][slot_id].item_id)
+	if item.id == null: return 0
+	var s = inventories[inventory_id][slot_id]
+	var pushable_count = get_pushable_count(item.stack, item.id, s.stack, s.capacity, s.item_id)
 	if pushable_count > 0:
-		if inventories[inventory_id][slot_id].item_id == null:
-			inventories[inventory_id][slot_id].stack = 0
-			inventories[inventory_id][slot_id].item_id = item.id
+		if s.item_id == null: s.item_id = item.id; s.stack = 0
+		s.stack += pushable_count
 		item.stack -= pushable_count
-		inventories[inventory_id][slot_id].stack += pushable_count
+		if item.stack <= 0: item.despawn()
 	return pushable_count
 
 
 func push_slot_to_slot(inventory_a, slot_a, inventory_b, slot_b):
-	if not inventories.has(inventory_a): push_error("couldn't find inventory_a %s" % inventory_a); return
-	if not inventories[inventory_a].has(slot_a): push_error("couldn't find slot %s in inventory_a %s" % [slot_a, inventory_a]); return
-	if not inventories.has(inventory_b): push_error("couldn't find inventory_b %s" % inventory_b); return
-	if not inventories[inventory_b].has(slot_b): push_error("couldn't find slot %s in inventory_b %s" % [slot_b, inventory_b]); return
+	_ERR_SLOT_EXISTS(inventory_a, slot_a)
+	_ERR_SLOT_EXISTS(inventory_b, slot_b)
 	
 	var sa = inventories[inventory_a][slot_a]
 	var sb = inventories[inventory_b][slot_b]
+	if sa.item_id == null: return 0
 	var pushable_count = get_pushable_count(sa.stack, sa.item_id, sb.stack, sb.capacity, sb.item_id)
 	if pushable_count > 0:
-		if sb.item_id == null:
-			sb.stack = 0
-			sb.item_id = sa.item_id
-		sa.stack -= pushable_count
-		if sa.stack == 0:
-			sa.item_id = null
-			sa.stack = null
+		if sb.item_id == null: sb.item_id = sa.item_id; sb.stack = 0
 		sb.stack += pushable_count
+		sa.stack -= pushable_count
+		if sa.stack <= 0: sa.item_id = null
 	return pushable_count
 
 
 func push_item_to_inventory(item: Node, inventory_id: String):
-	if not inventories.has(inventory_id): push_error("couldn't find inventory %s" % inventory_id); return
+	_ERR_INVENTORY_EXISTS(inventory_id)
+	if item.id == null: return 0
 	var pushed_stacks = 0
 	for slot_id in inventories[inventory_id]:
-		pushed_stacks += push_item_to_slot(item, inventory_id, slot_id)
 		if item.stack <= 0:
 			break
-	
+		pushed_stacks += push_item_to_slot(item, inventory_id, slot_id)
 	return pushed_stacks
 
 
-func push_slot_to_inventory(inventory_a, slot_a, inventory_b): 
-	if not inventories.has(inventory_a): push_error("couldn't find inventory_a %s" % inventory_a); return
-	if not inventories[inventory_a].has(slot_a): push_error("couldn't find slot %s in inventory_a %s" % [slot_a, inventory_a]); return
-	if not inventories.has(inventory_b): push_error("couldn't find inventory_b %s" % inventory_b); return
+func push_slot_to_inventory(inventory_a, slot_a, inventory_b):
+	_ERR_SLOT_EXISTS(inventory_a, slot_a)
+	_ERR_INVENTORY_EXISTS(inventory_b)
+	var sa = inventories[inventory_a][slot_a]
+	if sa.item_id == null: return 0
 	var pushed_stacks = 0
 	for slot_b in inventories[inventory_b]:
-		pushed_stacks += push_slot_to_slot(inventory_a, slot_a, inventory_b, slot_b)
-		if inventories[inventory_a][slot_a].stack <= 0:
-			inventories[inventory_a][slot_a].stack = null
-			inventories[inventory_a][slot_a].item_id = null
+		if sa.stack <= 0:
 			break
-	
+		pushed_stacks += push_slot_to_slot(inventory_a, slot_a, inventory_b, slot_b)
 	return pushed_stacks
 
 
@@ -146,3 +133,11 @@ func get_pushable_count(stack_a, id_a, stack_b, capacity_b, id_b):
 		return min(floor(capacity_b / $"../Items".config[id_a].size) - stack_b, stack_a)
 	
 	push_error("wtf?!")
+
+
+func _ERR_INVENTORY_EXISTS(inventory_id):
+	if not inventories.has(inventory_id): push_error("couldn't find inventory %s" % inventory_id)
+
+func _ERR_SLOT_EXISTS(inventory_id, slot_id):
+	if not inventories.has(inventory_id): push_error("couldn't find inventory %s" % inventory_id)
+	elif not inventories[inventory_id].has(slot_id): push_error("couldn't find slot %s in inventory %s" % [slot_id, inventory_id])

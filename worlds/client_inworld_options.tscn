@@ -1,22 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://bueen1crlh8ea"]
+[gd_scene load_steps=5 format=3 uid="uid://bueen1crlh8ea"]
 
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_ep3dy"]
 [ext_resource type="Script" path="res://worlds/client_inworld_options.gd" id="1_nyybn"]
 
+[sub_resource type="InputEventAction" id="InputEventAction_sa528"]
+action = &"escape"
+
+[sub_resource type="Shortcut" id="Shortcut_3b8kb"]
+events = [SubResource("InputEventAction_sa528")]
+
 [node name="Client Inworld Options" type="CanvasLayer" node_paths=PackedStringArray("quit_world_button")]
 layer = 2
-visible = false
 script = ExtResource("1_nyybn")
-quit_world_button = NodePath("Quit World")
+quit_world_button = NodePath("CanvasLayer/Quit World")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 2
+visible = false
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Resume" type="Button" parent="."]
+[node name="Resume" type="Button" parent="CanvasLayer"]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -28,7 +37,7 @@ grow_horizontal = 2
 theme = ExtResource("1_ep3dy")
 text = "Resume"
 
-[node name="Open LAN" type="Button" parent="."]
+[node name="Open LAN" type="Button" parent="CanvasLayer"]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -40,7 +49,7 @@ grow_horizontal = 2
 theme = ExtResource("1_ep3dy")
 text = "Open to LAN"
 
-[node name="Quit World" type="Button" parent="."]
+[node name="Quit World" type="Button" parent="CanvasLayer"]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -52,6 +61,33 @@ grow_horizontal = 2
 theme = ExtResource("1_ep3dy")
 text = "Quit"
 
-[connection signal="pressed" from="Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="Open LAN" to="." method="_on_open_lan_pressed"]
-[connection signal="pressed" from="Quit World" to="." method="_on_quit_world_pressed"]
+[node name="Open" type="Button" parent="."]
+offset_left = 17.0
+offset_top = 11.0
+offset_right = 126.0
+offset_bottom = 71.0
+toggle_mode = true
+action_mode = 0
+shortcut = SubResource("Shortcut_3b8kb")
+
+[node name="Label" type="Label" parent="Open"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -14.5
+offset_top = -30.0
+offset_right = 33.5
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ep3dy")
+theme_override_font_sizes/font_size = 60
+text = "="
+
+[connection signal="pressed" from="CanvasLayer/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="CanvasLayer/Open LAN" to="." method="_on_open_lan_pressed"]
+[connection signal="pressed" from="CanvasLayer/Quit World" to="." method="_on_quit_world_pressed"]
+[connection signal="toggled" from="Open" to="." method="_on_open_toggled"]

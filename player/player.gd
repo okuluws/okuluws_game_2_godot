@@ -145,6 +145,4 @@ func _on_item_pickup_area_area_entered(item):
 func do_action_slot(slot_a, slot_b):
 	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
 	$"../../Inventories".push_slot_to_slot(inventory_id, slot_a, inventory_id, slot_b)
-	prints(slot_a, slot_b)
-	
 	
