@@ -1,11 +1,11 @@
 extends CharacterBody2D
 
 
-var peer_owner = null
-var player_type = null
-var username = null
-var user_id = null
-var inventory_id = null
+var peer_owner
+var player_type
+var username
+var user_id
+var inventory_id
 
 var facing_direction: Vector2 = Vector2.DOWN
 var healthpoints_max: int = 10
@@ -13,6 +13,7 @@ var healthpoints: int = 10
 var coins: int = 0
 var display_text: String
 var is_idle: bool
+var client_inventory
 
 
 func _ready() -> void:
@@ -20,6 +21,7 @@ func _ready() -> void:
 		$IdleTimer.start()
 	elif peer_owner == multiplayer.get_unique_id():
 		$"Camera2D".enabled = true
+		add_child(preload("res://player/ui.tscn").instantiate())
 	
 
 func _process(_delta: float) -> void:
@@ -27,6 +29,7 @@ func _process(_delta: float) -> void:
 		display_text = "[center][color=green]%s" % username
 		if is_idle:
 			display_text += "[color=darkgray][AFK][/color]"
+		client_inventory = $"../../Inventories".inventories[inventory_id]
 	
 	match player_type:
 		"square":
@@ -94,9 +97,7 @@ func _physics_process(_delta: float) -> void:
 		
 		if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action: String) -> bool: return Input.is_action_pressed(_action)):
 			i_am_not_idle.rpc_id(1)
-		#
-		#if Input.is_action_just_pressed("open_inventory"):
-			#Client.inventory_gui.visible = not Client.inventory_gui.visible
+	
 	
 	move_and_slide()
 
@@ -132,9 +133,18 @@ func spawn_punch(_position: Vector2, _rotation: float, _velocity: Vector2) -> vo
 func _on_item_pickup_area_area_entered(item):
 	if not multiplayer.is_server(): return
 	if not $"../../Items".items.has(item): return
-	var fake_pickup_item = preload("res://player/fake_pickup_item.tscn").instantiate()
-	fake_pickup_item.position = item.position
-	fake_pickup_item.target_position = position
-	fake_pickup_item.item_id = item.id
-	$"../".add_child(fake_pickup_item, true)
-	$"../../Inventories".push_item_to_inventory(item, inventory_id)
+	if $"../../Inventories".push_item_to_inventory(item, inventory_id) > 0:
+		var fake_pickup_item = preload("res://player/fake_pickup_item.tscn").instantiate()
+		fake_pickup_item.position = item.position
+		fake_pickup_item.target_position = position
+		fake_pickup_item.item_id = item.id
+		$"../".add_child(fake_pickup_item, true)
+
+
+@rpc("any_peer", "reliable")
+func do_action_slot(slot_a, slot_b):
+	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
+	$"../../Inventories".push_slot_to_slot(inventory_id, slot_a, inventory_id, slot_b)
+	prints(slot_a, slot_b)
+	
+	

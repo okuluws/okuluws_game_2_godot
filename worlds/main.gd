@@ -68,7 +68,7 @@ func make_singleplayer(world_dir: String) -> Dictionary:
 	var offline_token = Marshalls.raw_to_base64(Crypto.new().generate_random_bytes(2048))
 	
 	var server = _setup_server(world_dir, "127.0.0.1:42000")
-	server.tickets["-1"] = { "user_id": $"/root/Main/Pocketbase".user_id, "username": $"/root/Main/Pocketbase".username, "token": offline_token, "date": Time.get_unix_time_from_system() }
+	server.tickets["-1"] = { "user_id": "-1", "username": "local player", "token": offline_token, "date": Time.get_unix_time_from_system() }
 	add_child(server)
 	servers.append(server)
 	

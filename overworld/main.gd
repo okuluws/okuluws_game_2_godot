@@ -13,9 +13,8 @@ func _ready():
 			var f = ConfigFile.new()
 			if f.load(savefile) != OK: push_error("couldn't load %s" % savefile); return
 			if not f.get_value("", "spawned_items", false):
-				$"../Items".spawn_item("square_fragment", 1, Vector2(200, 200))
-				$"../Items".spawn_item("triangle_fragment", 1, Vector2(300, 200))
-				$"../Items".spawn_item("widesquare_fragment", 1, Vector2(400, 200))
+				for n in range(1024):
+					$"../Items".spawn_item(["square_fragment", "triangle_fragment", "widesquare_fragment"].pick_random(), randi_range(1, 3), Vector2(randi_range(100, 600), randi_range(-100, 100)))
 				f.set_value("", "spawned_items", true)
 				f.save(savefile)
 				_PRINT_STAMP("spawned items")

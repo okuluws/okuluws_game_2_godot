@@ -3,11 +3,11 @@ extends Node
 
 const auth_file = "user://pocketbase.cfg"
 const auth_collection = "users"
-var pb_url: String = "http://192.168.178.214:8090"
+const pb_url = "http://192.168.178.214:8090"
 
-var authtoken: String
-var username: String
-var user_id: String
+var authtoken = null
+var username = null
+var user_id = null
 
 signal auth_changed
 signal finished_ready

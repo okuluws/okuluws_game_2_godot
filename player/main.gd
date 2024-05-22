@@ -60,6 +60,6 @@ func _load_player_save(player: Node):
 	if cfg.load(savefile) != OK: push_error("couldnt load file %s" % savefile); return FAILED
 	player.position = cfg.get_value(player.user_id, "position", Vector2.ZERO)
 	player.player_type = cfg.get_value(player.user_id, "player_type", ["square", "triangle", "widesquare"].pick_random())
-	player.inventory_id = cfg.get_value(player.user_id, "inventory_id", $"../Inventories".create_default_inventory(32))
+	player.inventory_id = cfg.get_value(player.user_id, "inventory_id") if cfg.has_section_key(player.user_id, "inventory_id") else $"../Inventories".create_default_inventory(40)
 	_PRINT_STAMP("loaded save for %s" % player.username)
 	return OK

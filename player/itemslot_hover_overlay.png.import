@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbx4p3f0vhi6v"
-path="res://.godot/imported/itemslot_selected.png-4a52e7c66fff416df94d9088d7a2fd81.ctex"
+uid="uid://dovfpolfsgcmj"
+path="res://.godot/imported/itemslot_hover_overlay.png-cd8fd3d83fcf4a8db63db4b72f05f7de.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://gui/itemslot_selected.png"
-dest_files=["res://.godot/imported/itemslot_selected.png-4a52e7c66fff416df94d9088d7a2fd81.ctex"]
+source_file="res://player/itemslot_hover_overlay.png"
+dest_files=["res://.godot/imported/itemslot_hover_overlay.png-cd8fd3d83fcf4a8db63db4b72f05f7de.ctex"]
 
 [params]
 

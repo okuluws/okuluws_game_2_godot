@@ -4,15 +4,15 @@ extends Node
 @export var world: Node
 var config = {
 	"square_fragment": {
-		"sprite_frames": load("res://items/square_fragment.tres"),
+		"sprite_frames": preload("res://items/square_fragment.tres"),
 		"size": 1.0
 	},
 	"triangle_fragment": {
-		"sprite_frames": load("res://items/triangle_fragment.tres"),
+		"sprite_frames": preload("res://items/triangle_fragment.tres"),
 		"size": 1.0
 	},
 	"widesquare_fragment": {
-		"sprite_frames": load("res://items/widesquare_fragment.tres"),
+		"sprite_frames": preload("res://items/widesquare_fragment.tres"),
 		"size": 1.0
 	},
 }
@@ -29,7 +29,7 @@ func _ready():
 
 
 func spawn_item(item_id: String, stack: int, position: Vector2):
-	var new_item = load("res://items/item.tscn").instantiate()
+	var new_item = preload("res://items/item.tscn").instantiate()
 	new_item.id = item_id
 	new_item.stack = stack
 	new_item.position = position

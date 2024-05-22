@@ -114,7 +114,3 @@ static func s_to_hhmmss(total_seconds: float) -> String:
 	var hours:  int   =  int(total_seconds / 3600.0)
 	var hhmmss_string:String = "%02dh %02dmin %02.1fs" % [hours, minutes, seconds]
 	return hhmmss_string
-
-
-
-

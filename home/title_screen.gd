@@ -7,7 +7,7 @@ func _ready():
 	
 
 func _on_pocketbase_auth_changed():
-	if $"../".pocketbase.username != "":
+	if $"../".pocketbase.username != null:
 		$"Welcome Back Message".text = "Welcome back %s!!" % $"../".pocketbase.username
 		$"Account Manage Panel/Login Info".text = "Logged in as %s" % $"../".pocketbase.username 
 		$"Account Manage Panel/Logout".visible = true
@@ -32,6 +32,7 @@ func _on_singleplayer_pressed() -> void:
 func _on_quit_pressed() -> void:
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	
+
 
 func _on_account_pressed():
 	if $"Account Manage Panel".visible:
