@@ -1,44 +1,35 @@
 extends CharacterBody2D
 
 
-@export var facing_direction: Vector2 = Vector2.DOWN
-@export var healthpoints_max: int = 10
-@export var healthpoints: int = 10
-@export var coins: int = 0
-@export var player_type: String
-@export var display_text: String
+var peer_owner
+var player_type
+var username
+var user_id
+var inventory_id
 
-@export var peer_id: int
-@export var user_record_id: String
-
-@export var is_idle: bool
-
-
-func load_profile_data(profile_data):
-	assert(multiplayer.is_server())
-	
-	coins = profile_data["coins"]
-	healthpoints_max = profile_data["hp"]
-	player_type = profile_data["player_type"]
-	
+var facing_direction: Vector2 = Vector2.DOWN
+var healthpoints_max: int = 10
+var healthpoints: int = 10
+var coins: int = 0
+var display_text: String
+var is_idle: bool
+var client_inventory
 
 
-func _ready():
+func _ready() -> void:
 	if multiplayer.is_server():
-		set_process(false)
-		set_physics_process(false)
-		await Pocketbase.subscribe("player_profiles/%s" % Server.players[user_record_id].profile_record_id, "*", load_profile_data)
-		load_profile_data(await Server.get_profile_data(Server.players[user_record_id]["profile_record_id"]))
 		$IdleTimer.start()
-		set_process(true)
-		set_physics_process(true)
+	elif peer_owner == multiplayer.get_unique_id():
+		$"Camera2D".enabled = true
+		add_child(preload("res://player/ui.tscn").instantiate())
+	
 
-
-func _process(_delta):
+func _process(_delta: float) -> void:
 	if multiplayer.is_server():
-		display_text = "[center][color=white]%s " % Server.players[user_record_id]["user_username"]
+		display_text = "[center][color=green]%s" % username
 		if is_idle:
 			display_text += "[color=darkgray][AFK][/color]"
+		client_inventory = $"../../Inventories".inventories[inventory_id]
 	
 	match player_type:
 		"square":
@@ -78,61 +69,80 @@ func _process(_delta):
 
 
 
-func _physics_process(_delta):
+func _physics_process(_delta: float) -> void:
 	if multiplayer.is_server():
 		if $IdleTimer.time_left == 0:
 			is_idle = true
 	
-	else:
-		if user_record_id == Pocketbase.user_id.value:
-			var move_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-			var move_direction_signed = move_direction.sign()
-			
-			if move_direction_signed.x == -1:
-				set_player_facing_direction.rpc_id(1, Vector2.LEFT)
-			elif move_direction_signed.x == 1:
-				set_player_facing_direction.rpc_id(1, Vector2.RIGHT)
-			elif move_direction_signed.y == -1:
-				set_player_facing_direction.rpc_id(1, Vector2.UP)
-			elif move_direction_signed.y == 1:
-				set_player_facing_direction.rpc_id(1, Vector2.DOWN)
-			
+	elif peer_owner == multiplayer.get_unique_id():
+		var move_direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		var move_direction_signed := move_direction.sign()
+		
+		if move_direction_signed.x == -1:
+			set_player_facing_direction.rpc_id(1, Vector2.LEFT)
+		elif move_direction_signed.x == 1:
+			set_player_facing_direction.rpc_id(1, Vector2.RIGHT)
+		elif move_direction_signed.y == -1:
+			set_player_facing_direction.rpc_id(1, Vector2.UP)
+		elif move_direction_signed.y == 1:
+			set_player_facing_direction.rpc_id(1, Vector2.DOWN)
+		
+		if move_direction != Vector2.ZERO or ["move_left", "move_right", "move_up", "move_down"].any(func(a): return Input.is_action_just_released(a)):
 			set_player_velocity.rpc_id(1, move_direction * 400)
-			velocity = move_direction * 400
+		#velocity = move_direction * 400
+		
+		if Input.is_action_just_pressed("attack"):
+			spawn_punch.rpc_id(1, position + get_local_mouse_position().normalized() * 80, get_local_mouse_position().angle() + PI / 2, get_local_mouse_position().normalized() * 1000)
 			
-			if Input.is_action_just_pressed("attack"):
-				Server.spawn_entity.rpc_id(1, {
-					"entity_name": "punch",
-					"properties": {
-						"auto_despawn": true,
-						"user_record_id": user_record_id,
-						"position": position + get_local_mouse_position().normalized()  * 80,
-						"rotation": get_local_mouse_position().angle() + PI / 2,
-						"velocity": get_local_mouse_position().normalized() * 1000,
-					},
-				})
-			
-			if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action): return Input.is_action_pressed(_action)):
-				i_am_not_idle.rpc_id(1)
-			
-			if Input.is_action_just_pressed("open_inventory"):
-				Client.inventory_gui.visible = not Client.inventory_gui.visible
+		
+		if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action: String) -> bool: return Input.is_action_pressed(_action)):
+			i_am_not_idle.rpc_id(1)
+	
 	
 	move_and_slide()
 
 
-@rpc("any_peer")
-func i_am_not_idle():
-	assert(multiplayer.is_server())
+@rpc("any_peer", "reliable")
+func i_am_not_idle() -> void:
+	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
 	is_idle = false
 	$IdleTimer.start()
 
 @rpc("any_peer")
-func set_player_velocity(_velocity):
-	assert(multiplayer.is_server())
+func set_player_velocity(_velocity: Vector2) -> void:
+	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
 	velocity = _velocity
 
-@rpc("any_peer")
-func set_player_facing_direction(_facing_direction):
-	assert(multiplayer.is_server())
+@rpc("any_peer", "reliable")
+func set_player_facing_direction(_facing_direction: Vector2) -> void:
+	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
 	facing_direction = _facing_direction
+
+@rpc("any_peer", "reliable")
+func spawn_punch(_position: Vector2, _rotation: float, _velocity: Vector2) -> void:
+	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
+	var new_punch = load("res://player/punch.tscn").instantiate()
+	new_punch.peer_owner = peer_owner
+	new_punch.position = _position
+	new_punch.rotation = _rotation
+	new_punch.velocity = _velocity
+	add_sibling(new_punch, true)
+	
+
+
+func _on_item_pickup_area_area_entered(item):
+	if not multiplayer.is_server(): return
+	if not $"../../Items".items.has(item): return
+	if $"../../Inventories".push_item_to_inventory(item, inventory_id) > 0:
+		var fake_pickup_item = preload("res://player/fake_pickup_item.tscn").instantiate()
+		fake_pickup_item.position = item.position
+		fake_pickup_item.target_position = position
+		fake_pickup_item.item_id = item.id
+		$"../".add_child(fake_pickup_item, true)
+
+
+@rpc("any_peer", "reliable")
+func do_action_slot(slot_a, slot_b):
+	if multiplayer.get_remote_sender_id() != peer_owner: push_warning("unauthorized player action from peer %d" ); return
+	$"../../Inventories".push_slot_to_slot(inventory_id, slot_a, inventory_id, slot_b)
+	

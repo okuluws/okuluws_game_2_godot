@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3 uid="uid://cegssjy7r8gx7"]
+
+[ext_resource type="Script" path="res://main/main.gd" id="1_3puvd"]
+[ext_resource type="PackedScene" uid="uid://dug2d3hft7e68" path="res://home/main.tscn" id="2_2owiu"]
+[ext_resource type="PackedScene" uid="uid://b84wfqxggchwj" path="res://worlds/main.tscn" id="3_rbro1"]
+[ext_resource type="PackedScene" uid="uid://dfnr236wev2ir" path="res://pocketbase/pocketbase.tscn" id="4_4sqoh"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_3puvd")
+
+[node name="Home" parent="." instance=ExtResource("2_2owiu")]
+
+[node name="Worlds" parent="." instance=ExtResource("3_rbro1")]
+
+[node name="Pocketbase" parent="." instance=ExtResource("4_4sqoh")]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://dde62wcnhs6gv"]
+
+[ext_resource type="Script" path="res://worlds/client.gd" id="1_wnrgn"]
+[ext_resource type="PackedScene" uid="uid://bn3a8m5cg1baf" path="res://overworld/main.tscn" id="2_itsqq"]
+[ext_resource type="PackedScene" uid="uid://c4baas5tuml2c" path="res://player/main.tscn" id="3_nphme"]
+[ext_resource type="PackedScene" uid="uid://cwv1t6e7fqjaa" path="res://items/main.tscn" id="4_mmc6f"]
+[ext_resource type="PackedScene" uid="uid://d0odjmlystmb3" path="res://inventories/main.tscn" id="5_p8cyl"]
+
+[node name="Client" type="SubViewport"]
+disable_3d = true
+script = ExtResource("1_wnrgn")
+
+[node name="Level" type="Node2D" parent="."]
+
+[node name="Overworld" parent="." node_paths=PackedStringArray("world") instance=ExtResource("2_itsqq")]
+world = NodePath("..")
+
+[node name="Players" parent="." node_paths=PackedStringArray("world") instance=ExtResource("3_nphme")]
+world = NodePath("..")
+
+[node name="Items" parent="." node_paths=PackedStringArray("world") instance=ExtResource("4_mmc6f")]
+world = NodePath("..")
+
+[node name="Inventories" parent="." node_paths=PackedStringArray("world") instance=ExtResource("5_p8cyl")]
+world = NodePath("..")

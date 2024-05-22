@@ -1,0 +1,73 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjt0tkkrfpo4n"]
+
+[ext_resource type="Script" path="res://home/game_options.gd" id="1_o6cjf"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="2_prsvr"]
+
+[node name="Game Options" type="CanvasLayer"]
+script = ExtResource("1_o6cjf")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -54.0
+offset_top = 29.0
+offset_right = 54.0
+offset_bottom = 59.0
+grow_horizontal = 2
+theme = ExtResource("2_prsvr")
+theme_override_font_sizes/font_size = 40
+text = "Game - Settings"
+
+[node name="TabContainer" type="TabContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -540.0
+offset_top = 88.0
+offset_right = 540.0
+offset_bottom = 556.0
+grow_horizontal = 2
+theme = ExtResource("2_prsvr")
+
+[node name="General" type="Control" parent="TabContainer"]
+layout_mode = 2
+
+[node name="Save Settings" type="Button" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = -79.0
+offset_right = 302.0
+offset_bottom = -17.0
+grow_vertical = 0
+theme = ExtResource("2_prsvr")
+text = "Save"
+
+[node name="Load Settings" type="Button" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 324.0
+offset_top = -79.0
+offset_right = 576.0
+offset_bottom = -16.0
+grow_vertical = 0
+theme = ExtResource("2_prsvr")
+text = "Load from File"
+
+[node name="Back" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -444.0
+offset_top = -79.0
+offset_right = -36.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_prsvr")
+text = "Back"

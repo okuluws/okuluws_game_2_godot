@@ -1,7 +1,0 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://b0by7hlhq1qlj"]
-
-[ext_resource type="FontFile" uid="uid://bg618v7rmq6n1" path="res://gui/MinecraftRegular-Bmg3.otf" id="1_4upxg"]
-
-[resource]
-default_font = ExtResource("1_4upxg")
-default_font_size = 22
