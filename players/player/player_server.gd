@@ -47,12 +47,15 @@ func _physics_process(_delta):
 
 func _on_item_pickup_area_area_entered(item):
 	if not items_handler.items.has(item): return
-	#if inventories_handler.push_item_to_inventory(item, inventory_id) > 0:
-		#var fake_pickup_item = load("res://players/player/common/fake_pickup_item.tscn").instantiate()
-		#fake_pickup_item.position = item.position
-		#fake_pickup_item.target_position = position
-		#fake_pickup_item.item_id = item.id
-		#level_handler.add_child(fake_pickup_item, true)
+	if inventories_handler.push_item_to_inventory(item, inventory_id) > 0:
+		multiplayer_spawner.spawn_function = func(_data):
+			var new_fake_pickup_item = preload("res://players/fake_pickup_item/fake_pickup_item_server.tscn").instantiate()
+			new_fake_pickup_item.position = item.position
+			new_fake_pickup_item.target_position = position
+			new_fake_pickup_item.item_id = item.id
+			return new_fake_pickup_item
+		multiplayer_spawner.spawn("fake_pickup_item")
+		multiplayer_spawner.spawn_function = func(): pass
 
 
 @rpc("any_peer", "reliable")

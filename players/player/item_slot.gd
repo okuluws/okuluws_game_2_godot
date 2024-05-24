@@ -19,6 +19,6 @@ func display_slot(slot):
 		$"Item Count".text = ""
 		return
 	
-	$"AnimatedSprite2D".sprite_frames = $"../../../../../Items".config[slot.item_id].sprite_frames
+	$"AnimatedSprite2D".sprite_frames = $"../../../../../Items/Common".config[slot.item_id].sprite_frames
 	$"Item Count".text = ("%d" % slot.stack) if slot.stack > 1 else ""
 

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dm1tixrgasd1m"]
+
+[ext_resource type="Script" path="res://overworld/main_client.gd" id="1_b2wwt"]
+
+[node name="Overworld" type="Node"]
+script = ExtResource("1_b2wwt")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("../../Level")
