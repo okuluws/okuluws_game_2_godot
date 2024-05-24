@@ -2,11 +2,11 @@ extends Node
 
 
 func _ready():
-	$"MultiplayerSpawner".spawn_function = _spawn_function
+	$"MultiplayerSpawner".spawn_function = func(data):
+		match data:
+			"player":
+				return preload("res://players/player/player_client.tscn").instantiate()
+			"punch":
+				return preload("res://players/punch/punch_client.tscn").instantiate()
 
-
-func _spawn_function(_data):
-	#var new_item = preload("res://players/main_client.tscn").instantiate()
-	#return new_item
-	pass
 

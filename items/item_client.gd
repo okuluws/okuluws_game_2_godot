@@ -8,4 +8,3 @@ var stack
 
 func _ready():
 	sprite_frames = items_config[id].sprite_frames
-

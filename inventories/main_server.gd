@@ -2,15 +2,12 @@ extends Node
 
 
 @onready var server = $"../"
-@onready var items_handler = server.get_node("ItemsServer")
+@onready var savefile = server.world_dir.path_join("inventories.cfg")
+@onready var items_common = server.get_node("Items/Common")
 var inventories = {}
-var savefile = null
 
 
 func _ready():
-	if not server.IS_SERVER: return
-	
-	savefile = server.world_dir.path_join("inventories.cfg")
 	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
 	server.load_queued.connect(_load_inventories)
 	server.save_queued.connect(_save_inventories)
@@ -117,13 +114,13 @@ func push_slot_to_inventory(inventory_a, slot_a, inventory_b):
 
 
 func get_pushable_count(stack_a, id_a, stack_b, capacity_b, id_b):
-	if not items_handler.config.has(id_a): push_error("couldn't find item %s" % id_a); return
+	if not items_common.config.has(id_a): push_error("couldn't find item %s" % id_a); return
 	if id_b == null:
-		return min(floor(capacity_b / items_handler.config[id_a].size), stack_a)
+		return min(floor(capacity_b / items_common.config[id_a].size), stack_a)
 	elif id_b != id_a:
 		return 0
 	elif id_b == id_a:
-		return min(floor(capacity_b / items_handler.config[id_a].size) - stack_b, stack_a)
+		return min(floor(capacity_b / items_common.config[id_a].size) - stack_b, stack_a)
 	
 	push_error("wtf?!")
 

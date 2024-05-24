@@ -9,28 +9,25 @@ var items = []
 
 
 func _ready():
-	item_spawner.spawn_function = _spawn_function
 	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
 	server.load_queued.connect(_load_items)
 	server.save_queued.connect(_save_items)
 
 
-func spawn_item(item_id: String, stack: int, position: Vector2):
-	var item = item_spawner.spawn()
-	item.id = item_id
-	item.stack = stack
-	item.position = position
-	items.append(item)
+func spawn_item(item_id, stack, position):
+	item_spawner.spawn_function = func(_data):
+		var new_item = preload("res://items/item_server.tscn").instantiate()
+		new_item.id = item_id
+		new_item.stack = stack
+		new_item.position = position
+		return new_item
+	items.append(item_spawner.spawn())
+	item_spawner.spawn_function = func(): pass
 
 
 func despawn_item(item: Node):
 	item.queue_free()
 	items.erase(item)
-
-
-func _spawn_function(_data):
-	var new_item = preload("res://items/item_server.tscn").instantiate()
-	return new_item
 
 
 func _save_items():

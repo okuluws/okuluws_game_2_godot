@@ -3,9 +3,9 @@ extends SubViewport
 
 const IS_SERVER = true
 @onready var pocketbase = $"/root/Main/Pocketbase"
-var world_dir = null
-var server_ip = null
-var server_port = null
+var world_dir
+var server_ip
+var server_port
 #var CONFIG_FILENAME: String
 #var LEVEL_FILENAME: String
 

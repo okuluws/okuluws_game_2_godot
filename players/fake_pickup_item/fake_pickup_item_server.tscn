@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://deku1s5qksxha"]
 
-[ext_resource type="Script" path="res://players/player/fake_pickup_item.gd" id="1_f5yt0"]
+[ext_resource type="Script" path="res://players/fake_pickup_item/fake_pickup_item_server.gd" id="1_f5yt0"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_l0p10"]
 properties/0/path = NodePath(".:position")

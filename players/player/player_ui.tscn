@@ -1,0 +1,207 @@
+[gd_scene load_steps=7 format=3 uid="uid://bxvyedtgh5oup"]
+
+[ext_resource type="Script" path="res://players/player/player_ui.gd" id="1_36y60"]
+[ext_resource type="PackedScene" uid="uid://2kp10yh3ks88" path="res://players/player/item_slot.tscn" id="2_go7u1"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="3_j4onj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pmrtj"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_rke7a"]
+action = &"open_inventory"
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_qax0n"]
+events = [SubResource("InputEventAction_rke7a")]
+
+[node name="UI" type="CanvasLayer"]
+script = ExtResource("1_36y60")
+
+[node name="Hotbar" type="HBoxContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -106.0
+offset_right = 320.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Item Slot" parent="Hotbar" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot2" parent="Hotbar" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot3" parent="Hotbar" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot4" parent="Hotbar" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot5" parent="Hotbar" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot6" parent="Hotbar" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot7" parent="Hotbar" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot8" parent="Hotbar" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Inventory" type="GridContainer" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -454.0
+offset_right = 320.0
+offset_bottom = -134.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 8
+
+[node name="Item Slot" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot2" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot3" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot4" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot5" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot6" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot7" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot8" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot9" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot10" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot11" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot12" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot13" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot14" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot15" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot16" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot17" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot18" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot19" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot20" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot21" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot22" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot23" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot24" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot25" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot26" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot27" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot28" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot29" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot30" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot31" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Item Slot32" parent="Inventory" instance=ExtResource("2_go7u1")]
+layout_mode = 2
+
+[node name="Open Inventory" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 327.0
+offset_top = -67.0
+offset_right = 403.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_j4onj")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pmrtj")
+action_mode = 0
+shortcut = SubResource("Shortcut_qax0n")
+shortcut_feedback = false
+shortcut_in_tooltip = false
+
+[node name="Label" type="Label" parent="Open Inventory"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = -20.0
+offset_right = 27.5
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_j4onj")
+theme_override_font_sizes/font_size = 80
+text = "^"
+
+[connection signal="pressed" from="Open Inventory" to="." method="_on_open_inventory_pressed"]

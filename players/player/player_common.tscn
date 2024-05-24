@@ -1,6 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://b2ft3hy267g7s"]
-
-[ext_resource type="Script" path="res://players/player/player_common.gd" id="1_fgcph"]
+[gd_scene load_steps=2 format=3 uid="uid://l656i6ffv5hp"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_6th57"]
 properties/0/path = NodePath(".:peer_owner")
@@ -30,9 +28,9 @@ properties/7/replication_mode = 2
 properties/8/path = NodePath(".:position")
 properties/8/spawn = true
 properties/8/replication_mode = 2
+properties/9/path = NodePath("CollisionPolygon2D:polygon")
+properties/9/spawn = true
+properties/9/replication_mode = 2
 
-[node name="PlayerCommon" type="Node"]
-script = ExtResource("1_fgcph")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer"]
 replication_config = SubResource("SceneReplicationConfig_6th57")

@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://worlds/client.gd" id="1_wnrgn"]
 [ext_resource type="PackedScene" uid="uid://bn3a8m5cg1baf" path="res://overworld/main.tscn" id="2_itsqq"]
-[ext_resource type="PackedScene" uid="uid://d0odjmlystmb3" path="res://inventories/main.tscn" id="5_p8cyl"]
 [ext_resource type="PackedScene" uid="uid://bjutk26pi1nl3" path="res://items/main_client.tscn" id="6_k8oxm"]
+[ext_resource type="PackedScene" uid="uid://e3dq207u8iq3" path="res://players/main_client.tscn" id="6_n88um"]
 [ext_resource type="PackedScene" uid="uid://dyvkhsafbh6xw" path="res://worlds/chat.tscn" id="6_nwgag"]
 
 [node name="Client" type="SubViewport"]
@@ -14,8 +14,8 @@ script = ExtResource("1_wnrgn")
 
 [node name="Overworld" parent="." instance=ExtResource("2_itsqq")]
 
-[node name="Inventories" parent="." instance=ExtResource("5_p8cyl")]
-
 [node name="Chat" parent="." instance=ExtResource("6_nwgag")]
 
 [node name="Items" parent="." instance=ExtResource("6_k8oxm")]
+
+[node name="Players" parent="." instance=ExtResource("6_n88um")]
