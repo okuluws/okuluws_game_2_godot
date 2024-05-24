@@ -1,21 +1,19 @@
 extends Node
 
 
-@export var world: Node
+@onready var server = $"../"
+@onready var items_handler = server.get_node("ItemsServer")
 var inventories = {}
 var savefile = null
 
 
 func _ready():
-	if world.name == "Server":
-		savefile = world.world_dir.path_join("inventories.cfg")
-		if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
-		world.load_queued.connect(_load_inventories)
-		world.save_queued.connect(_save_inventories)
-
-
-func _PRINT_STAMP(s: String):
-	print("[%s][%s] %s" % [name, Time.get_time_string_from_system(), s])
+	if not server.IS_SERVER: return
+	
+	savefile = server.world_dir.path_join("inventories.cfg")
+	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
+	server.load_queued.connect(_load_inventories)
+	server.save_queued.connect(_save_inventories)
 
 
 func _save_inventories():
@@ -28,7 +26,7 @@ func _save_inventories():
 				"item_id": inventories[i][s].item_id,
 			})
 	if f.save(savefile) != OK: push_error("couldn't save %s" % savefile); return
-	_PRINT_STAMP("saved inventories")
+	server.log_default("saved inventories")
 
 
 func _load_inventories():
@@ -43,7 +41,7 @@ func _load_inventories():
 				"capacity": f.get_value(section, key).capacity,
 				"item_id": f.get_value(section, key).item_id,
 			}
-	_PRINT_STAMP("loaded inventories")
+	server.log_default("loaded inventories")
 
 
 func create_default_inventory(slot_count: int):
@@ -62,16 +60,14 @@ func create_default_inventory(slot_count: int):
 
 
 func add_stack_to_slot(inventory_id, slot_id, amount):
-	_ERR_SLOT_EXISTS(inventory_id, slot_id)
-	
+	if _ERR_SLOT_EXISTS(inventory_id, slot_id): return
 	inventories[inventory_id][slot_id].stack += amount
 	if inventories[inventory_id][slot_id].stack <= 0:
 		inventories[inventory_id][slot_id].item_id = null
 
 
 func push_item_to_slot(item: Node, inventory_id: String, slot_id: String):
-	_ERR_SLOT_EXISTS(inventory_id, slot_id)
-	
+	if _ERR_SLOT_EXISTS(inventory_id, slot_id): return
 	if item.id == null: return 0
 	var s = inventories[inventory_id][slot_id]
 	var pushable_count = get_pushable_count(item.stack, item.id, s.stack, s.capacity, s.item_id)
@@ -84,9 +80,7 @@ func push_item_to_slot(item: Node, inventory_id: String, slot_id: String):
 
 
 func push_slot_to_slot(inventory_a, slot_a, inventory_b, slot_b):
-	_ERR_SLOT_EXISTS(inventory_a, slot_a)
-	_ERR_SLOT_EXISTS(inventory_b, slot_b)
-	
+	if _any_true([_ERR_SLOT_EXISTS(inventory_a, slot_a), _ERR_SLOT_EXISTS(inventory_b, slot_b)]): return
 	var sa = inventories[inventory_a][slot_a]
 	var sb = inventories[inventory_b][slot_b]
 	if sa.item_id == null: return 0
@@ -100,7 +94,7 @@ func push_slot_to_slot(inventory_a, slot_a, inventory_b, slot_b):
 
 
 func push_item_to_inventory(item: Node, inventory_id: String):
-	_ERR_INVENTORY_EXISTS(inventory_id)
+	if _ERR_INVENTORY_EXISTS(inventory_id): return
 	if item.id == null: return 0
 	var pushed_stacks = 0
 	for slot_id in inventories[inventory_id]:
@@ -111,8 +105,7 @@ func push_item_to_inventory(item: Node, inventory_id: String):
 
 
 func push_slot_to_inventory(inventory_a, slot_a, inventory_b):
-	_ERR_SLOT_EXISTS(inventory_a, slot_a)
-	_ERR_INVENTORY_EXISTS(inventory_b)
+	if _any_true([_ERR_SLOT_EXISTS(inventory_a, slot_a), _ERR_INVENTORY_EXISTS(inventory_b)]): return
 	var sa = inventories[inventory_a][slot_a]
 	if sa.item_id == null: return 0
 	var pushed_stacks = 0
@@ -124,20 +117,29 @@ func push_slot_to_inventory(inventory_a, slot_a, inventory_b):
 
 
 func get_pushable_count(stack_a, id_a, stack_b, capacity_b, id_b):
-	if not $"../Items".config.has(id_a): push_error("couldn't find item %s" % id_a); return
+	if not items_handler.config.has(id_a): push_error("couldn't find item %s" % id_a); return
 	if id_b == null:
-		return min(floor(capacity_b / $"../Items".config[id_a].size), stack_a)
+		return min(floor(capacity_b / items_handler.config[id_a].size), stack_a)
 	elif id_b != id_a:
 		return 0
 	elif id_b == id_a:
-		return min(floor(capacity_b / $"../Items".config[id_a].size) - stack_b, stack_a)
+		return min(floor(capacity_b / items_handler.config[id_a].size) - stack_b, stack_a)
 	
 	push_error("wtf?!")
 
 
 func _ERR_INVENTORY_EXISTS(inventory_id):
-	if not inventories.has(inventory_id): push_error("couldn't find inventory %s" % inventory_id)
+	if not inventories.has(inventory_id): push_error("couldn't find inventory %s" % inventory_id); return true
+	return false
+
 
 func _ERR_SLOT_EXISTS(inventory_id, slot_id):
-	if not inventories.has(inventory_id): push_error("couldn't find inventory %s" % inventory_id)
-	elif not inventories[inventory_id].has(slot_id): push_error("couldn't find slot %s in inventory %s" % [slot_id, inventory_id])
+	if not inventories.has(inventory_id): push_error("couldn't find inventory %s" % inventory_id); return true
+	elif not inventories[inventory_id].has(slot_id): push_error("couldn't find slot %s in inventory %s" % [slot_id, inventory_id]); return true
+	return false
+
+
+func _any_true(arr: Array):
+	return arr.any(func(b): return b == true)
+
+

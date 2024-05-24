@@ -2,14 +2,25 @@ extends SubViewport
 
 
 signal quit_world_queued
-
-var server_ip = null
-var server_port = null
-var ticket_token = null
-var ticket_id = null
+const IS_SERVER = false
+@onready var home = $"/root/Main/Home"
+@onready var pocketbase = $"/root/Main/Pocketbase"
+var client_ui_scene = load("res://worlds/client_ui.tscn")
+var server_ip
+var server_port
+var ticket_token 
+var ticket_id
 
 var enet := ENetMultiplayerPeer.new()
 var smapi := SceneMultiplayer.new()
+
+
+func _enter_tree():
+	get_tree().set_multiplayer(smapi, get_path())
+
+
+func _exit_tree():
+	get_tree().set_multiplayer(MultiplayerAPI.create_default_interface(), get_path())
 
 
 func _ready():
@@ -17,14 +28,14 @@ func _ready():
 	
 	smapi.peer_authenticating.connect(func(p):
 		if ticket_token == null or ticket_id == null:
-			smapi.send_auth(p, JSON.stringify({ "user_id": $"/root/Main/Pocketbase".user_id }).to_ascii_buffer())
+			smapi.send_auth(p, JSON.stringify({ "user_id": pocketbase.user_id }).to_ascii_buffer())
 		else:
 			smapi.send_auth(p, JSON.stringify({ "ticket_id": ticket_id, "ticket_token": ticket_token }).to_utf8_buffer())
 			smapi.complete_auth(p)
 	)
 	smapi.set_auth_callback(func(p, data: PackedByteArray):
 		ticket_id = data.get_string_from_utf8()
-		var res = await $"/root/Main/Pocketbase".api_GET("collections/server_tickets/records/%s" % ticket_id, true)
+		var res = await pocketbase.api_GET("collections/server_tickets/records/%s" % ticket_id, true)
 		if res.response_code != 200: push_error("couldnt find ticket with id %s??" % ticket_id); return
 		ticket_token = res.body.token
 		
@@ -43,7 +54,7 @@ func _ready():
 
 func _on_connected_to_server():
 	_PRINT_STAMP("connected to server peer")
-	add_child(load("res://worlds/client_inworld_options.tscn").instantiate())
+	add_child(client_ui_scene.instantiate())
 
 
 func _on_server_disconnected():
@@ -56,10 +67,10 @@ func _PRINT_STAMP(s: String):
 
 func quit_world():
 	quit_world_queued.emit()
-	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
-	enet.close()
+	enet.close.call_deferred()
+	smapi.set_deferred("multiplayer_peer", null)
 	queue_free()
-	$"/root/Main/Home".add_child(load($"/root/Main/Home".title_screen_file).instantiate())
+	home.add_child(load(home.title_screen_file).instantiate())
 	_PRINT_STAMP("quit world")
 	
 

@@ -1,11 +1,14 @@
-extends CanvasLayer
+extends Node
 
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+signal received_message
+var public_chat = []
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+@rpc("any_peer", "reliable")
+func send_message(s):
+	public_chat.append(s)
+
+
+func _on_multiplayer_synchronizer_delta_synchronized():
+	received_message.emit()

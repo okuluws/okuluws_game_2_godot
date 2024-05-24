@@ -1,0 +1,167 @@
+[gd_scene load_steps=16 format=3 uid="uid://cocglstkbohxi"]
+
+[ext_resource type="Script" path="res://players/player/player_client.gd" id="1_kylph"]
+[ext_resource type="Texture2D" uid="uid://b0gv64wvajret" path="res://players/player/player_type_textures/square.png" id="2_bolyh"]
+[ext_resource type="Texture2D" uid="uid://cgosb5qdc24n" path="res://players/player/player_type_textures/square_left.png" id="3_3vxoj"]
+[ext_resource type="Texture2D" uid="uid://baqgbnh3ctcgy" path="res://players/player/player_type_textures/square_right.png" id="4_n3pg8"]
+[ext_resource type="Texture2D" uid="uid://bw8g2oh1hexk1" path="res://players/player/player_type_textures/triangle.png" id="5_1ijut"]
+[ext_resource type="Texture2D" uid="uid://da72kxo0pex4t" path="res://players/player/player_type_textures/triangle_left.png" id="6_iegot"]
+[ext_resource type="Texture2D" uid="uid://lueb0gkw8oyr" path="res://players/player/player_type_textures/triangle_right.png" id="7_ldhgm"]
+[ext_resource type="Texture2D" uid="uid://gjh8om43wt0w" path="res://players/player/player_type_textures/widesquare.png" id="8_1gi0m"]
+[ext_resource type="Texture2D" uid="uid://xeg0s52f6dnp" path="res://players/player/player_type_textures/widesquare_left.png" id="9_x8vpw"]
+[ext_resource type="Texture2D" uid="uid://b3whmyh0u225l" path="res://players/player/player_type_textures/widesquare_right.png" id="10_lrul5"]
+[ext_resource type="AnimationLibrary" uid="uid://30r37upuil23" path="res://players/player/player_type_collisions.res" id="11_s1qff"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="12_idfbj"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kjyd5"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_bolyh")
+}],
+"loop": true,
+"name": &"square",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_3vxoj")
+}],
+"loop": true,
+"name": &"square_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_n3pg8")
+}],
+"loop": true,
+"name": &"square_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_1ijut")
+}],
+"loop": true,
+"name": &"triangle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_iegot")
+}],
+"loop": true,
+"name": &"triangle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_ldhgm")
+}],
+"loop": true,
+"name": &"triangle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_1gi0m")
+}],
+"loop": true,
+"name": &"widesquare",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_x8vpw")
+}],
+"loop": true,
+"name": &"widesquare_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_lrul5")
+}],
+"loop": true,
+"name": &"widesquare_right",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_x7leu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionPolygon2D:polygon")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [PackedVector2Array()]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a4vh8"]
+_data = {
+"RESET": SubResource("Animation_x7leu")
+}
+
+[node name="PlayerClient" type="CharacterBody2D"]
+script = ExtResource("1_kylph")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+enabled = false
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_kjyd5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+
+[node name="CollisionAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_a4vh8"),
+"player_type_collisions": ExtResource("11_s1qff")
+}
+
+[node name="DisplayLabelTop" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -93.0
+offset_top = -112.0
+offset_right = 93.0
+offset_bottom = -72.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("12_idfbj")
+bbcode_enabled = true
+fit_content = true
+autowrap_mode = 0
+
+[node name="DisplayLabelBottom" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -83.0
+offset_right = 45.0
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("12_idfbj")
+bbcode_enabled = true
+fit_content = true
+autowrap_mode = 0

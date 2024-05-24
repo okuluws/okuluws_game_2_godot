@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://worlds/server.gd" id="1_fslfu"]
 [ext_resource type="PackedScene" uid="uid://bn3a8m5cg1baf" path="res://overworld/main.tscn" id="2_6s53j"]
-[ext_resource type="PackedScene" uid="uid://c4baas5tuml2c" path="res://player/main.tscn" id="3_pi0wh"]
-[ext_resource type="PackedScene" uid="uid://cwv1t6e7fqjaa" path="res://items/main.tscn" id="4_ld80w"]
+[ext_resource type="PackedScene" uid="uid://cwv1t6e7fqjaa" path="res://items/main_server.tscn" id="4_ld80w"]
 [ext_resource type="PackedScene" uid="uid://d0odjmlystmb3" path="res://inventories/main.tscn" id="5_lrjdv"]
+[ext_resource type="PackedScene" uid="uid://dyvkhsafbh6xw" path="res://worlds/chat.tscn" id="6_s8w88"]
 
 [node name="Server" type="SubViewport"]
 disable_3d = true
@@ -12,14 +12,10 @@ script = ExtResource("1_fslfu")
 
 [node name="Level" type="Node2D" parent="."]
 
-[node name="Overworld" parent="." node_paths=PackedStringArray("world") instance=ExtResource("2_6s53j")]
-world = NodePath("..")
+[node name="Overworld" parent="." instance=ExtResource("2_6s53j")]
 
-[node name="Players" parent="." node_paths=PackedStringArray("world") instance=ExtResource("3_pi0wh")]
-world = NodePath("..")
+[node name="Inventories" parent="." instance=ExtResource("5_lrjdv")]
 
-[node name="Items" parent="." node_paths=PackedStringArray("world") instance=ExtResource("4_ld80w")]
-world = NodePath("..")
+[node name="Chat" parent="." instance=ExtResource("6_s8w88")]
 
-[node name="Inventories" parent="." node_paths=PackedStringArray("world") instance=ExtResource("5_lrjdv")]
-world = NodePath("..")
+[node name="Items" parent="." instance=ExtResource("4_ld80w")]

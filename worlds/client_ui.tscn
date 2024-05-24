@@ -1,0 +1,180 @@
+[gd_scene load_steps=9 format=3 uid="uid://bueen1crlh8ea"]
+
+[ext_resource type="Script" path="res://worlds/client_ui.gd" id="1_2d0ws"]
+[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="2_qp16o"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6w3jb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xto3y"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_ucql7"]
+action = &"enter"
+
+[sub_resource type="Shortcut" id="Shortcut_qkknl"]
+events = [SubResource("InputEventAction_ucql7")]
+
+[sub_resource type="InputEventAction" id="InputEventAction_sa528"]
+action = &"escape"
+
+[sub_resource type="Shortcut" id="Shortcut_3b8kb"]
+events = [SubResource("InputEventAction_sa528")]
+
+[node name="Client UI" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_2d0ws")
+
+[node name="Tabs" type="TabContainer" parent="."]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -438.0
+offset_top = 11.0
+offset_right = 438.0
+offset_bottom = 533.0
+grow_horizontal = 2
+theme = ExtResource("2_qp16o")
+
+[node name="World" type="Panel" parent="Tabs"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_6w3jb")
+
+[node name="Resume" type="Button" parent="Tabs/World"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -256.0
+offset_top = 101.0
+offset_right = 256.0
+offset_bottom = 171.0
+grow_horizontal = 2
+theme = ExtResource("2_qp16o")
+text = "Resume"
+
+[node name="Open LAN" type="Button" parent="Tabs/World"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -256.0
+offset_top = 176.0
+offset_right = 256.0
+offset_bottom = 246.0
+grow_horizontal = 2
+theme = ExtResource("2_qp16o")
+text = "Open to LAN"
+
+[node name="Quit World" type="Button" parent="Tabs/World"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -256.0
+offset_top = 252.0
+offset_right = 256.0
+offset_bottom = 322.0
+grow_horizontal = 2
+theme = ExtResource("2_qp16o")
+text = "Quit"
+
+[node name="Settings" type="Control" parent="Tabs"]
+visible = false
+layout_mode = 2
+
+[node name="Chat" type="Panel" parent="Tabs"]
+visible = false
+layout_mode = 2
+theme = ExtResource("2_qp16o")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_xto3y")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Tabs/Chat"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.927757
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Tabs/Chat/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LineEdit" type="LineEdit" parent="Tabs/Chat"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -38.0
+offset_right = -61.0
+grow_horizontal = 2
+grow_vertical = 0
+caret_blink = true
+
+[node name="Send Message" type="Button" parent="Tabs/Chat"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -61.0
+offset_top = -38.0
+grow_horizontal = 0
+grow_vertical = 0
+shortcut = SubResource("Shortcut_qkknl")
+shortcut_feedback = false
+shortcut_in_tooltip = false
+
+[node name="Label" type="Label" parent="Tabs/Chat/Send Message"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -13.5
+offset_top = 9.0
+offset_right = 10.5
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.57079
+theme_override_font_sizes/font_size = 40
+text = "^"
+
+[node name="Open Tabs" type="Button" parent="."]
+offset_left = 17.0
+offset_top = 11.0
+offset_right = 126.0
+offset_bottom = 71.0
+action_mode = 0
+shortcut = SubResource("Shortcut_3b8kb")
+shortcut_feedback = false
+shortcut_in_tooltip = false
+
+[node name="Label" type="Label" parent="Open Tabs"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -14.5
+offset_top = -30.0
+offset_right = 33.5
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_qp16o")
+theme_override_font_sizes/font_size = 60
+text = "="
+
+[connection signal="pressed" from="Tabs/World/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Tabs/World/Open LAN" to="." method="_on_open_lan_pressed"]
+[connection signal="pressed" from="Tabs/World/Quit World" to="." method="_on_quit_world_pressed"]
+[connection signal="pressed" from="Tabs/Chat/Send Message" to="." method="_on_send_message_pressed"]
+[connection signal="pressed" from="Open Tabs" to="." method="_on_open_tabs_pressed"]

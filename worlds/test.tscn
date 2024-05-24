@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bwo0hfu75fipa"]
-
-[ext_resource type="Texture2D" uid="uid://c32brgefmkhb5" path="res://squareenemy/squareenemy.png" id="1_qooul"]
-
-[node name="Test" type="Sprite2D"]
-texture = ExtResource("1_qooul")

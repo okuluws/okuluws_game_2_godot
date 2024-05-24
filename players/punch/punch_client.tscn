@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6i674vijxmsx"]
+
+[ext_resource type="Script" path="res://players/punch/punch_client.gd" id="1_evo3l"]
+[ext_resource type="Texture2D" uid="uid://5xtyu767ci47" path="res://players/punch/punch.png" id="2_q3vd4"]
+
+[node name="PunchClient" type="CharacterBody2D"]
+script = ExtResource("1_evo3l")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_q3vd4")
