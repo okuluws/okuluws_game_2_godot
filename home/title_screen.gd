@@ -1,15 +1,19 @@
 extends CanvasLayer
 
 
+@onready var home = $"../"
+@onready var pocketbase = $"../../Pocketbase"
+
+
 func _ready():
-	$"../".pocketbase.auth_changed.connect(_on_pocketbase_auth_changed)
+	pocketbase.auth_changed.connect(_on_pocketbase_auth_changed)
 	_on_pocketbase_auth_changed()
 	
 
 func _on_pocketbase_auth_changed():
-	if $"../".pocketbase.username != null:
-		$"Welcome Back Message".text = "Welcome back %s!!" % $"../".pocketbase.username
-		$"Account Manage Panel/Login Info".text = "Logged in as %s" % $"../".pocketbase.username 
+	if pocketbase.username != null:
+		$"Welcome Back Message".text = "Welcome back %s!!" % pocketbase.username
+		$"Account Manage Panel/Login Info".text = "Logged in as %s" % pocketbase.username 
 		$"Account Manage Panel/Logout".visible = true
 	else:
 		$"Welcome Back Message".text = ""
@@ -19,13 +23,13 @@ func _on_pocketbase_auth_changed():
 
 
 func _on_multiplayer_pressed() -> void:
-	$"../".add_child(load($"../".server_selection_file).instantiate())
+	home.add_child(load("res://home/server_selection.tscn").instantiate())
 	queue_free()
 	
 
 
 func _on_singleplayer_pressed() -> void:
-	$"../".add_child(load($"../".world_selection_file).instantiate())
+	home.add_child(load("res://home/world_selection.tscn").instantiate())
 	queue_free()
 	
 
@@ -42,13 +46,13 @@ func _on_account_pressed():
 
 
 func _on_login_pressed():
-	if await $"../".pocketbase.auth_with_password($"Account Manage Panel/Username Line".text, $"Account Manage Panel/Password Line".text) != OK:
+	if await pocketbase.auth_with_password($"Account Manage Panel/Username Line".text, $"Account Manage Panel/Password Line".text) != OK:
 		$"Account Manage Panel/Request Response Info".text = "something went wrong"
 	else:
 		_on_close_pressed()
 
 func _on_sign_up_pressed():
-	if await $"../".pocketbase.create_auth_record($"Account Manage Panel/Username Line".text, $"Account Manage Panel/Password Line".text) != OK:
+	if await pocketbase.create_auth_record($"Account Manage Panel/Username Line".text, $"Account Manage Panel/Password Line".text) != OK:
 		$"Account Manage Panel/Request Response Info".text = "something went wrong"
 	else:
 		_on_login_pressed()
@@ -62,5 +66,5 @@ func _on_close_pressed():
 
 
 func _on_logout_pressed():
-	$"../".pocketbase.delete_auth()
+	pocketbase.delete_auth()
 	_on_close_pressed()

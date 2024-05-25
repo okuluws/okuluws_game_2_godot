@@ -1,51 +1,60 @@
 extends CanvasLayer
 
 
-const FuncU = preload("res://globals/FuncU.gd")
+const WORLDS_DIR = "user://worlds"
 @export var world_display_vbox: VBoxContainer
-var selected_world_folder_name: String
+@onready var worlds_handler = $"../../Worlds"
+@onready var home = $"../"
+var selected_world_dir
 
 
-func _ready() -> void:
+func _ready():
 	load_world_displays()
 	
 
-func _on_new_world_pressed() -> void:
-	$"../../Worlds".create_world_folder("New World")
-	selected_world_folder_name = "New World"
+func _on_new_world_pressed():
+	var world_name = "New World"
+	var world_dir = WORLDS_DIR.path_join(world_name)
+	var n = 1
+	while DirAccess.dir_exists_absolute(world_dir):
+		world_dir = WORLDS_DIR.path_join("%s (%d)" % [world_name, n])
+		n += 1
+	worlds_handler.create_world_folder(world_dir, world_name)
+	selected_world_dir = world_dir
 	load_world_displays()
 	
 
-func _on_back_pressed() -> void:
-	get_parent().add_child(load(get_parent().title_screen_file).instantiate())
+func _on_back_pressed():
+	home.add_child(load("res://home/title_screen.tscn").instantiate())
 	queue_free()
 	
 
-func _on_join_world_pressed() -> void:
-	$"../../Worlds".make_singleplayer("%s/%s" % [$"../../Worlds".WORLDS_DIR, selected_world_folder_name])
+func _on_join_world_pressed():
+	worlds_handler.make_singleplayer(selected_world_dir)
 	queue_free()
 	
 
-func _on_edit_world_pressed() -> void:
-	var world_edit = load(get_parent().world_edit_file).instantiate()
-	world_edit.setup("%s/%s" % [$"../../Worlds".WORLDS_DIR, selected_world_folder_name])
-	get_parent().add_child(world_edit)
+func _on_edit_world_pressed():
+	var world_edit = load("res://home/world_edit.tscn").instantiate()
+	world_edit.world_dir = selected_world_dir
+	home.add_child(world_edit)
 	queue_free()
 	
 
-func load_world_displays() -> void:
+func load_world_displays():
 	for c in world_display_vbox.get_children():
 		world_display_vbox.remove_child(c)
 	
-	var worlds_folder := DirAccess.open($"../../Worlds".WORLDS_DIR)
-	for dir_name in worlds_folder.get_directories():
-		var world_config = FuncU.BetterConfigFile.new("%s/%s/%s" % [worlds_folder.get_current_dir(), dir_name, $"../../Worlds".WORLD_CONFIG_FILENAME])
-		var world_display = load(get_parent().world_display_file).instantiate()
-		world_display.world_name.text = world_config.get_base_value("name")
-		world_display.playtime.text = "Playtime: %s" % FuncU.s_to_hhmmss(world_config.get_base_value("playtime"))
-		world_display.version.text = "version %s" % world_config.get_base_value("version")
-		world_display.pressed.connect(func() -> void:
-			selected_world_folder_name = dir_name
+	for dirname in DirAccess.open(WORLDS_DIR).get_directories():
+		var dir = WORLDS_DIR.path_join(dirname)
+		var world_config = ConfigFile.new()
+		if world_config.load(dir.path_join("config.cfg")) != OK: push_error(); return
+		var world_display = load("res://home/world_display.tscn").instantiate()
+		world_display.world_name.text = world_config.get_value("", "name")
+		world_display.playtime.text = "Playtime: %s" % _s_to_hhmmss(world_config.get_value("", "playtime"))
+		world_display.version.text = "version %s" % world_config.get_value("", "version")
+		world_display.pressed.connect(func():
+			selected_world_dir = dir
 			$"Join World".disabled = false
 			$"Edit World".disabled = false
 			$"Host World".disabled = false
@@ -53,7 +62,16 @@ func load_world_displays() -> void:
 		world_display_vbox.add_child(world_display)
 	
 
-
 func _on_host_world_pressed():
-	$"../../Worlds".make_server("%s/%s" % [$"../../Worlds".WORLDS_DIR, selected_world_folder_name], "*:42000")
+	worlds_handler.make_server(selected_world_dir, "*:42000")
 	queue_free()
+
+
+func _s_to_hhmmss(total_seconds: float) -> String:
+	var seconds:float = fmod(total_seconds , 60.0)
+	var minutes:int   =  int(total_seconds / 60.0) % 60
+	var hours:  int   =  int(total_seconds / 3600.0)
+	var hhmmss_string:String = "%02dh %02dmin %02.1fs" % [hours, minutes, seconds]
+	return hhmmss_string
+
+

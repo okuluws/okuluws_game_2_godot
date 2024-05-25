@@ -24,7 +24,6 @@ func _ready():
 	$"PunchSpawnArea".gui_input.connect(func(event):
 		if event is InputEventScreenTouch:
 			if event.pressed:
-				print("touch?")
 				_spawn_punch(event.position)
 	)
 	

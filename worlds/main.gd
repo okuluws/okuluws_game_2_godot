@@ -3,35 +3,29 @@
 extends Node
 
 
-const FuncU = preload("res://globals/FuncU.gd")
 const WORLDS_DIR = "user://worlds"
-const WORLD_CONFIG_FILENAME = "config.cfg"
-const WORLD_LEVEL_FILENAME = "level.cfg"
-const client_world_file = "res://worlds/client.tscn"
-const server_world_file = "res://worlds/server.tscn"
+var client_world_scene = load("res://worlds/client.tscn")
+var server_world_scene = load("res://worlds/server.tscn")
 
 var clients = []
 var servers = []
 
 
 func _ready():
-	if not DirAccess.dir_exists_absolute(WORLDS_DIR):
-		DirAccess.make_dir_absolute(WORLDS_DIR)
+	if not DirAccess.dir_exists_absolute(WORLDS_DIR): DirAccess.make_dir_absolute(WORLDS_DIR)
 	
 
-func create_world_folder(world_name: String) -> int:
+
+func create_world_folder(path, world_name):
 	var worlds_dir = DirAccess.open(WORLDS_DIR)
-	if worlds_dir.dir_exists(world_name): print_debug("world folder >%s< already exists" % world_name); return FAILED
-	worlds_dir.make_dir(world_name)
-	var world_dir = DirAccess.open("%s/%s" % [worlds_dir.get_current_dir(), world_name])
+	if worlds_dir.dir_exists(path): print_debug("world folder >%s< already exists" % path); return
+	worlds_dir.make_dir(path)
+	var world_config = ConfigFile.new()
+	world_config.set_value("", "name", world_name)
+	world_config.set_value("", "playtime", 0.0)
+	world_config.set_value("", "version", ProjectSettings.get_setting_with_override("application/config/version"))
+	if world_config.save(path.path_join("config.cfg")) != OK: push_error(); return
 	
-	var world_config = FuncU.BetterConfigFile.new("%s/%s" % [world_dir.get_current_dir(), WORLD_CONFIG_FILENAME])
-	world_config.set_base_value("name", world_name)
-	world_config.set_base_value("playtime", 0.0)
-	world_config.set_base_value("version", "0.0.1")
-	world_config.save()
-	
-	return OK
 
 
 func make_client(server_address: String) -> Node:
@@ -42,7 +36,7 @@ func make_client(server_address: String) -> Node:
 
 
 func _setup_client(server_address: String) -> Node:
-	var client = load(client_world_file).instantiate()
+	var client = client_world_scene.instantiate()
 	var a = _parse_server_address(server_address)
 	client.server_ip = a.ip
 	client.server_port = a.port
@@ -56,7 +50,7 @@ func make_server(world_dir: String, server_address: String) -> Node:
 	return server
 
 func _setup_server(world_dir: String, server_address: String) -> Node:
-	var server = load(server_world_file).instantiate()
+	var server = server_world_scene.instantiate()
 	var a = _parse_server_address(server_address)
 	server.world_dir = world_dir
 	server.server_ip = a.ip

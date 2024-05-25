@@ -70,7 +70,7 @@ func quit_world():
 	enet.close.call_deferred()
 	smapi.set_deferred("multiplayer_peer", null)
 	queue_free()
-	home.add_child(load(home.title_screen_file).instantiate())
+	home.add_child(load("res://home/title_screen.tscn").instantiate())
 	_PRINT_STAMP("quit world")
 	
 
