@@ -63,12 +63,7 @@ func _physics_process(_delta):
 		set_player_facing_direction.rpc_id(1, Vector2.DOWN)
 	
 	if move_direction != Vector2.ZERO:
-		set_player_velocity.rpc_id(1, move_direction * 350)
-	
-	if Input.is_action_just_pressed("attack"):
-		spawn_punch.rpc_id(1, position + get_local_mouse_position().normalized() * 80, get_local_mouse_position().angle() + PI / 2, get_local_mouse_position().normalized() * 1000)
-	
-	if ["move_left", "move_right", "move_up", "move_down", "attack"].any(func(_action): return Input.is_action_pressed(_action)):
+		set_player_velocity.rpc_id(1, move_direction * 300)
 		i_am_not_idle.rpc_id(1)
 	
 

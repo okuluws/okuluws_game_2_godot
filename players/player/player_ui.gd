@@ -1,3 +1,5 @@
+# NOTE: (24.05.2024) builtin multitouch should be implemented in the future, https://github.com/godotengine/godot-proposals/issues/3976
+
 extends CanvasLayer
 
 
@@ -18,6 +20,14 @@ func _ready():
 			_on_slot_pressed(str(n))
 		)
 	
+	# multitouch, see NOTES
+	$"PunchSpawnArea".gui_input.connect(func(event):
+		if event is InputEventScreenTouch:
+			if event.pressed:
+				print("touch?")
+				_spawn_punch(event.position)
+	)
+	
 
 
 func _process(_delta):
@@ -32,14 +42,14 @@ func _process(_delta):
 	if moving_joypad:
 		movement_joypad_cirlce.global_position = movement_joypad_cirlce.get_global_mouse_position()
 		var delta_position: Vector2 = movement_joypad_cirlce.global_position - movement_joypad_ring.global_position
-		if delta_position.length() > 80:
-			movement_joypad_ring.global_position = movement_joypad_ring.global_position.move_toward(movement_joypad_cirlce.global_position, delta_position.length() - 80)
+		if delta_position.length() > 70:
+			movement_joypad_ring.global_position = movement_joypad_ring.global_position.move_toward(movement_joypad_cirlce.global_position, delta_position.length() - 70)
 		
 		# doppelt hält besser (clamp technically not needed)
-		Input.action_press("move_left",  clamp(-delta_position.x / 80, 0, 1))
-		Input.action_press("move_right", clamp( delta_position.x / 80, 0, 1))
-		Input.action_press("move_up",    clamp(-delta_position.y / 80, 0, 1))
-		Input.action_press("move_down",  clamp( delta_position.y / 80, 0, 1))
+		Input.action_press("move_left",  clamp(-delta_position.x / 70, 0, 1))
+		Input.action_press("move_right", clamp( delta_position.x / 70, 0, 1))
+		Input.action_press("move_up",    clamp(-delta_position.y / 70, 0, 1))
+		Input.action_press("move_down",  clamp( delta_position.y / 70, 0, 1))
 
 
 func _on_slot_pressed(slot_id):
@@ -72,3 +82,15 @@ func _on_movement_joypad_spawn_area_button_up():
 	Input.action_release("move_right")
 	Input.action_release("move_up")
 	Input.action_release("move_down")
+
+
+func _on_punch_spawn_area_pressed():
+	#_spawn_punch(player.get_global_mouse_position())
+	pass
+
+
+func _spawn_punch(mouse_position):
+	#player.get_canvas_transform().affine_inverse() * mouse_position
+	var normal = player.to_local(player.get_canvas_transform().affine_inverse() * mouse_position).normalized()
+	player.spawn_punch.rpc_id(1, player.position + normal * 80, Vector2.ZERO.angle_to_point(normal) + PI / 2, normal * 1000)
+

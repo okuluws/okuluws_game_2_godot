@@ -1,10 +1,20 @@
-[gd_scene load_steps=14 format=3 uid="uid://bxvyedtgh5oup"]
+[gd_scene load_steps=19 format=3 uid="uid://bxvyedtgh5oup"]
 
 [ext_resource type="Script" path="res://players/player/player_ui.gd" id="1_36y60"]
 [ext_resource type="PackedScene" uid="uid://2kp10yh3ks88" path="res://players/player/item_slot.tscn" id="2_go7u1"]
 [ext_resource type="Texture2D" uid="uid://cvx4784ydkpoa" path="res://players/player/move_joypad_ring.png" id="2_odcgh"]
 [ext_resource type="Texture2D" uid="uid://6fdutlcs8mgv" path="res://players/player/move_joypad_circle.png" id="3_ebo5c"]
 [ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="3_j4onj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_frl8a"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xmcpq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g1507"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6x54"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_75myt"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_br4io"]
 
@@ -28,12 +38,26 @@ events = [SubResource("InputEventAction_rke7a")]
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_36y60")
 
+[node name="PunchSpawnArea" type="Button" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_frl8a")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_xmcpq")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_g1507")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_m6x54")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_75myt")
+action_mode = 0
+
 [node name="MovementJoypadSpawnArea" type="Button" parent="."]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -354.0
-offset_right = 492.0
+offset_top = -307.0
+offset_right = 404.0
 offset_bottom = 6.0
 grow_vertical = 0
 focus_mode = 0
@@ -271,6 +295,7 @@ theme = ExtResource("3_j4onj")
 theme_override_font_sizes/font_size = 80
 text = "^"
 
+[connection signal="pressed" from="PunchSpawnArea" to="." method="_on_punch_spawn_area_pressed"]
 [connection signal="button_down" from="MovementJoypadSpawnArea" to="." method="_on_movement_joypad_spawn_area_button_down"]
 [connection signal="button_up" from="MovementJoypadSpawnArea" to="." method="_on_movement_joypad_spawn_area_button_up"]
 [connection signal="pressed" from="Open Inventory" to="." method="_on_open_inventory_pressed"]
