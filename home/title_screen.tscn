@@ -208,6 +208,7 @@ text = "Close"
 
 [connection signal="pressed" from="VBoxContainer/Singleplayer" to="." method="_on_singleplayer_pressed"]
 [connection signal="pressed" from="VBoxContainer/Multiplayer" to="." method="_on_multiplayer_pressed"]
+[connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="Account" to="." method="_on_account_pressed"]
 [connection signal="pressed" from="Account Manage Panel/Logout" to="." method="_on_logout_pressed"]

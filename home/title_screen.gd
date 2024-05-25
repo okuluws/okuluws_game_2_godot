@@ -68,3 +68,8 @@ func _on_close_pressed():
 func _on_logout_pressed():
 	pocketbase.delete_auth()
 	_on_close_pressed()
+
+
+func _on_options_pressed():
+	home.add_child(load("res://home/game_options.tscn").instantiate())
+	queue_free()
