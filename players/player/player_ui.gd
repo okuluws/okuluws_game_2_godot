@@ -3,6 +3,7 @@
 extends CanvasLayer
 
 
+@onready var main = $"/root/Main"
 @onready var player = $"../"
 @onready var inventory_ui = $"Inventory"
 @onready var hotbar_ui = $"Hotbar"
@@ -27,6 +28,9 @@ func _ready():
 				_spawn_punch(event.position)
 	)
 	
+	if not main.get_virtual_joystick():
+		$"MovementJoypadSpawnArea".disabled = true
+		$"MovementJoypadSpawnArea".mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _process(_delta):

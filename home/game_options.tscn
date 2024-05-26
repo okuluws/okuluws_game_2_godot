@@ -71,7 +71,7 @@ grow_horizontal = 0
 grow_vertical = 2
 horizontal_alignment = 2
 
-[node name="ResolutionButton" type="Button" parent="TabContainer/General"]
+[node name="ContentScaleFactor" type="Button" parent="TabContainer/General"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -82,7 +82,7 @@ offset_bottom = 96.0
 grow_horizontal = 0
 flat = true
 
-[node name="Label" type="Label" parent="TabContainer/General/ResolutionButton"]
+[node name="Label" type="Label" parent="TabContainer/General/ContentScaleFactor"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -94,7 +94,7 @@ offset_bottom = 15.0
 grow_vertical = 2
 text = "Resolution Scale"
 
-[node name="Label2" type="Label" parent="TabContainer/General/ResolutionButton"]
+[node name="Label2" type="Label" parent="TabContainer/General/ContentScaleFactor"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -140,38 +140,32 @@ theme_override_colors/font_color = Color(0.85098, 0.0156863, 0.160784, 1)
 text = "Reset Config"
 
 [node name="Back" type="Button" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -1116.0
-offset_top = -79.0
-offset_right = -808.0
-offset_bottom = -16.0
-grow_horizontal = 0
-grow_vertical = 0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -540.0
+offset_top = 569.0
+offset_right = -232.0
+offset_bottom = 632.0
+grow_horizontal = 2
 theme = ExtResource("2_prsvr")
 text = "Back"
 
 [node name="Save" type="Button" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -313.0
-offset_top = -79.0
-offset_right = -36.0
-offset_bottom = -16.0
-grow_horizontal = 0
-grow_vertical = 0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 258.0
+offset_top = 569.0
+offset_right = 540.0
+offset_bottom = 632.0
+grow_horizontal = 2
 theme = ExtResource("2_prsvr")
 disabled = true
 text = "Save"
 
 [connection signal="pressed" from="TabContainer/General/VirtualJoystickButton" to="." method="_on_virtual_joystick_button_pressed"]
-[connection signal="pressed" from="TabContainer/General/ResolutionButton" to="." method="_on_resolution_button_pressed"]
+[connection signal="pressed" from="TabContainer/General/ContentScaleFactor" to="." method="_on_content_scale_factor_pressed"]
 [connection signal="pressed" from="TabContainer/General/ResetConfigButton" to="." method="_on_reset_config_button_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Save" to="." method="_on_save_pressed"]
