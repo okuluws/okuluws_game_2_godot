@@ -20,15 +20,13 @@ func _ready():
 
 
 func _on_peer_connected(peer_id):
-	multiplayer_spawner.spawn_function = func(_data):
-		var new_player = preload("res://players/player/player_server.tscn").instantiate()
-		new_player.peer_owner = peer_id
-		new_player.username = server.peer_users[peer_id].username
-		new_player.user_id = server.peer_users[peer_id].user_id
-		_load_player_save(new_player)
-		return new_player
+	var new_player = preload("res://players/player/player_server.tscn").instantiate()
+	new_player.peer_owner = peer_id
+	new_player.username = server.peer_users[peer_id].username
+	new_player.user_id = server.peer_users[peer_id].user_id
+	_load_player_save(new_player)
+	multiplayer_spawner.spawn_function = func(_data): multiplayer_spawner.spawn_function = Callable(); return new_player
 	players[peer_id] = multiplayer_spawner.spawn("player")
-	multiplayer_spawner.spawn_function = func(): pass
 	server.log_default("%s joined the game" % players[peer_id].username)
 
 

@@ -14,7 +14,7 @@ func _ready():
 		var f = ConfigFile.new()
 		if f.load(savefile) != OK: push_error("couldn't load %s" % savefile); return
 		if not f.get_value("", "spawned_items", false):
-			for n in range(2048):
+			for n in range(1024):
 				items_handler.spawn_item(["square_fragment", "triangle_fragment", "widesquare_fragment"].pick_random(), 1, Vector2(randi_range(100, 600), randi_range(-100, 100)))
 			f.set_value("", "spawned_items", true)
 			f.save(savefile)

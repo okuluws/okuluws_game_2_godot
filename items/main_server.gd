@@ -15,14 +15,12 @@ func _ready():
 
 
 func spawn_item(item_id, stack, position):
-	item_spawner.spawn_function = func(_data):
-		var new_item = preload("res://items/item_server.tscn").instantiate()
-		new_item.id = item_id
-		new_item.stack = stack
-		new_item.position = position
-		return new_item
+	var new_item = preload("res://items/item_server.tscn").instantiate()
+	new_item.id = item_id
+	new_item.stack = stack
+	new_item.position = position
+	item_spawner.spawn_function = func(_data): item_spawner.spawn_function = Callable(); return new_item
 	items.append(item_spawner.spawn())
-	item_spawner.spawn_function = func(): pass
 
 
 func despawn_item(item: Node):
