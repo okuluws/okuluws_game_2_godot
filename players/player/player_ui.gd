@@ -87,11 +87,6 @@ func _on_movement_joypad_spawn_area_button_up():
 	Input.action_release("move_down")
 
 
-func _on_punch_spawn_area_pressed():
-	#_spawn_punch(player.get_global_mouse_position())
-	pass
-
-
 func _spawn_punch(mouse_position):
 	#player.get_canvas_transform().affine_inverse() * mouse_position
 	var normal = player.to_local(player.get_canvas_transform().affine_inverse() * mouse_position).normalized()

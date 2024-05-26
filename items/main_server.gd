@@ -33,9 +33,9 @@ func despawn_item(item: Node):
 func _save_items():
 	var f = ConfigFile.new()
 	for i in items:
-		f.set_value(i.get_path(), "id", i.id)
-		f.set_value(i.get_path(), "stack", i.stack)
-		f.set_value(i.get_path(), "position", i.position)
+		f.set_value(i.name, "id", i.id)
+		f.set_value(i.name, "stack", i.stack)
+		f.set_value(i.name, "position", i.position)
 	if f.save(savefile) != OK: push_error("couldn't save %s" % savefile); return
 	server.log_default("saved items")
 
