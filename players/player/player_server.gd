@@ -78,15 +78,13 @@ func set_player_facing_direction(_facing_direction):
 @rpc("any_peer", "reliable")
 func spawn_punch(_position, _rotation, _velocity):
 	if _WARN_PEER_WRONG_PLAYER(multiplayer.get_remote_sender_id()): return
-	multiplayer_spawner.spawn_function = func(_data):
-		var new_punch = preload("res://players/punch/punch_server.tscn").instantiate()
-		new_punch.peer_owner = peer_owner
-		new_punch.position = _position
-		new_punch.rotation = _rotation
-		new_punch.velocity = _velocity
-		return new_punch
+	var new_punch = preload("res://players/punch/punch_server.tscn").instantiate()
+	new_punch.peer_owner = peer_owner
+	new_punch.position = _position
+	new_punch.rotation = _rotation
+	new_punch.velocity = _velocity
+	multiplayer_spawner.spawn_function = func(_data): multiplayer_spawner.spawn_function = Callable(); return new_punch
 	multiplayer_spawner.spawn("punch")
-	multiplayer_spawner.spawn_function = func(): pass
 	
 
 
