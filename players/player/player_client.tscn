@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cocglstkbohxi"]
+[gd_scene load_steps=16 format=3 uid="uid://cocglstkbohxi"]
 
 [ext_resource type="Script" path="res://players/player/player_client.gd" id="1_kylph"]
 [ext_resource type="Texture2D" uid="uid://b0gv64wvajret" path="res://players/player/player_type_textures/square.png" id="2_bolyh"]
@@ -11,7 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://xeg0s52f6dnp" path="res://players/player/player_type_textures/widesquare_left.png" id="9_x8vpw"]
 [ext_resource type="Texture2D" uid="uid://b3whmyh0u225l" path="res://players/player/player_type_textures/widesquare_right.png" id="10_lrul5"]
 [ext_resource type="AnimationLibrary" uid="uid://30r37upuil23" path="res://players/player/player_type_collisions.res" id="11_s1qff"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="12_idfbj"]
 [ext_resource type="PackedScene" uid="uid://l656i6ffv5hp" path="res://players/player/player_common.tscn" id="13_wk28a"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_kjyd5"]
@@ -147,7 +146,6 @@ offset_right = 93.0
 offset_bottom = -72.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("12_idfbj")
 bbcode_enabled = true
 fit_content = true
 autowrap_mode = 0
@@ -164,7 +162,6 @@ offset_right = 45.0
 offset_bottom = -43.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("12_idfbj")
 bbcode_enabled = true
 fit_content = true
 autowrap_mode = 0

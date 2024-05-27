@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://b75h5pk7slpam"]
+[gd_scene load_steps=2 format=3 uid="uid://b75h5pk7slpam"]
 
 [ext_resource type="Script" path="res://home/world_display.gd" id="1_541gy"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_hit25"]
 
 [node name="World Display" type="Button" node_paths=PackedStringArray("world_name", "playtime", "version")]
 custom_minimum_size = Vector2(0, 120)
@@ -36,7 +35,6 @@ layout_mode = 1
 offset_right = 274.0
 offset_bottom = 27.0
 mouse_filter = 1
-theme = ExtResource("1_hit25")
 text = "Test"
 fit_content = true
 
@@ -49,7 +47,6 @@ offset_top = -20.0
 offset_right = 542.0
 grow_vertical = 0
 mouse_filter = 1
-theme = ExtResource("1_hit25")
 theme_override_font_sizes/normal_font_size = 20
 text = "Playtime: 37h"
 fit_content = true
@@ -65,7 +62,6 @@ offset_left = -188.0
 offset_top = -20.0
 grow_horizontal = 0
 grow_vertical = 0
-theme = ExtResource("1_hit25")
 theme_override_colors/default_color = Color(0.531713, 0.531713, 0.531713, 1)
 theme_override_font_sizes/normal_font_size = 20
 text = "Version 0.0.1"

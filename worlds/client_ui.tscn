@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://bueen1crlh8ea"]
+[gd_scene load_steps=8 format=3 uid="uid://bueen1crlh8ea"]
 
 [ext_resource type="Script" path="res://worlds/client_ui.gd" id="1_2d0ws"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="2_qp16o"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6w3jb"]
 
@@ -24,7 +23,6 @@ layer = 2
 script = ExtResource("1_2d0ws")
 
 [node name="Tabs" type="TabContainer" parent="."]
-visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -33,7 +31,6 @@ offset_top = 11.0
 offset_right = 438.0
 offset_bottom = 533.0
 grow_horizontal = 2
-theme = ExtResource("2_qp16o")
 
 [node name="World" type="Panel" parent="Tabs"]
 layout_mode = 2
@@ -49,7 +46,6 @@ offset_top = 101.0
 offset_right = 256.0
 offset_bottom = 171.0
 grow_horizontal = 2
-theme = ExtResource("2_qp16o")
 text = "Resume"
 
 [node name="Open LAN" type="Button" parent="Tabs/World"]
@@ -62,7 +58,6 @@ offset_top = 176.0
 offset_right = 256.0
 offset_bottom = 246.0
 grow_horizontal = 2
-theme = ExtResource("2_qp16o")
 text = "Open to LAN"
 
 [node name="Quit World" type="Button" parent="Tabs/World"]
@@ -75,7 +70,6 @@ offset_top = 252.0
 offset_right = 256.0
 offset_bottom = 322.0
 grow_horizontal = 2
-theme = ExtResource("2_qp16o")
 text = "Quit"
 
 [node name="Settings" type="Control" parent="Tabs"]
@@ -85,7 +79,6 @@ layout_mode = 2
 [node name="Chat" type="Panel" parent="Tabs"]
 visible = false
 layout_mode = 2
-theme = ExtResource("2_qp16o")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_xto3y")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Tabs/Chat"]
@@ -169,7 +162,6 @@ offset_right = 33.5
 offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_qp16o")
 theme_override_font_sizes/font_size = 60
 text = "="
 

@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bus6e712ij5qc"]
+[gd_scene load_steps=2 format=3 uid="uid://bus6e712ij5qc"]
 
 [ext_resource type="Script" path="res://home/world_selection.gd" id="1_cep2k"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_m1hu2"]
 
 [node name="World Selection" type="CanvasLayer" node_paths=PackedStringArray("world_display_vbox")]
 script = ExtResource("1_cep2k")
@@ -13,7 +12,6 @@ anchor_right = 1.0
 offset_top = 12.0
 offset_bottom = 52.0
 grow_horizontal = 2
-theme = ExtResource("1_m1hu2")
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
 text = "[center]Worlds"
@@ -31,7 +29,6 @@ offset_right = -10.0
 offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 0
-theme = ExtResource("1_m1hu2")
 text = "New World"
 
 [node name="Back" type="Button" parent="."]
@@ -46,7 +43,6 @@ offset_right = 192.0
 offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 0
-theme = ExtResource("1_m1hu2")
 text = "Back"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
@@ -76,7 +72,6 @@ offset_top = 68.0
 offset_right = 531.0
 offset_bottom = 138.0
 grow_horizontal = 2
-theme = ExtResource("1_m1hu2")
 disabled = true
 text = "Join"
 
@@ -89,7 +84,6 @@ offset_top = 145.0
 offset_right = 531.0
 offset_bottom = 215.0
 grow_horizontal = 2
-theme = ExtResource("1_m1hu2")
 disabled = true
 text = "Edit"
 
@@ -102,7 +96,6 @@ offset_top = 224.0
 offset_right = 531.0
 offset_bottom = 294.0
 grow_horizontal = 2
-theme = ExtResource("1_m1hu2")
 disabled = true
 text = "Host"
 

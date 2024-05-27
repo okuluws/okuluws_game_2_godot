@@ -1,10 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://bxvyedtgh5oup"]
+[gd_scene load_steps=14 format=3 uid="uid://bxvyedtgh5oup"]
 
 [ext_resource type="Script" path="res://players/player/player_ui.gd" id="1_36y60"]
 [ext_resource type="PackedScene" uid="uid://2kp10yh3ks88" path="res://players/player/item_slot.tscn" id="2_go7u1"]
 [ext_resource type="Texture2D" uid="uid://cvx4784ydkpoa" path="res://players/player/move_joypad_ring.png" id="2_odcgh"]
 [ext_resource type="Texture2D" uid="uid://6fdutlcs8mgv" path="res://players/player/move_joypad_circle.png" id="3_ebo5c"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="3_j4onj"]
+[ext_resource type="Texture2D" uid="uid://ccxena86it8n0" path="res://players/player/message-square-lines-svgrepo-com.svg" id="6_rsgrs"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_frl8a"]
 
@@ -15,16 +15,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6x54"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_75myt"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_br4io"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jxpqc"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b0tth"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_31hdb"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_05mrd"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pmrtj"]
 
@@ -53,19 +43,13 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_75myt")
 action_mode = 0
 
 [node name="MovementJoypadSpawnArea" type="Button" parent="."]
-anchors_preset = 2
-anchor_top = 1.0
+anchors_preset = -1
+anchor_top = 0.653
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_top = -307.0
-offset_right = 404.0
-offset_bottom = 6.0
-grow_vertical = 0
+offset_top = -0.480225
+offset_right = -332.0
 focus_mode = 0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_br4io")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_jxpqc")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_b0tth")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_31hdb")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_05mrd")
 
 [node name="MovementJoypadRing" type="Control" parent="."]
 visible = false
@@ -271,7 +255,6 @@ offset_right = 403.0
 offset_bottom = -26.0
 grow_horizontal = 2
 grow_vertical = 0
-theme = ExtResource("3_j4onj")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_pmrtj")
 action_mode = 0
 shortcut = SubResource("Shortcut_qax0n")
@@ -291,9 +274,31 @@ offset_right = 27.5
 offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_j4onj")
 theme_override_font_sizes/font_size = 80
 text = "^"
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = -1
+anchor_top = 0.2375
+anchor_right = 0.397396
+anchor_bottom = 0.763426
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="OpenChatButton" type="Button" parent="."]
+anchors_preset = -1
+anchor_top = 0.237
+anchor_bottom = 0.237
+offset_top = 1.07996
+offset_right = 72.0
+offset_bottom = 73.08
+grow_vertical = 2
+icon = ExtResource("6_rsgrs")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_top = 1527.0
+offset_right = 1526.0
+offset_bottom = 1649.0
 
 [connection signal="button_down" from="MovementJoypadSpawnArea" to="." method="_on_movement_joypad_spawn_area_button_down"]
 [connection signal="button_up" from="MovementJoypadSpawnArea" to="." method="_on_movement_joypad_spawn_area_button_up"]

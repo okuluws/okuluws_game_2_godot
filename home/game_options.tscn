@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cjt0tkkrfpo4n"]
+[gd_scene load_steps=2 format=3 uid="uid://cjt0tkkrfpo4n"]
 
 [ext_resource type="Script" path="res://home/game_options.gd" id="1_o6cjf"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="2_prsvr"]
 
 [node name="Game Options" type="CanvasLayer"]
 script = ExtResource("1_o6cjf")
@@ -15,7 +14,6 @@ offset_top = 29.0
 offset_right = 54.0
 offset_bottom = 59.0
 grow_horizontal = 2
-theme = ExtResource("2_prsvr")
 theme_override_font_sizes/font_size = 40
 text = "Game - Settings"
 horizontal_alignment = 1
@@ -29,7 +27,6 @@ offset_top = 40.0
 offset_right = 540.0
 offset_bottom = 556.0
 grow_horizontal = 2
-theme = ExtResource("2_prsvr")
 
 [node name="General" type="Control" parent="TabContainer"]
 layout_mode = 2
@@ -124,10 +121,10 @@ offset_right = -20.0
 offset_bottom = 8.0
 grow_horizontal = 0
 grow_vertical = 2
-min_value = 1.0
-max_value = 4.0
+min_value = 0.1
+max_value = 3.0
 step = 0.1
-value = 1.0
+value = 0.1
 
 [node name="ResetConfigButton" type="Button" parent="TabContainer/General"]
 layout_mode = 1
@@ -136,11 +133,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -200.0
+offset_left = -252.0
 offset_top = -38.0
 grow_horizontal = 0
 grow_vertical = 0
-theme = ExtResource("2_prsvr")
 flat = true
 
 [node name="Label" type="Label" parent="TabContainer/General/ResetConfigButton"]
@@ -166,7 +162,6 @@ offset_top = 569.0
 offset_right = -232.0
 offset_bottom = 632.0
 grow_horizontal = 2
-theme = ExtResource("2_prsvr")
 text = "Back"
 
 [node name="Save" type="Button" parent="."]
@@ -178,7 +173,6 @@ offset_top = 569.0
 offset_right = 540.0
 offset_bottom = 632.0
 grow_horizontal = 2
-theme = ExtResource("2_prsvr")
 disabled = true
 text = "Apply"
 

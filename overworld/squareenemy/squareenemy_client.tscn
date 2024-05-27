@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://d030v3fi71op6"]
+[gd_scene load_steps=5 format=3 uid="uid://d030v3fi71op6"]
 
 [ext_resource type="Texture2D" uid="uid://c32brgefmkhb5" path="res://overworld/squareenemy/squareenemy.png" id="1_w5gkl"]
 [ext_resource type="PackedScene" uid="uid://bgii108pfe4g7" path="res://overworld/squareenemy/squareenemy_sync.tscn" id="2_6ai2t"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="2_ar6c2"]
 [ext_resource type="Script" path="res://overworld/squareenemy/squareenemy_client.gd" id="2_l2wf6"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_leusy"]
@@ -33,7 +32,6 @@ offset_right = -10.0
 offset_bottom = -108.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_ar6c2")
 bbcode_enabled = true
 fit_content = true
 autowrap_mode = 0

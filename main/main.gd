@@ -13,7 +13,6 @@ func _ready():
 	#print(k.save_to_string())
 	#print(k.save_to_string(true))
 	
-	
 
 
 #func _process(_delta):
@@ -43,7 +42,7 @@ func save_config():
 
 func reset_config():
 	_config.clear()
-	set_content_scale_factor(3.0 if OS.has_feature("mobile") else 2.0)
+	set_content_scale_factor(1.0)
 	set_virtual_joystick(OS.has_feature("mobile"))
 	apply_changes()
 	save_config()
@@ -67,6 +66,4 @@ func set_virtual_joystick(val):
 
 func get_virtual_joystick():
 	return _config.get_value("gameplay", "virtual_joystick")
-
-
 

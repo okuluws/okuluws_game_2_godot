@@ -1,6 +1,5 @@
-[gd_scene load_steps=3 format=3 uid="uid://bu5sofg6f5shv"]
+[gd_scene load_steps=2 format=3 uid="uid://bu5sofg6f5shv"]
 
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_7ygn6"]
 [ext_resource type="Script" path="res://home/server_selection.gd" id="1_lqv63"]
 
 [node name="Server Selection" type="CanvasLayer" node_paths=PackedStringArray("server_address_edit", "server_list_vbox", "join_server_button", "edit_server_button", "remove_server_button")]
@@ -27,7 +26,6 @@ offset_top = 9.0
 offset_right = 173.0
 offset_bottom = 49.0
 grow_horizontal = 2
-theme = ExtResource("1_7ygn6")
 theme_override_font_sizes/normal_font_size = 40
 bbcode_enabled = true
 text = "[center]Server Selection"
@@ -64,7 +62,6 @@ grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_7ygn6")
 disabled = true
 text = "Join"
 
@@ -80,7 +77,6 @@ offset_right = -24.0
 offset_bottom = -109.0
 grow_horizontal = 0
 grow_vertical = 2
-theme = ExtResource("1_7ygn6")
 disabled = true
 text = "Edit"
 
@@ -96,7 +92,6 @@ offset_right = -24.0
 offset_bottom = -26.0
 grow_horizontal = 0
 grow_vertical = 2
-theme = ExtResource("1_7ygn6")
 disabled = true
 text = "Remove"
 
@@ -109,7 +104,6 @@ offset_right = 247.0
 grow_vertical = 0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme = ExtResource("1_7ygn6")
 text = "Back"
 
 [node name="Server Address" type="LineEdit" parent="."]
@@ -124,7 +118,6 @@ offset_right = 196.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 3
-theme = ExtResource("1_7ygn6")
 text = "192.168.178.214:42000"
 placeholder_text = "address"
 alignment = 1
@@ -141,7 +134,6 @@ offset_right = 316.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 3
-theme = ExtResource("1_7ygn6")
 text = "Add"
 
 [connection signal="pressed" from="Join Server" to="." method="_on_join_server_pressed"]

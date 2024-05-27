@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqtr7tqdd75x5"]
+[gd_scene load_steps=2 format=3 uid="uid://bqtr7tqdd75x5"]
 
 [ext_resource type="Script" path="res://home/title_screen.gd" id="1_44pfs"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="2_q8lmu"]
 
 [node name="TitleScreen" type="CanvasLayer"]
 script = ExtResource("1_44pfs")
@@ -15,7 +14,6 @@ offset_top = 35.0
 offset_right = 697.0
 offset_bottom = 175.0
 grow_horizontal = 2
-theme = ExtResource("2_q8lmu")
 theme_override_font_sizes/normal_font_size = 140
 bbcode_enabled = true
 text = "[center]okuluws-game-2"
@@ -31,7 +29,6 @@ offset_top = 153.0
 offset_right = 545.0
 offset_bottom = 193.0
 grow_horizontal = 2
-theme = ExtResource("2_q8lmu")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchors_preset = 8
@@ -50,21 +47,18 @@ grow_vertical = 2
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_vertical = 2
-theme = ExtResource("2_q8lmu")
 text = "Singleplayer"
 
 [node name="Multiplayer" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("2_q8lmu")
 text = "Multiplayer"
 
 [node name="Options" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_vertical = 10
-theme = ExtResource("2_q8lmu")
 text = "Options"
 
 [node name="Quit" type="Button" parent="."]
@@ -79,7 +73,6 @@ offset_right = -40.0
 offset_bottom = -24.0
 grow_horizontal = 0
 grow_vertical = 0
-theme = ExtResource("2_q8lmu")
 text = "Quit ;("
 
 [node name="Account" type="Button" parent="."]
@@ -91,7 +84,6 @@ offset_top = -88.0
 offset_right = 240.0
 offset_bottom = -24.0
 grow_vertical = 0
-theme = ExtResource("2_q8lmu")
 text = "Account
 "
 
@@ -108,7 +100,6 @@ offset_right = 343.0
 offset_bottom = 101.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_q8lmu")
 color = Color(0.176471, 0.176471, 0.176471, 1)
 
 [node name="Login Info" type="Label" parent="Account Manage Panel"]

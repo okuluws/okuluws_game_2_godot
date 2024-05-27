@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c4by3skeseg0c"]
+[gd_scene load_steps=2 format=3 uid="uid://c4by3skeseg0c"]
 
 [ext_resource type="Script" path="res://home/world_edit.gd" id="1_suxo1"]
-[ext_resource type="Theme" uid="uid://b0by7hlhq1qlj" path="res://main/pixel_theme.tres" id="1_y01jw"]
 
 [node name="World Edit" type="CanvasLayer" node_paths=PackedStringArray("config_title")]
 script = ExtResource("1_suxo1")
@@ -16,7 +15,6 @@ offset_top = 29.0
 offset_right = 188.0
 offset_bottom = 69.0
 grow_horizontal = 2
-theme = ExtResource("1_y01jw")
 theme_override_font_sizes/font_size = 40
 text = "New Ford - Config"
 
@@ -29,7 +27,6 @@ offset_top = 88.0
 offset_right = 519.0
 offset_bottom = 547.0
 grow_horizontal = 2
-theme = ExtResource("1_y01jw")
 
 [node name="General" type="Control" parent="TabContainer"]
 layout_mode = 2
@@ -66,7 +63,6 @@ offset_top = 553.0
 offset_right = 519.0
 offset_bottom = 633.0
 grow_horizontal = 2
-theme = ExtResource("1_y01jw")
 theme_override_font_sizes/font_size = 30
 text = "Back"
 
