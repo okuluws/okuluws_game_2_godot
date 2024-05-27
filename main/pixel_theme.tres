@@ -30,7 +30,7 @@ corner_detail = 12
 
 [resource]
 default_font = ExtResource("1_4upxg")
-default_font_size = 30
+default_font_size = 40
 LineEdit/styles/normal = SubResource("StyleBoxFlat_euqp3")
 MarginContainer/constants/margin_bottom = 14
 MarginContainer/constants/margin_left = 14

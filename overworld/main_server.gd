@@ -8,7 +8,6 @@ extends Node
 
 
 func _ready():
-	multiplayer_spawner.spawn_function = func(_data): return preload("res://overworld/overworld_server.tscn").instantiate()
 	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
 	server.start_queued.connect(func():
 		var f = ConfigFile.new()
@@ -19,7 +18,14 @@ func _ready():
 			f.set_value("", "spawned_items", true)
 			f.save(savefile)
 			server.log_default("spawned items")
-		multiplayer_spawner.spawn()
+		multiplayer_spawner.spawn_function = func(_data): multiplayer_spawner.spawn_function = Callable(); return preload("res://overworld/overworld_server.tscn").instantiate()
+		multiplayer_spawner.spawn("overworld")
+		var new_squareenemy = preload("res://overworld/squareenemy/squareenemy_server.tscn").instantiate()
+		#new_squareenemy.healthpoints = 20.0
+		#new_squareenemy.healthpoints_max = 20.0
+		multiplayer_spawner.spawn_function = func(_data): multiplayer_spawner.spawn_function = Callable(); return new_squareenemy
+		multiplayer_spawner.spawn("squareenemy")
+		
 		server.log_default("spawned overworld")
 	)
 

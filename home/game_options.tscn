@@ -69,9 +69,10 @@ offset_right = -20.0
 offset_bottom = 15.0
 grow_horizontal = 0
 grow_vertical = 2
+text = "disenabled"
 horizontal_alignment = 2
 
-[node name="ContentScaleFactor" type="Button" parent="TabContainer/General"]
+[node name="ContentScaleFactorButton" type="Button" parent="TabContainer/General"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -82,7 +83,7 @@ offset_bottom = 96.0
 grow_horizontal = 0
 flat = true
 
-[node name="Label" type="Label" parent="TabContainer/General/ContentScaleFactor"]
+[node name="Label" type="Label" parent="TabContainer/General/ContentScaleFactorButton"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -92,22 +93,41 @@ offset_top = -15.0
 offset_right = 173.0
 offset_bottom = 15.0
 grow_vertical = 2
-text = "Resolution Scale"
+text = "GUI Scale"
 
-[node name="Label2" type="Label" parent="TabContainer/General/ContentScaleFactor"]
+[node name="Label2" type="Label" parent="TabContainer/General/ContentScaleFactorButton"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -137.0
+offset_left = -304.0
 offset_top = -15.0
-offset_right = -20.0
+offset_right = -187.0
 offset_bottom = 15.0
 grow_horizontal = 0
 grow_vertical = 2
+text = "idk"
 horizontal_alignment = 2
+
+[node name="ContentScaleFactorSlider" type="HSlider" parent="TabContainer/General/ContentScaleFactorButton"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -177.0
+offset_top = -8.0
+offset_right = -20.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 2
+min_value = 1.0
+max_value = 4.0
+step = 0.1
+value = 1.0
 
 [node name="ResetConfigButton" type="Button" parent="TabContainer/General"]
 layout_mode = 1
@@ -125,17 +145,15 @@ flat = true
 
 [node name="Label" type="Label" parent="TabContainer/General/ResetConfigButton"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -15.0
-offset_right = 20.0
-offset_bottom = 15.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -252.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
 theme_override_colors/font_color = Color(0.85098, 0.0156863, 0.160784, 1)
 text = "Reset Config"
 
@@ -162,10 +180,10 @@ offset_bottom = 632.0
 grow_horizontal = 2
 theme = ExtResource("2_prsvr")
 disabled = true
-text = "Save"
+text = "Apply"
 
 [connection signal="pressed" from="TabContainer/General/VirtualJoystickButton" to="." method="_on_virtual_joystick_button_pressed"]
-[connection signal="pressed" from="TabContainer/General/ContentScaleFactor" to="." method="_on_content_scale_factor_pressed"]
+[connection signal="value_changed" from="TabContainer/General/ContentScaleFactorButton/ContentScaleFactorSlider" to="." method="_on_content_scale_factor_slider_value_changed"]
 [connection signal="pressed" from="TabContainer/General/ResetConfigButton" to="." method="_on_reset_config_button_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Save" to="." method="_on_save_pressed"]
