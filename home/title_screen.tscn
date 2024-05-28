@@ -14,7 +14,7 @@ offset_top = 35.0
 offset_right = 697.0
 offset_bottom = 175.0
 grow_horizontal = 2
-theme_override_font_sizes/normal_font_size = 140
+theme_override_font_sizes/normal_font_size = 120
 bbcode_enabled = true
 text = "[center]okuluws-game-2"
 fit_content = true
@@ -24,10 +24,10 @@ autowrap_mode = 0
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -557.0
-offset_top = 153.0
-offset_right = 545.0
-offset_bottom = 193.0
+offset_left = -476.0
+offset_top = 138.0
+offset_right = 464.0
+offset_bottom = 178.0
 grow_horizontal = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
