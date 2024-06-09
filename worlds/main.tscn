@@ -1,14 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://b84wfqxggchwj"]
+[gd_scene load_steps=4 format=3 uid="uid://b84wfqxggchwj"]
 
 [ext_resource type="Script" path="res://worlds/main.gd" id="1_l66np"]
+[ext_resource type="PackedScene" uid="uid://dde62wcnhs6gv" path="res://worlds/client.tscn" id="2_yjlqr"]
+[ext_resource type="PackedScene" uid="uid://8wl5lpudm7g6" path="res://worlds/server.tscn" id="3_qi3f4"]
 
 [node name="Worlds" type="Node"]
 script = ExtResource("1_l66np")
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-stretch = true
+client_world_scene = ExtResource("2_yjlqr")
+server_world_scene = ExtResource("3_qi3f4")

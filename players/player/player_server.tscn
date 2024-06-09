@@ -1,16 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://cs3f2fj0a3n6i"]
 
 [ext_resource type="Script" path="res://players/player/player_server.gd" id="1_fgcph"]
-[ext_resource type="PackedScene" uid="uid://l656i6ffv5hp" path="res://players/player/player_common.tscn" id="3_xbie5"]
+[ext_resource type="PackedScene" uid="uid://l656i6ffv5hp" path="res://players/player/player_syncer.tscn" id="3_oreuo"]
 [ext_resource type="AnimationLibrary" uid="uid://30r37upuil23" path="res://players/player/player_type_collisions.res" id="18_yp0eg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dkbu6"]
 radius = 82.3893
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("collision_animation_player", "idle_timer")]
 collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_fgcph")
+collision_animation_player = NodePath("CollisionAnimationPlayer")
+idle_timer = NodePath("IdleTimer")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 scale = Vector2(1, 1.00197)
@@ -31,6 +33,6 @@ wait_time = 10.0
 one_shot = true
 autostart = true
 
-[node name="MultiplayerSynchronizer" parent="." instance=ExtResource("3_xbie5")]
+[node name="MultiplayerSynchronizer" parent="." instance=ExtResource("3_oreuo")]
 
 [connection signal="area_entered" from="ItemPickupArea" to="." method="_on_item_pickup_area_area_entered"]

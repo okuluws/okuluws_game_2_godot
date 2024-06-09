@@ -1,7 +1,0 @@
-[gd_scene format=3 uid="uid://bdepnxpco2mky"]
-
-[node name="Chat Message" type="RichTextLabel"]
-offset_right = 929.0
-offset_bottom = 40.0
-bbcode_enabled = true
-fit_content = true

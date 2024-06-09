@@ -1,73 +1,83 @@
-extends CanvasLayer
+extends Control
 
 
-const WORLDS_DIR = "user://worlds"
+# REQUIRED
+var main
+
+@onready var home = main.home
+@onready var ui = main.ui
+@onready var worlds = main.worlds
 @export var world_display_vbox: VBoxContainer
-@onready var worlds_handler = $"../../Worlds"
-@onready var home = $"../"
-var selected_world_dir
+@export var join_world_button: BaseButton
+@export var edit_world_button: BaseButton
+@export var host_world_button: BaseButton
+var worlds_dir_path = "user://worlds"
+var selected_world_dir_path
 
 
 func _ready():
 	load_world_displays()
-	
 
-func _on_new_world_pressed():
+
+func _on_join_world_button_pressed():
+	worlds.make_singleplayer(selected_world_dir_path)
+	queue_free()
+
+
+func _on_edit_world_button_pressed():
+	var new_world_edit = home.world_edit_scene.instantiate()
+	new_world_edit.main = main
+	new_world_edit.world_dir_path = selected_world_dir_path
+	ui.add_child(new_world_edit)
+	queue_free()
+
+
+func _on_host_world_button_pressed():
+	worlds.make_server(selected_world_dir_path, "*:42000")
+	queue_free()
+
+
+func _on_new_world_button_pressed():
 	var world_name = "New World"
-	var world_dir = WORLDS_DIR.path_join(world_name)
+	var world_dir_path = worlds_dir_path.path_join(world_name)
 	var n = 1
-	while DirAccess.dir_exists_absolute(world_dir):
-		world_dir = WORLDS_DIR.path_join("%s (%d)" % [world_name, n])
+	while DirAccess.dir_exists_absolute(world_dir_path):
+		world_dir_path = worlds_dir_path.path_join("%s (%d)" % [world_name, n])
 		n += 1
-	worlds_handler.create_world_folder(world_dir, world_name)
-	selected_world_dir = world_dir
+	worlds.create_world_folder(world_dir_path, world_name)
+	selected_world_dir_path = world_dir_path
 	load_world_displays()
-	
 
-func _on_back_pressed():
-	home.add_child(load("res://home/title_screen.tscn").instantiate())
-	queue_free()
-	
 
-func _on_join_world_pressed():
-	worlds_handler.make_singleplayer(selected_world_dir)
+func _on_back_button_pressed():
+	var new_title_screen = home.title_screen_scene.instantiate()
+	new_title_screen.main = main
+	ui.add_child(new_title_screen)
 	queue_free()
-	
 
-func _on_edit_world_pressed():
-	var world_edit = load("res://home/world_edit.tscn").instantiate()
-	world_edit.world_dir = selected_world_dir
-	home.add_child(world_edit)
-	queue_free()
-	
 
 func load_world_displays():
 	for c in world_display_vbox.get_children():
 		world_display_vbox.remove_child(c)
 	
-	for dirname in DirAccess.open(WORLDS_DIR).get_directories():
-		var dir = WORLDS_DIR.path_join(dirname)
+	for dirname in DirAccess.open(worlds_dir_path).get_directories():
+		var dir_path = worlds_dir_path.path_join(dirname)
 		var world_config = ConfigFile.new()
-		if world_config.load(dir.path_join("config.cfg")) != OK: push_error(); return
-		var world_display = load("res://home/world_display.tscn").instantiate()
-		world_display.world_name.text = world_config.get_value("", "name")
-		world_display.playtime.text = "Playtime: %s" % _s_to_hhmmss(world_config.get_value("", "playtime"))
-		world_display.version.text = "version %s" % world_config.get_value("", "version")
-		world_display.pressed.connect(func():
-			selected_world_dir = dir
-			$"Join World".disabled = false
-			$"Edit World".disabled = false
-			$"Host World".disabled = false
+		if world_config.load(dir_path.path_join("config.cfg")) != OK: push_error(); return
+		var new_world_display = home.world_display_scene.instantiate()
+		new_world_display.world_name_rich_label.text = world_config.get_value("", "name")
+		new_world_display.playtime_rich_label.text = "Playtime: %s" % _format_seconds(world_config.get_value("", "playtime"))
+		new_world_display.version_rich_label.text = "version %s" % world_config.get_value("", "version")
+		new_world_display.pressed.connect(func():
+			selected_world_dir_path = dir_path
+			join_world_button.disabled = false
+			edit_world_button.disabled = false
+			host_world_button.disabled = false
 		)
-		world_display_vbox.add_child(world_display)
-	
-
-func _on_host_world_pressed():
-	worlds_handler.make_server(selected_world_dir, "*:42000")
-	queue_free()
+		world_display_vbox.add_child(new_world_display)
 
 
-func _s_to_hhmmss(total_seconds: float) -> String:
+func _format_seconds(total_seconds: float) -> String:
 	var seconds:float = fmod(total_seconds , 60.0)
 	var minutes:int   =  int(total_seconds / 60.0) % 60
 	var hours:  int   =  int(total_seconds / 3600.0)

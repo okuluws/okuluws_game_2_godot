@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://home/world_display.gd" id="1_541gy"]
 
-[node name="World Display" type="Button" node_paths=PackedStringArray("world_name", "playtime", "version")]
+[node name="World Display" type="Button" node_paths=PackedStringArray("world_name_rich_label", "playtime_rich_label", "version_rich_label")]
 custom_minimum_size = Vector2(0, 120)
 anchors_preset = 10
 anchor_right = 1.0
@@ -10,9 +10,9 @@ offset_left = 461.0
 offset_bottom = 120.0
 grow_horizontal = 2
 script = ExtResource("1_541gy")
-world_name = NodePath("MarginContainer/Control/World Name")
-playtime = NodePath("MarginContainer/Control/Playtime")
-version = NodePath("MarginContainer/Control/Version")
+world_name_rich_label = NodePath("MarginContainer/Control/WorldNameRichLabel")
+playtime_rich_label = NodePath("MarginContainer/Control/PlaytimeRichLabel")
+version_rich_label = NodePath("MarginContainer/Control/VersionRichLabel")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -30,7 +30,7 @@ theme_override_constants/margin_bottom = 4
 layout_mode = 2
 mouse_filter = 1
 
-[node name="World Name" type="RichTextLabel" parent="MarginContainer/Control"]
+[node name="WorldNameRichLabel" type="RichTextLabel" parent="MarginContainer/Control"]
 layout_mode = 1
 offset_right = 274.0
 offset_bottom = 27.0
@@ -38,7 +38,7 @@ mouse_filter = 1
 text = "Test"
 fit_content = true
 
-[node name="Playtime" type="RichTextLabel" parent="MarginContainer/Control"]
+[node name="PlaytimeRichLabel" type="RichTextLabel" parent="MarginContainer/Control"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -51,7 +51,7 @@ theme_override_font_sizes/normal_font_size = 20
 text = "Playtime: 37h"
 fit_content = true
 
-[node name="Version" type="RichTextLabel" parent="MarginContainer/Control"]
+[node name="VersionRichLabel" type="RichTextLabel" parent="MarginContainer/Control"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

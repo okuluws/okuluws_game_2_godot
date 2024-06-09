@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://cocglstkbohxi"]
+[gd_scene load_steps=17 format=3 uid="uid://cocglstkbohxi"]
 
 [ext_resource type="Script" path="res://players/player/player_client.gd" id="1_kylph"]
 [ext_resource type="Texture2D" uid="uid://b0gv64wvajret" path="res://players/player/player_type_textures/square.png" id="2_bolyh"]
+[ext_resource type="PackedScene" uid="uid://bxvyedtgh5oup" path="res://players/player/player_ui.tscn" id="2_dcvf0"]
 [ext_resource type="Texture2D" uid="uid://cgosb5qdc24n" path="res://players/player/player_type_textures/square_left.png" id="3_3vxoj"]
 [ext_resource type="Texture2D" uid="uid://baqgbnh3ctcgy" path="res://players/player/player_type_textures/square_right.png" id="4_n3pg8"]
 [ext_resource type="Texture2D" uid="uid://bw8g2oh1hexk1" path="res://players/player/player_type_textures/triangle.png" id="5_1ijut"]
@@ -11,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://xeg0s52f6dnp" path="res://players/player/player_type_textures/widesquare_left.png" id="9_x8vpw"]
 [ext_resource type="Texture2D" uid="uid://b3whmyh0u225l" path="res://players/player/player_type_textures/widesquare_right.png" id="10_lrul5"]
 [ext_resource type="AnimationLibrary" uid="uid://30r37upuil23" path="res://players/player/player_type_collisions.res" id="11_s1qff"]
-[ext_resource type="PackedScene" uid="uid://l656i6ffv5hp" path="res://players/player/player_common.tscn" id="13_wk28a"]
+[ext_resource type="PackedScene" uid="uid://l656i6ffv5hp" path="res://players/player/player_syncer.tscn" id="13_f18d8"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_kjyd5"]
 animations = [{
@@ -113,10 +114,16 @@ _data = {
 "RESET": SubResource("Animation_x7leu")
 }
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("animated_sprite", "collision_animation_player", "camera", "display_label_top", "display_label_bottom")]
 collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_kylph")
+player_ui_scene = ExtResource("2_dcvf0")
+animated_sprite = NodePath("AnimatedSprite2D")
+collision_animation_player = NodePath("CollisionAnimationPlayer")
+camera = NodePath("Camera2D")
+display_label_top = NodePath("DisplayLabelTop")
+display_label_bottom = NodePath("DisplayLabelBottom")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 enabled = false
@@ -166,4 +173,4 @@ bbcode_enabled = true
 fit_content = true
 autowrap_mode = 0
 
-[node name="MultiplayerSynchronizer" parent="." instance=ExtResource("13_wk28a")]
+[node name="MultiplayerSynchronizer" parent="." instance=ExtResource("13_f18d8")]

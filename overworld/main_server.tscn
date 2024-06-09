@@ -6,5 +6,4 @@
 script = ExtResource("1_nwfj3")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://overworld/overworld.tscn")
 spawn_path = NodePath("../../Level")

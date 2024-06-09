@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://bjutk26pi1nl3"]
+
+[ext_resource type="Script" path="res://items/items_client.gd" id="1_nwjrf"]
+[ext_resource type="Script" path="res://items/items_config_client.gd" id="2_1vtby"]
+[ext_resource type="PackedScene" uid="uid://csk8s84safsqy" path="res://items/item_client.tscn" id="2_rf2u7"]
+[ext_resource type="PackedScene" uid="uid://dx1cw73500ywm" path="res://items/items_config_syncer.tscn" id="3_uxiyp"]
+
+[node name="Items" type="Node" node_paths=PackedStringArray("item_spawner", "config")]
+script = ExtResource("1_nwjrf")
+item_spawner = NodePath("MultiplayerSpawner")
+config = NodePath("Config")
+item_scene = ExtResource("2_rf2u7")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+
+[node name="Config" type="Node" parent="."]
+script = ExtResource("2_1vtby")
+
+[node name="ItemsConfigSyncer" parent="Config" instance=ExtResource("3_uxiyp")]

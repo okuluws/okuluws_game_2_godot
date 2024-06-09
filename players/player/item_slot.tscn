@@ -5,12 +5,15 @@
 [ext_resource type="Texture2D" uid="uid://dovfpolfsgcmj" path="res://players/player/itemslot_hover_overlay.png" id="2_vuae2"]
 [ext_resource type="Texture2D" uid="uid://cejaa7ovy8q4a" path="res://players/player/itemslot_selected.png" id="3_d34o4"]
 
-[node name="Item Slot" type="TextureButton"]
+[node name="Item Slot" type="TextureButton" node_paths=PackedStringArray("animated_sprite", "overlay_texture_rect", "item_count_label")]
 offset_right = 40.0
 offset_bottom = 40.0
 texture_normal = ExtResource("1_u0mvj")
 texture_focused = ExtResource("3_d34o4")
 script = ExtResource("2_vis3q")
+animated_sprite = NodePath("AnimatedSprite2D")
+overlay_texture_rect = NodePath("Overlay")
+item_count_label = NodePath("ItemCountLabel")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 
@@ -30,7 +33,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_vuae2")
 
-[node name="Item Count" type="Label" parent="."]
+[node name="ItemCountLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

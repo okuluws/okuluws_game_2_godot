@@ -1,21 +1,21 @@
 [gd_scene load_steps=6 format=3 uid="uid://dde62wcnhs6gv"]
 
 [ext_resource type="Script" path="res://worlds/client.gd" id="1_wnrgn"]
+[ext_resource type="PackedScene" uid="uid://bueen1crlh8ea" path="res://worlds/client_ui.tscn" id="2_durim"]
 [ext_resource type="PackedScene" uid="uid://dm1tixrgasd1m" path="res://overworld/main_client.tscn" id="5_kn0wa"]
-[ext_resource type="PackedScene" uid="uid://bjutk26pi1nl3" path="res://items/main_client.tscn" id="6_k8oxm"]
+[ext_resource type="PackedScene" uid="uid://bjutk26pi1nl3" path="res://items/items_client.tscn" id="6_k8oxm"]
 [ext_resource type="PackedScene" uid="uid://e3dq207u8iq3" path="res://players/main_client.tscn" id="6_n88um"]
-[ext_resource type="PackedScene" uid="uid://dyvkhsafbh6xw" path="res://worlds/chat.tscn" id="6_nwgag"]
 
-[node name="Client" type="SubViewport"]
+[node name="Client" type="SubViewport" node_paths=PackedStringArray("level")]
 disable_3d = true
 script = ExtResource("1_wnrgn")
+level = NodePath("Level")
+client_ui_scene = ExtResource("2_durim")
 
 [node name="Level" type="Node2D" parent="."]
 
-[node name="Chat" parent="." instance=ExtResource("6_nwgag")]
+[node name="Players" parent="." instance=ExtResource("6_n88um")]
 
 [node name="Items" parent="." instance=ExtResource("6_k8oxm")]
-
-[node name="Players" parent="." instance=ExtResource("6_n88um")]
 
 [node name="Overworld" parent="." instance=ExtResource("5_kn0wa")]

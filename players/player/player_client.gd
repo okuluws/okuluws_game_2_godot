@@ -1,9 +1,16 @@
 extends CharacterBody2D
 
 
-@onready var collision_animation_player = $"CollisionAnimationPlayer"
-@onready var animated_sprite = $"AnimatedSprite2D"
+# REQUIRED
+var client
 
+@onready var main = client.main
+@export var player_ui_scene: PackedScene
+@export var animated_sprite: AnimatedSprite2D
+@export var collision_animation_player: AnimationPlayer
+@export var camera: Camera2D
+@export var display_label_top: RichTextLabel
+@export var display_label_bottom: RichTextLabel
 var peer_owner
 var facing_direction
 var coins
@@ -16,8 +23,10 @@ var display_text
 
 func _ready():
 	if peer_owner != multiplayer.get_unique_id(): return
-	$"Camera2D".enabled = true
-	add_child(load("res://players/player/player_ui.tscn").instantiate())
+	camera.enabled = true
+	var new_player_ui = client.players.player_ui_scene.instantiate()
+	new_player_ui.player = self
+	main.ui.add_child(new_player_ui)
 
 
 func _process(_delta):
@@ -43,8 +52,8 @@ func _process(_delta):
 		["triangle", Vector2.UP], ["triangle", Vector2.DOWN]:
 			animated_sprite.play("triangle")
 	
-	$"DisplayLabelTop".text = display_text
-	$"DisplayLabelBottom".text = "[center]  %d[color=red]♥ " % healthpoints
+	display_label_top.text = display_text
+	display_label_bottom.text = "[center]  %d[color=red]♥ " % healthpoints
 
 
 func _physics_process(_delta):

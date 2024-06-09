@@ -3,14 +3,17 @@
 extends CanvasLayer
 
 
-@onready var main = $"/root/Main"
-@onready var player = $"../"
-@onready var inventory_ui = $"Inventory"
-@onready var hotbar_ui = $"Hotbar"
-@onready var all_slots = hotbar_ui.get_children() + inventory_ui.get_children()
-@onready var movement_joypad_ring = $"MovementJoypadRing"
-@onready var movement_joypad_cirlce = $"MovementJoypadCircle"
+# REQUIRED
+var player
 
+@export var inventory_ui: GridContainer
+@export var hotbar_ui: HBoxContainer
+@export var movement_joypad_ring: Control
+@export var movement_joypad_cirlce: Control
+@export var punch_spawn_area: BaseButton
+@export var movement_joypad_spawn_area: BaseButton
+@onready var main = player.client.main
+@onready var all_slots = hotbar_ui.get_children() + inventory_ui.get_children()
 var action_slot_id
 var moving_joypad = false
 
@@ -22,15 +25,15 @@ func _ready():
 		)
 	
 	# multitouch, see NOTES
-	$"PunchSpawnArea".gui_input.connect(func(event):
+	punch_spawn_area.gui_input.connect(func(event):
 		if event is InputEventScreenTouch:
 			if event.pressed:
 				_spawn_punch(event.position)
 	)
 	
 	if not main.get_virtual_joystick():
-		$"MovementJoypadSpawnArea".disabled = true
-		$"MovementJoypadSpawnArea".mouse_filter = Control.MOUSE_FILTER_IGNORE
+		movement_joypad_spawn_area.disabled = true
+		movement_joypad_spawn_area.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _process(_delta):
@@ -91,4 +94,3 @@ func _spawn_punch(mouse_position):
 	#player.get_canvas_transform().affine_inverse() * mouse_position
 	var normal = player.to_local(player.get_canvas_transform().affine_inverse() * mouse_position).normalized()
 	player.spawn_punch.rpc_id(1, player.position + normal * 80, Vector2.ZERO.angle_to_point(normal) + PI / 2, normal * 1000)
-

@@ -1,16 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://bueen1crlh8ea"]
+[gd_scene load_steps=4 format=3 uid="uid://bueen1crlh8ea"]
 
 [ext_resource type="Script" path="res://worlds/client_ui.gd" id="1_2d0ws"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6w3jb"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xto3y"]
-
-[sub_resource type="InputEventAction" id="InputEventAction_ucql7"]
-action = &"enter"
-
-[sub_resource type="Shortcut" id="Shortcut_qkknl"]
-events = [SubResource("InputEventAction_ucql7")]
 
 [sub_resource type="InputEventAction" id="InputEventAction_sa528"]
 action = &"escape"
@@ -18,25 +8,35 @@ action = &"escape"
 [sub_resource type="Shortcut" id="Shortcut_3b8kb"]
 events = [SubResource("InputEventAction_sa528")]
 
-[node name="Client UI" type="CanvasLayer"]
-layer = 2
-script = ExtResource("1_2d0ws")
-
-[node name="Tabs" type="TabContainer" parent="."]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -438.0
-offset_top = 11.0
-offset_right = 438.0
-offset_bottom = 533.0
+[node name="ClientUI" type="Control" node_paths=PackedStringArray("world_texture_rect", "escape_panel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2d0ws")
+world_texture_rect = NodePath("WorldTextureRect")
+escape_panel = NodePath("EscapePanel")
 
-[node name="World" type="Panel" parent="Tabs"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_6w3jb")
+[node name="WorldTextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Resume" type="Button" parent="Tabs/World"]
+[node name="EscapePanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ResumeButton" type="Button" parent="EscapePanel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -48,7 +48,7 @@ offset_bottom = 171.0
 grow_horizontal = 2
 text = "Resume"
 
-[node name="Open LAN" type="Button" parent="Tabs/World"]
+[node name="OpenLanButton" type="Button" parent="EscapePanel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -60,7 +60,7 @@ offset_bottom = 246.0
 grow_horizontal = 2
 text = "Open to LAN"
 
-[node name="Quit World" type="Button" parent="Tabs/World"]
+[node name="QuitWorldButton" type="Button" parent="EscapePanel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -72,74 +72,8 @@ offset_bottom = 322.0
 grow_horizontal = 2
 text = "Quit"
 
-[node name="Settings" type="Control" parent="Tabs"]
-visible = false
-layout_mode = 2
-
-[node name="Chat" type="Panel" parent="Tabs"]
-visible = false
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_xto3y")
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Tabs/Chat"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.927757
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Tabs/Chat/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="LineEdit" type="LineEdit" parent="Tabs/Chat"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -38.0
-offset_right = -61.0
-grow_horizontal = 2
-grow_vertical = 0
-caret_blink = true
-
-[node name="Send Message" type="Button" parent="Tabs/Chat"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -61.0
-offset_top = -38.0
-grow_horizontal = 0
-grow_vertical = 0
-shortcut = SubResource("Shortcut_qkknl")
-shortcut_feedback = false
-shortcut_in_tooltip = false
-
-[node name="Label" type="Label" parent="Tabs/Chat/Send Message"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -13.5
-offset_top = 9.0
-offset_right = 10.5
-offset_bottom = 49.0
-grow_horizontal = 2
-grow_vertical = 2
-rotation = -1.57079
-theme_override_font_sizes/font_size = 40
-text = "^"
-
-[node name="Open Tabs" type="Button" parent="."]
+[node name="OpenEscapePanelButton" type="Button" parent="."]
+layout_mode = 0
 offset_left = 17.0
 offset_top = 11.0
 offset_right = 126.0
@@ -149,7 +83,7 @@ shortcut = SubResource("Shortcut_3b8kb")
 shortcut_feedback = false
 shortcut_in_tooltip = false
 
-[node name="Label" type="Label" parent="Open Tabs"]
+[node name="Label" type="Label" parent="OpenEscapePanelButton"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -165,8 +99,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 60
 text = "="
 
-[connection signal="pressed" from="Tabs/World/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="Tabs/World/Open LAN" to="." method="_on_open_lan_pressed"]
-[connection signal="pressed" from="Tabs/World/Quit World" to="." method="_on_quit_world_pressed"]
-[connection signal="pressed" from="Tabs/Chat/Send Message" to="." method="_on_send_message_pressed"]
-[connection signal="pressed" from="Open Tabs" to="." method="_on_open_tabs_pressed"]
+[connection signal="pressed" from="EscapePanel/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="EscapePanel/OpenLanButton" to="." method="_on_open_lan_button_pressed"]
+[connection signal="pressed" from="EscapePanel/QuitWorldButton" to="." method="_on_quit_world_button_pressed"]
+[connection signal="pressed" from="OpenEscapePanelButton" to="." method="_on_open_escape_panel_button_pressed"]

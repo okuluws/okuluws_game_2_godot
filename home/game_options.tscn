@@ -2,10 +2,21 @@
 
 [ext_resource type="Script" path="res://home/game_options.gd" id="1_o6cjf"]
 
-[node name="Game Options" type="CanvasLayer"]
+[node name="GameOptions" type="Control" node_paths=PackedStringArray("virtual_joystick_value_label", "content_scale_factor_value_label", "content_scale_factor_slider", "save_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_o6cjf")
+virtual_joystick_value_label = NodePath("TabContainer/General/VirtualJoystickButton/ValueLabel")
+content_scale_factor_value_label = NodePath("TabContainer/General/ContentScaleFactorButton/ValueLabel")
+content_scale_factor_slider = NodePath("TabContainer/General/ContentScaleFactorButton/ContentScaleFactorSlider")
+save_button = NodePath("SaveButton")
 
 [node name="Label" type="Label" parent="."]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -19,6 +30,7 @@ text = "Game - Settings"
 horizontal_alignment = 1
 
 [node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -51,7 +63,7 @@ grow_vertical = 2
 text = "Virtual Joystick"
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="TabContainer/General/VirtualJoystickButton"]
+[node name="ValueLabel" type="Label" parent="TabContainer/General/VirtualJoystickButton"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -88,7 +100,7 @@ grow_vertical = 2
 text = "GUI Scale"
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="TabContainer/General/ContentScaleFactorButton"]
+[node name="ValueLabel" type="Label" parent="TabContainer/General/ContentScaleFactorButton"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -122,7 +134,8 @@ max_value = 5.0
 step = 0.1
 value = 1.0
 
-[node name="Back" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -133,7 +146,8 @@ offset_bottom = 529.0
 grow_horizontal = 2
 text = "Back"
 
-[node name="Save" type="Button" parent="."]
+[node name="SaveButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -146,6 +160,7 @@ disabled = true
 text = "Apply"
 
 [node name="ResetConfigButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -174,6 +189,6 @@ vertical_alignment = 1
 
 [connection signal="pressed" from="TabContainer/General/VirtualJoystickButton" to="." method="_on_virtual_joystick_button_pressed"]
 [connection signal="value_changed" from="TabContainer/General/ContentScaleFactorButton/ContentScaleFactorSlider" to="." method="_on_content_scale_factor_slider_value_changed"]
-[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="Save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="ResetConfigButton" to="." method="_on_reset_config_button_pressed"]

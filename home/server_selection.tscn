@@ -2,22 +2,21 @@
 
 [ext_resource type="Script" path="res://home/server_selection.gd" id="1_lqv63"]
 
-[node name="Server Selection" type="CanvasLayer" node_paths=PackedStringArray("server_address_edit", "server_list_vbox", "join_server_button", "edit_server_button", "remove_server_button")]
-script = ExtResource("1_lqv63")
-server_address_edit = NodePath("Server Address")
-server_list_vbox = NodePath("ScrollContainer/VBoxContainer")
-join_server_button = NodePath("Join Server")
-edit_server_button = NodePath("Edit Server")
-remove_server_button = NodePath("Remove Server")
-
-[node name="Panel" type="Panel" parent="."]
+[node name="ServerSelection" type="Panel" node_paths=PackedStringArray("server_address_line_edit", "server_list_vbox", "join_server_button", "edit_server_button", "remove_server_button")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_lqv63")
+server_address_line_edit = NodePath("ServerAddressLineEdit")
+server_list_vbox = NodePath("ScrollContainer/VBoxContainer")
+join_server_button = NodePath("JoinServerButton")
+edit_server_button = NodePath("EditServerButton")
+remove_server_button = NodePath("RemoveServerButton")
 
 [node name="Title" type="RichTextLabel" parent="."]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -32,6 +31,7 @@ text = "[center]Server Selection"
 fit_content = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
@@ -48,7 +48,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Join Server" type="Button" parent="."]
+[node name="JoinServerButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
@@ -65,7 +66,8 @@ size_flags_vertical = 3
 disabled = true
 text = "Join"
 
-[node name="Edit Server" type="Button" parent="."]
+[node name="EditServerButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
@@ -80,7 +82,8 @@ grow_vertical = 2
 disabled = true
 text = "Edit"
 
-[node name="Remove Server" type="Button" parent="."]
+[node name="RemoveServerButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
@@ -95,7 +98,8 @@ grow_vertical = 2
 disabled = true
 text = "Remove"
 
-[node name="Back" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -106,7 +110,8 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Back"
 
-[node name="Server Address" type="LineEdit" parent="."]
+[node name="ServerAddressLineEdit" type="LineEdit" parent="."]
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -122,7 +127,8 @@ text = "192.168.178.214:42000"
 placeholder_text = "address"
 alignment = 1
 
-[node name="Add Server" type="Button" parent="."]
+[node name="AddServerButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -136,8 +142,8 @@ grow_vertical = 0
 size_flags_vertical = 3
 text = "Add"
 
-[connection signal="pressed" from="Join Server" to="." method="_on_join_server_pressed"]
-[connection signal="pressed" from="Edit Server" to="." method="_on_edit_server_pressed"]
-[connection signal="pressed" from="Remove Server" to="." method="_on_remove_server_pressed"]
-[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="Add Server" to="." method="_on_add_server_pressed"]
+[connection signal="pressed" from="JoinServerButton" to="." method="_on_join_server_button_pressed"]
+[connection signal="pressed" from="EditServerButton" to="." method="_on_edit_server_button_pressed"]
+[connection signal="pressed" from="RemoveServerButton" to="." method="_on_remove_server_button_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="AddServerButton" to="." method="_on_add_server_button_pressed"]

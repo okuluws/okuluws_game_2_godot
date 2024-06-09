@@ -2,11 +2,21 @@
 
 [ext_resource type="Script" path="res://home/world_selection.gd" id="1_cep2k"]
 
-[node name="World Selection" type="CanvasLayer" node_paths=PackedStringArray("world_display_vbox")]
+[node name="World Selection" type="Control" node_paths=PackedStringArray("world_display_vbox", "join_world_button", "edit_world_button", "host_world_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_cep2k")
 world_display_vbox = NodePath("ScrollContainer/VBoxContainer")
+join_world_button = NodePath("JoinWorldButton")
+edit_world_button = NodePath("EditWorldButton")
+host_world_button = NodePath("HostWorldButton")
 
-[node name="Title" type="RichTextLabel" parent="."]
+[node name="TitleRichLabel" type="RichTextLabel" parent="."]
+layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 12.0
@@ -17,35 +27,8 @@ bbcode_enabled = true
 text = "[center]Worlds"
 fit_content = true
 
-[node name="New World" type="Button" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -226.0
-offset_top = -99.0
-offset_right = -10.0
-offset_bottom = -50.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "New World"
-
-[node name="Back" type="Button" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 15.0
-offset_top = -99.0
-offset_right = 192.0
-offset_bottom = -50.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "Back"
-
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
@@ -63,7 +46,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 1
 
-[node name="Join World" type="Button" parent="."]
+[node name="JoinWorldButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -75,7 +59,8 @@ grow_horizontal = 2
 disabled = true
 text = "Join"
 
-[node name="Edit World" type="Button" parent="."]
+[node name="EditWorldButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -87,7 +72,8 @@ grow_horizontal = 2
 disabled = true
 text = "Edit"
 
-[node name="Host World" type="Button" parent="."]
+[node name="HostWorldButton" type="Button" parent="."]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -99,8 +85,38 @@ grow_horizontal = 2
 disabled = true
 text = "Host"
 
-[connection signal="pressed" from="New World" to="." method="_on_new_world_pressed"]
-[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="Join World" to="." method="_on_join_world_pressed"]
-[connection signal="pressed" from="Edit World" to="." method="_on_edit_world_pressed"]
-[connection signal="pressed" from="Host World" to="." method="_on_host_world_pressed"]
+[node name="NewWorldButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -226.0
+offset_top = -99.0
+offset_right = -10.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "New World"
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = -99.0
+offset_right = 192.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Back"
+
+[connection signal="pressed" from="JoinWorldButton" to="." method="_on_join_world_button_pressed"]
+[connection signal="pressed" from="EditWorldButton" to="." method="_on_edit_world_button_pressed"]
+[connection signal="pressed" from="HostWorldButton" to="." method="_on_host_world_button_pressed"]
+[connection signal="pressed" from="NewWorldButton" to="." method="_on_new_world_button_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

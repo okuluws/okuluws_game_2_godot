@@ -1,13 +1,15 @@
-extends CanvasLayer
+extends Control
 
 
-@onready var main = $"/root/Main"
-@onready var home = $"../"
-@onready var virtual_joystick_value_label = $"TabContainer/General/VirtualJoystickButton/Label2"
-@onready var content_scale_factor_value_label = $"TabContainer/General/ContentScaleFactorButton/Label2"
-@onready var content_scale_factor_slider = $"TabContainer/General/ContentScaleFactorButton/ContentScaleFactorSlider"
-@onready var save_button = $"Save"
-var intermediate_config = ConfigFile.new()
+# REQUIRED
+var main
+
+@onready var home = main.home
+@onready var ui = main.ui
+@export var virtual_joystick_value_label: Label
+@export var content_scale_factor_value_label: Label
+@export var content_scale_factor_slider: Slider
+@export var save_button: BaseButton
 
 
 func _ready():
@@ -21,8 +23,10 @@ func _display_config():
 	save_button.disabled = not main.config_has_changes()
 
 
-func _on_back_pressed():
-	home.add_child(load("res://home/title_screen.tscn").instantiate())
+func _on_back_button_pressed():
+	var new_title_screen = home.title_screen_scene.instantiate()
+	new_title_screen.main = main
+	ui.add_child(new_title_screen)
 	queue_free()
 
 
@@ -36,7 +40,7 @@ func _on_content_scale_factor_slider_value_changed(value):
 	_display_config()
 
 
-func _on_save_pressed():
+func _on_save_button_pressed():
 	main.apply_changes()
 	main.save_config()
 	_display_config()
@@ -45,8 +49,5 @@ func _on_save_pressed():
 func _on_reset_config_button_pressed():
 	main.reset_config()
 	_display_config()
-
-
-
 
 

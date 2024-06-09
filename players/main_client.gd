@@ -1,13 +1,19 @@
 extends Node
 
 
+@export var multiplayer_spawner: MultiplayerSpawner
+@export var player_scene: PackedScene
+@export var punch_scene : PackedScene
+@export var fake_pickup_item_scene : PackedScene
+
+
 func _ready():
-	$"MultiplayerSpawner".spawn_function = func(data):
+	multiplayer_spawner.spawn_function = func(data):
 		match data:
 			"player":
-				return preload("res://players/player/player_client.tscn").instantiate()
+				return player_scene.instantiate()
 			"punch":
-				return preload("res://players/punch/punch_client.tscn").instantiate()
+				return punch_scene.instantiate()
 			"fake_pickup_item":
-				return preload("res://players/fake_pickup_item/fake_pickup_item_client.tscn").instantiate()
+				return fake_pickup_item_scene.instantiate()
 
