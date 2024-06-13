@@ -13,12 +13,10 @@ extends Node
 @export var world_display_scene: PackedScene
 
 
-func _ready():
+func show_main_menu():
 	var new_title_screen = title_screen_scene.instantiate()
-	new_title_screen.main = main
-	main.ui.add_child(new_title_screen)
+	new_title_screen.home = self
+	add_child(new_title_screen)
 	
-
-
 
 

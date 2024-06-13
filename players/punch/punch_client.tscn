@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b6i674vijxmsx"]
 
-[ext_resource type="PackedScene" uid="uid://deebaye2kcson" path="res://players/punch/punch_common.tscn" id="2_jg8ig"]
+[ext_resource type="PackedScene" uid="uid://deebaye2kcson" path="res://players/punch/punch_syncer.tscn" id="2_jg8ig"]
 [ext_resource type="Texture2D" uid="uid://5xtyu767ci47" path="res://players/punch/punch.png" id="2_q3vd4"]
 
 [node name="Punch" type="Sprite2D"]

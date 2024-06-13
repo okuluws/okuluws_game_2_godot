@@ -28,9 +28,6 @@ properties/7/replication_mode = 2
 properties/8/path = NodePath(".:position")
 properties/8/spawn = true
 properties/8/replication_mode = 2
-properties/9/path = NodePath("CollisionPolygon2D:polygon")
-properties/9/spawn = true
-properties/9/replication_mode = 2
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer"]
 replication_config = SubResource("SceneReplicationConfig_6th57")

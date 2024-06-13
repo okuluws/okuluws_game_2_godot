@@ -2,7 +2,6 @@ extends Node
 
 
 @export var pb: Node
-@export var ui: Node
 @export var home: Node
 @export var worlds: Node
 var options_file_path = "user://options.cfg"
@@ -13,11 +12,7 @@ var options_hash
 func _ready():
 	if not FileAccess.file_exists(options_file_path): reset_config()
 	load_config()
-	#print(IP.get_local_interfaces())
-	#var k = Crypto.new().generate_rsa(256)
-	#print(k.save_to_string())
-	#print(k.save_to_string(true))
-	
+	home.show_main_menu()
 
 
 #func _process(_delta):
@@ -26,7 +21,7 @@ func _ready():
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		print("calling tree quit")
+		print("game quit")
 		get_tree().quit()
 
 

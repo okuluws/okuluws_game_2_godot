@@ -1,8 +1,10 @@
 extends Node2D
 
 
-var item_id
+# REQUIRED
 var target_position
+
+var item_id
 
 
 func _physics_process(delta):

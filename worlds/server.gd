@@ -1,15 +1,16 @@
-extends SubViewport
+extends Window
 
 
 # REQUIRED
-@export var main: Node
+var worlds
 var world_dir_path
 var server_ip
 var server_port
 
-@export var level: Node2D
+@export var players: Node
 @export var items: Node
 @export var inventories: Node
+@onready var main = worlds.main
 signal load_queued
 signal start_queued
 signal save_queued
@@ -25,7 +26,10 @@ func _enter_tree():
 
 
 func _exit_tree():
+	save_queued.emit()
+	smapi.multiplayer_peer = null
 	get_tree().set_multiplayer(MultiplayerAPI.create_default_interface(), get_path())
+	print("shutdown server")
 
 
 func _ready():
@@ -41,12 +45,12 @@ func _ready():
 			if res.response_code != 200:
 				push_error("couldnt create server ticket");
 				return
-			tickets[res.body.ticked_id] = { "user_id": res.body.user_id, "username": res.body.username, "token": res.body.token, "date": Time.get_unix_time_from_system() }
+			tickets[res.body.ticked_id] = { "user_id": res.body.user_id, "username": res.body.username, "key": res.body.key, "date": Time.get_unix_time_from_system() }
 			smapi.send_auth(p, res.body.ticked_id.to_utf8_buffer())
 			return
 		
-		elif data.has("ticket_token") and data.has("ticket_id"):
-			if crypto.constant_time_compare(data.ticket_token.to_utf8_buffer(), tickets[data.ticket_id].token.to_utf8_buffer()):
+		elif data.has("ticket_key") and data.has("ticket_id"):
+			if crypto.constant_time_compare(data.ticket_key.to_utf8_buffer(), tickets[data.ticket_id].key.to_utf8_buffer()):
 				peer_users[p] = { "user_id": tickets[data.ticket_id].user_id, "username": tickets[data.ticket_id].username }
 				tickets.erase(data.ticket_id)
 				smapi.complete_auth(p)
@@ -57,8 +61,6 @@ func _ready():
 				push_warning("ticket auth fail from peer %d (sus)" % p)
 				return
 		
-		push_warning("unknown request from peer %d, KICKED" % p)
-		smapi.disconnect_peer(p)
 	)
 	smapi.peer_connected.connect(func(peer_id): print("connected user %s, peer %d" % [peer_users[peer_id].username, peer_id]))
 	smapi.peer_authentication_failed.connect(func(peer_id):
@@ -75,13 +77,19 @@ func _ready():
 	start_queued.emit()
 
 
+func create_ticket(user_id: String, username: String) -> Dictionary:
+	# technically this can collide🤓 - it's 512 bits brotha
+	var ticket_id = Marshalls.raw_to_base64(Crypto.new().generate_random_bytes(64))
+	
+	# maybe thats not secure enough...
+	var key = Marshalls.raw_to_base64(Crypto.new().generate_random_bytes(2048))
+	
+	tickets[ticket_id] = { "user_id": user_id, "username": username, "key": key, "created": Time.get_unix_time_from_system() }
+	return { "id": ticket_id, "key": key }
+
+
 func _notification(what: int) -> void:
-	if what in [NOTIFICATION_WM_CLOSE_REQUEST, NOTIFICATION_WM_GO_BACK_REQUEST]:
-		shutdown()
-
-
-func shutdown():
-	save_queued.emit()
-	queue_free()
-	print("shutdown server")
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		worlds.close_server(self)
+		
 

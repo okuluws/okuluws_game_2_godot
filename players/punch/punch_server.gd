@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 
-@onready var despawn_timer = $"Timer"
+# REQUIRED
 var peer_owner
 
 
@@ -15,10 +15,10 @@ func _on_timer_timeout():
 	queue_free()
 
 
-func _on_area_2d_body_entered(body):
-	if not ("player_common" in body and body.peer_owner != peer_owner) and body.has_method("take_damage"):
-		body.take_damage(3, peer_owner)
+func _on_area_2d_body_entered(_body):
+	#if body.has_method("take_damage"):
+		#body.take_damage(3, peer_owner)
 		
-		#despawn
+	pass
 
 

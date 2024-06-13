@@ -1,7 +1,6 @@
-[gd_scene load_steps=18 format=3 uid="uid://bxvyedtgh5oup"]
+[gd_scene load_steps=17 format=3 uid="uid://bxvyedtgh5oup"]
 
 [ext_resource type="Script" path="res://players/player/player_ui.gd" id="1_36y60"]
-[ext_resource type="PackedScene" uid="uid://2kp10yh3ks88" path="res://players/player/item_slot.tscn" id="2_go7u1"]
 [ext_resource type="Texture2D" uid="uid://cvx4784ydkpoa" path="res://players/player/move_joypad_ring.png" id="2_odcgh"]
 [ext_resource type="Texture2D" uid="uid://6fdutlcs8mgv" path="res://players/player/move_joypad_circle.png" id="3_ebo5c"]
 
@@ -34,7 +33,7 @@ pressed = true
 [sub_resource type="Shortcut" id="Shortcut_qax0n"]
 events = [SubResource("InputEventAction_rke7a")]
 
-[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("inventory_ui", "hotbar_ui", "movement_joypad_ring", "movement_joypad_cirlce", "punch_spawn_area", "movement_joypad_spawn_area")]
+[node name="PlayerUI" type="CanvasLayer" node_paths=PackedStringArray("inventory_ui", "hotbar_ui", "movement_joypad_ring", "movement_joypad_cirlce", "punch_spawn_area", "movement_joypad_spawn_area")]
 script = ExtResource("1_36y60")
 inventory_ui = NodePath("Inventory")
 hotbar_ui = NodePath("Hotbar")
@@ -63,7 +62,7 @@ anchor_top = 0.653
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_top = -0.480225
-offset_right = -332.0
+offset_right = -20.0
 focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_472c1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_7to10")
@@ -126,30 +125,6 @@ grow_vertical = 0
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Item Slot" parent="Hotbar" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot2" parent="Hotbar" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot3" parent="Hotbar" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot4" parent="Hotbar" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot5" parent="Hotbar" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot6" parent="Hotbar" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot7" parent="Hotbar" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot8" parent="Hotbar" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
 [node name="Inventory" type="GridContainer" parent="."]
 visible = false
 anchors_preset = 7
@@ -166,102 +141,6 @@ grow_vertical = 0
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 8
-
-[node name="Item Slot" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot2" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot3" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot4" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot5" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot6" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot7" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot8" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot9" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot10" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot11" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot12" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot13" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot14" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot15" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot16" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot17" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot18" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot19" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot20" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot21" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot22" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot23" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot24" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot25" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot26" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot27" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot28" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot29" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot30" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot31" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
-
-[node name="Item Slot32" parent="Inventory" instance=ExtResource("2_go7u1")]
-layout_mode = 2
 
 [node name="Open Inventory" type="Button" parent="."]
 anchors_preset = 7

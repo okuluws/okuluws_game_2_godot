@@ -1,9 +1,11 @@
 extends AnimatedSprite2D
 
 
-@onready var items_config = $"../../Items/Common".config
+# REQUIRED
+var players
+
 var item_id
 
 
 func _ready():
-	sprite_frames = items_config[item_id].sprite_frames
+	sprite_frames = players.client.items.config.item_sprite_frames[item_id]

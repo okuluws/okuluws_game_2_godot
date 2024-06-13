@@ -2,11 +2,9 @@ extends Control
 
 
 # REQUIRED
-var main
+var home
 
-@onready var home = main.home
-@onready var ui = main.ui
-@onready var worlds = main.worlds
+@onready var worlds = home.main.worlds
 @export var world_display_vbox: VBoxContainer
 @export var join_world_button: BaseButton
 @export var edit_world_button: BaseButton
@@ -26,9 +24,9 @@ func _on_join_world_button_pressed():
 
 func _on_edit_world_button_pressed():
 	var new_world_edit = home.world_edit_scene.instantiate()
-	new_world_edit.main = main
+	new_world_edit.home = home
 	new_world_edit.world_dir_path = selected_world_dir_path
-	ui.add_child(new_world_edit)
+	home.add_child(new_world_edit)
 	queue_free()
 
 
@@ -51,8 +49,8 @@ func _on_new_world_button_pressed():
 
 func _on_back_button_pressed():
 	var new_title_screen = home.title_screen_scene.instantiate()
-	new_title_screen.main = main
-	ui.add_child(new_title_screen)
+	new_title_screen.home = home
+	home.add_child(new_title_screen)
 	queue_free()
 
 

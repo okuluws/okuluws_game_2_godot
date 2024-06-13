@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0gv64wvajret"
-path="res://.godot/imported/square.png-ba2c0d35be401efb0fbd9f11f6c6b5e4.ctex"
+uid="uid://wvf1gedsryct"
+path="res://.godot/imported/widesquare_idle_1-Sheet.png-2ace4ecf4dc9609237238f18ad7f4805.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://players/player/player_type_textures/square.png"
-dest_files=["res://.godot/imported/square.png-ba2c0d35be401efb0fbd9f11f6c6b5e4.ctex"]
+source_file="res://players/player_type_sprite_frames/widesquare_idle_1-Sheet.png"
+dest_files=["res://.godot/imported/widesquare_idle_1-Sheet.png-2ace4ecf4dc9609237238f18ad7f4805.ctex"]
 
 [params]
 

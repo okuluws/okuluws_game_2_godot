@@ -5,20 +5,11 @@
 [ext_resource type="PackedScene" uid="uid://b84wfqxggchwj" path="res://worlds/main.tscn" id="3_rbro1"]
 [ext_resource type="PackedScene" uid="uid://dfnr236wev2ir" path="res://pocketbase/pocketbase.tscn" id="4_4sqoh"]
 
-[node name="Main" type="Node" node_paths=PackedStringArray("pb", "ui", "home", "worlds")]
+[node name="Main" type="Node" node_paths=PackedStringArray("pb", "home", "worlds")]
 script = ExtResource("1_3puvd")
 pb = NodePath("Pocketbase")
-ui = NodePath("UI")
 home = NodePath("Home")
 worlds = NodePath("Worlds")
-
-[node name="UI" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="Pocketbase" parent="." instance=ExtResource("4_4sqoh")]
 

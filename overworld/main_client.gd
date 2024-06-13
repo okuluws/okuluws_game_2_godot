@@ -1,12 +1,17 @@
 extends Node
 
 
+@export var overworld_scene: PackedScene
+@export var squareenemy_scene: PackedScene
+@export var multiplayer_spawner: MultiplayerSpawner
+
+
 func _ready():
-	$"MultiplayerSpawner".spawn_function = func(data):
+	multiplayer_spawner.spawn_function = func(data):
 		match data:
 			"overworld":
-				return preload("res://overworld/overworld_client.tscn").instantiate()
+				return overworld_scene.instantiate()
 			"squareenemy":
-				return preload("res://overworld/squareenemy/squareenemy_client.tscn").instantiate()
+				return squareenemy_scene.instantiate()
 
 

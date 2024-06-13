@@ -2,15 +2,14 @@ extends CharacterBody2D
 
 
 # REQUIRED
-var client
+var players
 
-@onready var main = client.main
 @export var player_ui_scene: PackedScene
 @export var animated_sprite: AnimatedSprite2D
-@export var collision_animation_player: AnimationPlayer
 @export var camera: Camera2D
 @export var display_label_top: RichTextLabel
 @export var display_label_bottom: RichTextLabel
+@export var collision_shape: CollisionShape2D
 var peer_owner
 var facing_direction
 var coins
@@ -24,36 +23,25 @@ var display_text
 func _ready():
 	if peer_owner != multiplayer.get_unique_id(): return
 	camera.enabled = true
-	var new_player_ui = client.players.player_ui_scene.instantiate()
+	var new_player_ui = players.player_ui_scene.instantiate()
 	new_player_ui.player = self
-	main.ui.add_child(new_player_ui)
+	players.add_child(new_player_ui)
 
 
 func _process(_delta):
-	match [player_type, facing_direction]:
-		["square", Vector2.LEFT]:
-			animated_sprite.play("square_left")
-		["square", Vector2.RIGHT]:
-			animated_sprite.play("square_right")
-		["square", Vector2.UP], ["square", Vector2.DOWN]:
-			animated_sprite.play("square")
-		
-		["widesquare", Vector2.LEFT]:
-			animated_sprite.play("widesquare_left")
-		["widesquare", Vector2.RIGHT]:
-			animated_sprite.play("widesquare_right")
-		["widesquare", Vector2.UP], ["widesquare", Vector2.DOWN]:
-			animated_sprite.play("widesquare")
-	
-		["triangle", Vector2.LEFT]:
-			animated_sprite.play("triangle_left")
-		["triangle", Vector2.RIGHT]:
-			animated_sprite.play("triangle_right")
-		["triangle", Vector2.UP], ["triangle", Vector2.DOWN]:
-			animated_sprite.play("triangle")
+	animated_sprite.sprite_frames = players.config.player_type_sprite_frames[player_type]
+	match facing_direction:
+		Vector2.LEFT:
+			animated_sprite.play("left")
+		Vector2.RIGHT:
+			animated_sprite.play("right")
+		_:
+			animated_sprite.play("default")
 	
 	display_label_top.text = display_text
 	display_label_bottom.text = "[center]  %d[color=red]♥ " % healthpoints
+	
+	collision_shape.shape = players.config.player_type_polygons[player_type]
 
 
 func _physics_process(_delta):

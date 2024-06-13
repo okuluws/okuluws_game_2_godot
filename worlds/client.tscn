@@ -6,16 +6,22 @@
 [ext_resource type="PackedScene" uid="uid://bjutk26pi1nl3" path="res://items/items_client.tscn" id="6_k8oxm"]
 [ext_resource type="PackedScene" uid="uid://e3dq207u8iq3" path="res://players/main_client.tscn" id="6_n88um"]
 
-[node name="Client" type="SubViewport" node_paths=PackedStringArray("level")]
+[node name="Client" type="Window" node_paths=PackedStringArray("players", "items")]
 disable_3d = true
+initial_position = 2
+size = Vector2i(1152, 648)
+content_scale_size = Vector2i(1152, 648)
+content_scale_mode = 1
+content_scale_aspect = 4
 script = ExtResource("1_wnrgn")
-level = NodePath("Level")
+players = NodePath("Players")
+items = NodePath("Items")
 client_ui_scene = ExtResource("2_durim")
 
-[node name="Level" type="Node2D" parent="."]
+[node name="Players" parent="." node_paths=PackedStringArray("client") instance=ExtResource("6_n88um")]
+client = NodePath("..")
 
-[node name="Players" parent="." instance=ExtResource("6_n88um")]
-
-[node name="Items" parent="." instance=ExtResource("6_k8oxm")]
+[node name="Items" parent="." node_paths=PackedStringArray("client") instance=ExtResource("6_k8oxm")]
+client = NodePath("..")
 
 [node name="Overworld" parent="." instance=ExtResource("5_kn0wa")]

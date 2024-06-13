@@ -2,12 +2,11 @@ extends Node
 
 
 # REQUIRED
-@export var server: SubViewport
+@export var server: Window
 
-@onready var level = server.level
 @onready var savefile = server.world_dir_path.path_join("items.cfg")
-@export var item_spawner: MultiplayerSpawner
 @export var config: Node
+@export var item_spawner: MultiplayerSpawner
 @export var item_scene: PackedScene
 var items = []
 
@@ -16,8 +15,6 @@ func _ready():
 	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
 	server.load_queued.connect(_load_items)
 	server.save_queued.connect(_save_items)
-	
-	item_spawner.spawn_path = level.get_path()
 
 
 func spawn_item(item_id, stack, position):
@@ -41,7 +38,7 @@ func _save_items():
 		f.set_value(i.name, "stack", i.stack)
 		f.set_value(i.name, "position", i.position)
 	if f.save(savefile) != OK: push_error("couldn't save %s" % savefile); return
-	server.log_default("saved items")
+	print("saved items")
 
 
 func _load_items():
@@ -54,4 +51,4 @@ func _load_items():
 		return
 	for section in f.get_sections():
 		spawn_item(f.get_value(section, "id"), f.get_value(section, "stack"), f.get_value(section, "position"))
-	server.log_default("spawned items")
+	print("spawned items")

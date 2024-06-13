@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://do43v3g55q5xh"
-path="res://.godot/imported/triangle idle_2-Sheet.png-81b572051062d8e226852a49abf116a4.ctex"
+uid="uid://lueb0gkw8oyr"
+path="res://.godot/imported/triangle_right.png-d233372e34f890cf8589e782f3d658ce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://players/player/player_type_textures/triangle idle_2-Sheet.png"
-dest_files=["res://.godot/imported/triangle idle_2-Sheet.png-81b572051062d8e226852a49abf116a4.ctex"]
+source_file="res://players/player_type_sprite_frames/triangle_right.png"
+dest_files=["res://.godot/imported/triangle_right.png-d233372e34f890cf8589e782f3d658ce.ctex"]
 
 [params]
 

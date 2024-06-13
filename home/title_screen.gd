@@ -2,11 +2,9 @@ extends Control
 
 
 # REQUIRED
-var main
+var home
 
-@onready var home = main.home
-@onready var pb = main.pb
-@onready var ui = main.ui
+@onready var pb = home.main.pb
 @export var welcome_back_label: Label
 @export var account_management_panel: Control
 @export var auth_state_info: Label
@@ -34,22 +32,22 @@ func _on_pocketbase_auth_changed():
 
 func _on_singleplayer_button_pressed():
 	var new_world_selection = home.world_selection_scene.instantiate()
-	new_world_selection.main = main
-	ui.add_child(new_world_selection)
+	new_world_selection.home = home
+	home.add_child(new_world_selection)
 	queue_free()
 
 
 func _on_multiplayer_button_pressed():
 	var new_server_selection = home.server_selection_scene.instantiate()
-	new_server_selection.main = main
-	ui.add_child(new_server_selection)
+	new_server_selection.home = home
+	home.add_child(new_server_selection)
 	queue_free()
 
 
 func _on_options_button_pressed():
 	var new_game_options = home.game_options_scene.instantiate()
-	new_game_options.main = main
-	ui.add_child(new_game_options)
+	new_game_options.home = home
+	home.add_child(new_game_options)
 	queue_free()
 
 

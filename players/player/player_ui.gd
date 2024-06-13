@@ -12,17 +12,20 @@ var player
 @export var movement_joypad_cirlce: Control
 @export var punch_spawn_area: BaseButton
 @export var movement_joypad_spawn_area: BaseButton
-@onready var main = player.client.main
-@onready var all_slots = hotbar_ui.get_children() + inventory_ui.get_children()
+@onready var main = player.players.client.main
 var action_slot_id
 var moving_joypad = false
 
 
 func _ready():
-	for n in range(all_slots.size()):
-		all_slots[n].pressed.connect(func():
-			_on_slot_pressed(str(n))
-		)
+	for n in range(40):
+		var new_item_slot = player.players.item_slot_scene.instantiate()
+		new_item_slot.player = player
+		new_item_slot.pressed.connect(func(): _on_slot_pressed(str(n)))
+		if n < 8:
+			hotbar_ui.add_child(new_item_slot)
+		else:
+			inventory_ui.add_child(new_item_slot)
 	
 	# multitouch, see NOTES
 	punch_spawn_area.gui_input.connect(func(event):
@@ -37,7 +40,6 @@ func _ready():
 
 
 func _process(_delta):
-	if player.inventory == null: return
 	for n in range(player.inventory.values().size()):
 		var slot = player.inventory.values()[n]
 		if n < 8:

@@ -6,20 +6,26 @@
 [ext_resource type="PackedScene" uid="uid://d0odjmlystmb3" path="res://inventories/main_server.tscn" id="5_lrjdv"]
 [ext_resource type="PackedScene" uid="uid://bakiddujj53st" path="res://players/main_server.tscn" id="6_ix3g8"]
 
-[node name="Server" type="SubViewport" node_paths=PackedStringArray("level", "items", "inventories")]
+[node name="Server" type="Window" node_paths=PackedStringArray("players", "items", "inventories")]
 disable_3d = true
+initial_position = 2
+size = Vector2i(1152, 648)
+content_scale_size = Vector2i(1152, 648)
+content_scale_mode = 1
+content_scale_aspect = 4
 script = ExtResource("1_fslfu")
-level = NodePath("Level")
+players = NodePath("Players")
 items = NodePath("Items")
 inventories = NodePath("Inventories")
 
-[node name="Level" type="Node2D" parent="."]
-
-[node name="Players" parent="." instance=ExtResource("6_ix3g8")]
+[node name="Players" parent="." node_paths=PackedStringArray("server") instance=ExtResource("6_ix3g8")]
+server = NodePath("..")
 
 [node name="Items" parent="." node_paths=PackedStringArray("server") instance=ExtResource("4_ld80w")]
 server = NodePath("..")
 
-[node name="Inventories" parent="." instance=ExtResource("5_lrjdv")]
+[node name="Inventories" parent="." node_paths=PackedStringArray("server") instance=ExtResource("5_lrjdv")]
+server = NodePath("..")
 
-[node name="Overworld" parent="." instance=ExtResource("2_6s53j")]
+[node name="Overworld" parent="." node_paths=PackedStringArray("server") instance=ExtResource("2_6s53j")]
+server = NodePath("..")

@@ -2,11 +2,9 @@ extends Panel
 
 
 # REQUIRED
-var main
+var home
 
-@onready var home = main.home
-@onready var ui = main.ui
-@onready var worlds = main.worlds
+@onready var worlds = home.main.worlds
 @export var server_address_line_edit: LineEdit
 @export var server_list_vbox: VBoxContainer
 @export var join_server_button: BaseButton
@@ -62,8 +60,8 @@ func _on_remove_server_button_pressed():
 
 func _on_back_button_pressed():
 	var new_title_screen = home.title_screen_scene.instantiate()
-	new_title_screen.main = main
-	ui.add_child(new_title_screen)
+	new_title_screen.home = home
+	home.add_child(new_title_screen)
 	queue_free()
 
 

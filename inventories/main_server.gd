@@ -1,9 +1,11 @@
 extends Node
 
 
-@onready var server = $"../"
-@onready var savefile = server.world_dir.path_join("inventories.cfg")
-@onready var items_common = server.get_node("Items/Common")
+# REQUIRED
+@export var server: Window
+
+@onready var savefile = server.world_dir_path.path_join("inventories.cfg")
+@onready var items_config = server.items.config
 var inventories = {}
 
 
@@ -23,7 +25,7 @@ func _save_inventories():
 				"item_id": inventories[i][s].item_id,
 			})
 	if f.save(savefile) != OK: push_error("couldn't save %s" % savefile); return
-	server.log_default("saved inventories")
+	print("saved inventories")
 
 
 func _load_inventories():
@@ -38,7 +40,7 @@ func _load_inventories():
 				"capacity": f.get_value(section, key).capacity,
 				"item_id": f.get_value(section, key).item_id,
 			}
-	server.log_default("loaded inventories")
+	print("loaded inventories")
 
 
 func create_default_inventory(slot_count: int):
@@ -114,13 +116,13 @@ func push_slot_to_inventory(inventory_a, slot_a, inventory_b):
 
 
 func get_pushable_count(stack_a, id_a, stack_b, capacity_b, id_b):
-	if not items_common.config.has(id_a): push_error("couldn't find item %s" % id_a); return
+	if not items_config.item_sizes.has(id_a): push_error("couldn't find item %s" % id_a); return
 	if id_b == null:
-		return min(floor(capacity_b / items_common.config[id_a].size), stack_a)
+		return min(floor(capacity_b / items_config.item_sizes[id_a]), stack_a)
 	elif id_b != id_a:
 		return 0
 	elif id_b == id_a:
-		return min(floor(capacity_b / items_common.config[id_a].size) - stack_b, stack_a)
+		return min(floor(capacity_b / items_config.item_sizes[id_a]) - stack_b, stack_a)
 	
 	push_error("wtf?!")
 

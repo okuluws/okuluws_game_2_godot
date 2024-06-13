@@ -2,13 +2,14 @@ extends Node
 
 
 # REQUIRED
-@export var server: SubViewport
+@export var server: Window
 
-@onready var savefile = server.world_dir.path_join("players.cfg")
+@onready var savefile = server.world_dir_path.path_join("players.cfg")
 @export var multiplayer_spawner: MultiplayerSpawner
 @export var player_scene: PackedScene
 @export var punch_scene : PackedScene
 @export var fake_pickup_item_scene : PackedScene
+@export var config: Node
 var players = {}
 
 
@@ -24,6 +25,7 @@ func _ready():
 
 func _on_peer_connected(peer_id):
 	var new_player = player_scene.instantiate()
+	new_player.players = self
 	new_player.peer_owner = peer_id
 	new_player.username = server.peer_users[peer_id].username
 	new_player.user_id = server.peer_users[peer_id].user_id

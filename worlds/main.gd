@@ -7,8 +7,8 @@ extends Node
 @export var client_world_scene: PackedScene
 @export var server_world_scene: PackedScene
 var worlds_dir_path = "user://worlds"
-var clients = []
-var servers = []
+var clients = {}
+var servers = {}
 
 
 func _ready():
@@ -28,8 +28,8 @@ func create_world_folder(world_dir_path, world_name):
 
 func make_client(server_address: String) -> Node:
 	var client = _setup_client(server_address)
-	$"SubViewportContainer".add_child(client)
-	clients.append(client)
+	add_child(client)
+	clients[client] = {}
 	return client
 
 
@@ -45,7 +45,7 @@ func _setup_client(server_address: String) -> Node:
 func make_server(world_dir_path: String, server_address: String) -> Node:
 	var server = _setup_server(world_dir_path, server_address)
 	add_child(server)
-	servers.append(server)
+	servers[server] = {}
 	return server
 
 
@@ -60,19 +60,23 @@ func _setup_server(world_dir_path: String, server_address: String) -> Node:
 
 
 func make_singleplayer(world_dir_path: String) -> Dictionary:
-	var offline_token = Marshalls.raw_to_base64(Crypto.new().generate_random_bytes(2048))
-	
-	var server = _setup_server(world_dir_path, "127.0.0.1:42000")
-	server.tickets["-1"] = { "user_id": "-1", "username": "local player", "token": offline_token, "date": Time.get_unix_time_from_system() }
+	var server = server_world_scene.instantiate()
+	server.worlds = self
+	server.world_dir_path = world_dir_path
+	server.server_port = 42123
+	server.server_ip = "127.0.0.1"
 	add_child(server)
-	servers.append(server)
+	servers[server] = {}
 	
-	var client = _setup_client("127.0.0.1:42000")
-	client.ticket_id = "-1"
-	client.ticket_token = offline_token
-	client.quit_world_queued.connect(server.shutdown)
+	var client = client_world_scene.instantiate()
+	client.worlds = self
+	client.server_port = 42123
+	client.server_ip = "127.0.0.1"
+	var ret = server.create_ticket("-1", "Offline Player")
+	client.ticket_id = ret.id
+	client.ticket_key = ret.key
 	add_child(client)
-	clients.append(client)
+	clients[client] = {}
 	
 	return { "server": server, "client": client }
 
@@ -83,5 +87,20 @@ func _parse_server_address(s: String):
 	return { "ip": s.trim_suffix(":%s" % port_str).lstrip("[").rstrip("]"), "port": int(port_str) }
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		for c in clients:
+			close_client(c)
+		for s in servers:
+			close_server(s)
 
+
+func close_client(node):
+	node.queue_free()
+	clients.erase(node)
+
+
+func close_server(node):
+	node.queue_free()
+	servers.erase(node)
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cxh5e4mjl018c"]
 
 [ext_resource type="TileSet" uid="uid://bmu6tj33bkk3h" path="res://overworld/overworld_tileset.tres" id="1_1p51p"]
-[ext_resource type="PackedScene" uid="uid://dq1y5nw0imsgi" path="res://overworld/overworld_common.tscn" id="3_7x6u4"]
+[ext_resource type="PackedScene" uid="uid://dq1y5nw0imsgi" path="res://overworld/overworld_syncer.tscn" id="3_7x6u4"]
 
 [node name="Overworld" type="TileMap"]
 z_index = -1

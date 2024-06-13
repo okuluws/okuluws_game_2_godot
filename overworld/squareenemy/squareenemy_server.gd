@@ -1,9 +1,9 @@
 extends CharacterBody2D
 
 
-@onready var multiplayer_spawner
-var healthpoints = 20.0
-var healthpoints_max = 20.0
+# REQUIRED
+var healthpoints
+var healthpoints_max
 
 
 func take_damage(damagepoints):

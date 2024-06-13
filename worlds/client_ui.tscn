@@ -8,28 +8,12 @@ action = &"escape"
 [sub_resource type="Shortcut" id="Shortcut_3b8kb"]
 events = [SubResource("InputEventAction_sa528")]
 
-[node name="ClientUI" type="Control" node_paths=PackedStringArray("world_texture_rect", "escape_panel")]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="ClientUI" type="CanvasLayer" node_paths=PackedStringArray("escape_panel")]
 script = ExtResource("1_2d0ws")
-world_texture_rect = NodePath("WorldTextureRect")
 escape_panel = NodePath("EscapePanel")
-
-[node name="WorldTextureRect" type="TextureRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="EscapePanel" type="Panel" parent="."]
 visible = false
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -73,7 +57,6 @@ grow_horizontal = 2
 text = "Quit"
 
 [node name="OpenEscapePanelButton" type="Button" parent="."]
-layout_mode = 0
 offset_left = 17.0
 offset_top = 11.0
 offset_right = 126.0

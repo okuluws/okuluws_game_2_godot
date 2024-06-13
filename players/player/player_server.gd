@@ -2,14 +2,13 @@ extends CharacterBody2D
 
 
 # REQUIRED
-var server
+var players
 
-@onready var inventories = server.inventories
-@onready var items = server.items
-@onready var players = server.players
+@onready var inventories = players.server.inventories
+@onready var items = players.server.items
 @onready var multiplayer_spawner = players.multiplayer_spawner
-@export var collision_animation_player: AnimationPlayer
 @export var idle_timer: Timer
+@export var collision_shape: CollisionShape2D
 var user_id
 var username
 var inventory_id
@@ -24,19 +23,17 @@ var player_type
 var display_text = ""
 
 
-func _process(_delta):
+func _ready():
+	inventory = inventories.inventories[inventory_id]
 	display_text = "[center][color=green]%s" % username
 	if is_idle:
 		display_text += "[color=darkgray][AFK][/color]"
-	inventory = inventories.inventories[inventory_id]
 	
-	match player_type:
-		"square":
-			collision_animation_player.play("player_type_collisions/square")
-		"widesquare":
-			collision_animation_player.play("player_type_collisions/widesquare")
-		"triangle":
-			collision_animation_player.play("player_type_collisions/triangle")
+	collision_shape.shape = players.config.player_type_polygons[player_type]
+
+
+func _process(_delta):
+	_ready()
 
 
 func _physics_process(_delta):

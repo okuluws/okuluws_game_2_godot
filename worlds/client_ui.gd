@@ -1,15 +1,11 @@
-extends Control
+extends CanvasLayer
 
 
 # REQUIRED
-@export var client: SubViewport
+var client
 
-@export var world_texture_rect: TextureRect
 @export var escape_panel: Panel
-
-
-func _ready():
-	world_texture_rect.texture = client.get_texture()
+@onready var worlds = client.worlds
 
 
 func _on_resume_button_pressed():
@@ -21,7 +17,7 @@ func _on_open_lan_button_pressed():
 
 
 func _on_quit_world_button_pressed():
-	client.quit_world()
+	worlds.close_client(client)
 
 
 func _on_open_escape_panel_button_pressed():
