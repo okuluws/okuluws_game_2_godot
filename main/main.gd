@@ -4,6 +4,7 @@ extends Node
 @export var pb: Node
 @export var home: Node
 @export var worlds: Node
+
 var options_file_path = "user://options.cfg"
 var options_file = ConfigFile.new()
 var options_hash
