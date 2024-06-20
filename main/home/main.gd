@@ -14,9 +14,7 @@ extends Node
 
 
 func show_main_menu():
-	var new_title_screen = title_screen_scene.instantiate()
-	new_title_screen.home = self
-	add_child(new_title_screen)
+	add_child(title_screen_scene.instantiate())
 	
 
 
