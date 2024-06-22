@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3 uid="uid://n5rgvf8dvpaw"]
+
+[ext_resource type="Script" path="res://main/home/create_world_screen.gd" id="1_5lnx2"]
+
+[node name="CreateWorldScreen" type="Control" node_paths=PackedStringArray("ledit_world_name")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5lnx2")
+ledit_world_name = NodePath("LEditWorldName")
+
+[node name="LEditWorldName" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -223.0
+offset_top = 126.0
+offset_right = 223.0
+offset_bottom = 186.0
+grow_horizontal = 2
+placeholder_text = "World Name"
+
+[node name="BtnCreate" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -223.0
+offset_top = 532.0
+offset_right = -5.0
+offset_bottom = 592.0
+grow_horizontal = 2
+text = "Create"
+
+[node name="BtnCancel" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 5.0
+offset_top = 532.0
+offset_right = 223.0
+offset_bottom = 592.0
+grow_horizontal = 2
+text = "Cancel"
+
+[connection signal="pressed" from="BtnCreate" to="." method="_on_btn_create_pressed"]
+[connection signal="pressed" from="BtnCancel" to="." method="_on_btn_cancel_pressed"]

@@ -41,7 +41,6 @@ offset_top = -20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
 theme_type_variation = &"HeaderMedium"
 text = "Play"
 
@@ -69,7 +68,6 @@ offset_top = -20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
 theme_type_variation = &"HeaderMedium"
 text = "Settings"
 
@@ -97,7 +95,6 @@ offset_top = -20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
 theme_type_variation = &"HeaderMedium"
 text = "Quit"
 

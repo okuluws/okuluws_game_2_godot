@@ -1,0 +1,157 @@
+[gd_scene load_steps=5 format=3 uid="uid://dhn7h7v87cdq8"]
+
+[ext_resource type="Script" path="res://main/home/play_selection_screen.gd" id="1_gnf1m"]
+[ext_resource type="PackedScene" uid="uid://8x0br77dsy7v" path="res://main/home/underline.tscn" id="2_siudc"]
+[ext_resource type="PackedScene" uid="uid://bxh3hu0rayil5" path="res://main/home/world_display.tscn" id="2_vn0pu"]
+[ext_resource type="PackedScene" uid="uid://b16xrjs6ew5gl" path="res://main/home/server_display.tscn" id="3_fx401"]
+
+[node name="PlaySelectionScreen" type="Control" node_paths=PackedStringArray("vbox_world_list", "vbox_server_list", "world_deletion_confirmation_window")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gnf1m")
+scene_world_display = ExtResource("2_vn0pu")
+scene_server_display = ExtResource("3_fx401")
+vbox_world_list = NodePath("HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
+vbox_server_list = NodePath("HBoxContainer/VBoxContainer2/ScrollContainer/MarginContainer/VBoxContainer")
+world_deletion_confirmation_window = NodePath("ConfirmationDialog")
+
+[node name="BtnBackArrow" type="Button" parent="."]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 60.0
+offset_right = 104.0
+offset_bottom = 122.0
+mouse_default_cursor_shape = 2
+flat = true
+metadata/_edit_group_ = true
+
+[node name="Label" type="Label" parent="BtnBackArrow"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderLarge"
+text = "<"
+
+[node name="Underline" parent="BtnBackArrow/Label" node_paths=PackedStringArray("node") instance=ExtResource("2_siudc")]
+layout_mode = 0
+node = NodePath("../..")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 60.0
+offset_right = 492.0
+offset_bottom = 120.0
+theme_type_variation = &"HeaderLarge"
+text = "Select World"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -456.0
+offset_top = 178.0
+offset_right = 543.0
+offset_bottom = -35.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "Local"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BtnImportWorld" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Import"
+
+[node name="BtnCreateWorld" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Create"
+
+[node name="BtnEditWorld" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Edit"
+
+[node name="BtnDeleteWorld" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Delete"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "Remote"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer2/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer2/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="BtnAddServer" type="Button" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "Add"
+
+[node name="BtnEditServer" type="Button" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "Edit"
+
+[node name="BtnRemoveServer" type="Button" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "Remove"
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+initial_position = 2
+size = Vector2i(500, 160)
+ok_button_text = "Continue"
+dialog_text = "This deletion is PERMANENT.
+Are you sure?"
+cancel_button_text = "Cancel!!!1!!11!"
+
+[connection signal="pressed" from="BtnBackArrow" to="." method="_on_btn_back_arrow_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/HBoxContainer/BtnCreateWorld" to="." method="_on_btn_create_world_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/HBoxContainer/BtnDeleteWorld" to="." method="_on_btn_delete_world_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer2/HBoxContainer/BtnAddServer" to="." method="_on_btn_add_server_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer2/HBoxContainer/BtnRemoveServer" to="." method="_on_btn_remove_server_pressed"]

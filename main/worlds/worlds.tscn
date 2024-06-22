@@ -1,10 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://b84wfqxggchwj"]
+[gd_scene load_steps=2 format=3 uid="uid://b84wfqxggchwj"]
 
 [ext_resource type="Script" path="res://main/worlds/worlds.gd" id="1_l66np"]
-[ext_resource type="PackedScene" uid="uid://dde62wcnhs6gv" path="res://main/worlds/client.tscn" id="2_yjlqr"]
-[ext_resource type="PackedScene" uid="uid://8wl5lpudm7g6" path="res://main/worlds/server.tscn" id="3_qi3f4"]
 
 [node name="Worlds" type="Node"]
 script = ExtResource("1_l66np")
-client_world_scene = ExtResource("2_yjlqr")
-server_world_scene = ExtResource("3_qi3f4")

@@ -1,13 +1,17 @@
 extends Control
 
 
+# REQUIRED
+@export var home: Node
+
+
 func _on_play_pressed():
-	queue_free()
+	home.show_menu("play_selection_screen")
 
 
 func _on_settings_pressed():
-	queue_free()
+	pass
 
 
 func _on_quit_pressed():
-	queue_free()
+	pass
