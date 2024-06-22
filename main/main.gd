@@ -22,15 +22,17 @@ func _enter_tree():
 	}
 
 
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		get_tree().quit()
+
+
+
 
 #func _process(_delta):
 	#stretch_auto()
 #
 #
-#func _notification(what):
-	#if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		#print("game quit")
-		#get_tree().quit()
 #
 #
 #func load_config():

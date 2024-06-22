@@ -21,26 +21,27 @@ func _ready():
 	var err
 	if not DirAccess.dir_exists_absolute(worlds_dir_path):
 		err = func_u.DirAccess_make_dir_absolute(worlds_dir_path)
-		if err != OK: func_u.unreacheable(err)
+		if err != null: func_u.unreachable(err)
 	
 	if not FileAccess.file_exists(worlds_config_file_path):
 		err = _save_worlds_config()
-		if err != OK: func_u.unreacheable(err)
+		if err != null: func_u.unreachable(err)
 	else:
 		err = func_u.ConfigFile_load(worlds_config, worlds_config_file_path)
-		if err != OK: func_u.unreacheable(err)
+		if err != null: func_u.unreachable(err)
 	
 	if not FileAccess.file_exists(remote_worlds_config_file_path):
 		err = _save_worlds_config()
-		if err != OK: func_u.unreacheable(err)
+		if err != null: func_u.unreachable(err)
 	else:
 		err = func_u.ConfigFile_load(remote_worlds_config, remote_worlds_config_file_path)
-		if err != OK: func_u.unreacheable(err)
+		if err != null: func_u.unreachable(err)
 
 
-func _exit_tree():
-	_save_worlds_config()
-	_save_remote_worlds_config()
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_save_worlds_config()
+		_save_remote_worlds_config()
 
 
 func create_world(display_name: String):
@@ -49,17 +50,17 @@ func create_world(display_name: String):
 	var new_world_dir_path = worlds_dir_path.path_join(world_id)
 	
 	err = func_u.DirAccess_make_dir_absolute(new_world_dir_path)
-	if err != OK:
+	if err != null:
 		return { "err": err, "ret": null }
 	
 	worlds_config.set_value(world_id, "path", new_world_dir_path)
 	worlds_config.set_value(world_id, "display_name", display_name)
 	
 	err = _save_worlds_config()
-	if err != OK:
+	if err != null:
 		return { "err": err, "ret": null }
 	
-	return { "err": OK, "ret": world_id }
+	return { "err": null, "ret": world_id }
 
 
 func add_remote_world(display_name: String, ip: String, port: int):
@@ -70,10 +71,10 @@ func add_remote_world(display_name: String, ip: String, port: int):
 	remote_worlds_config.set_value(remote_world_id, "port", port)
 	
 	var err = _save_remote_worlds_config()
-	if err != OK:
+	if err != null:
 		return { "err": err, "ret": null }
 	
-	return { "err": OK, "ret": remote_world_id }
+	return { "err": null, "ret": remote_world_id }
 
 
 func remove_remote_world(id: String):
@@ -88,7 +89,7 @@ func unlink_world(id: String):
 
 func delete_world(id: String):
 	var err = func_u.trash_recursive(worlds_config.get_value(id, "path"))
-	if err != OK:
+	if err != null:
 		return err
 	
 	return unlink_world(id)

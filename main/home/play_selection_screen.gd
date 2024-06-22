@@ -75,5 +75,7 @@ func _on_btn_delete_world_pressed():
 		selected_world = null
 		load_world_list()
 	)
-	
-	#main.modules.worlds.delete_world(selected_world)
+
+
+func _on_btn_start_world_pressed():
+	pass # Replace with function body.
