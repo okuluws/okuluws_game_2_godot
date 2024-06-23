@@ -2,7 +2,7 @@ extends Node
 
 
 # REQUIRED
-@export var server: Window
+@export var server: Node
 
 @export var overworld_scene: PackedScene
 @export var squareenemy_scene: PackedScene
@@ -12,24 +12,24 @@ extends Node
 
 func _ready():
 	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
-	server.start_queued.connect(func():
-		var f = ConfigFile.new()
-		if f.load(savefile) != OK: push_error("couldn't load %s" % savefile); return
-		if not f.get_value("", "spawned_items", false):
-			for n in range(1024):
-				server.items.spawn_item(["square_fragment", "triangle_fragment", "widesquare_fragment"].pick_random(), 1, Vector2(randi_range(100, 600), randi_range(-100, 100)))
-			f.set_value("", "spawned_items", true)
-			f.save(savefile)
-			print("spawned overworld items")
-		multiplayer_spawner.spawn_function = func(_data): multiplayer_spawner.spawn_function = Callable(); return overworld_scene.instantiate()
-		multiplayer_spawner.spawn("overworld")
-		var new_squareenemy = squareenemy_scene.instantiate()
-		new_squareenemy.healthpoints = 20.0
-		new_squareenemy.healthpoints_max = 20.0
-		new_squareenemy.position = Vector2(-200 ,0)
-		multiplayer_spawner.spawn_function = func(_data): multiplayer_spawner.spawn_function = Callable(); return new_squareenemy
-		multiplayer_spawner.spawn("squareenemy")
-		
-		print("spawned overworld")
-	)
+	
+	var f = ConfigFile.new()
+	if f.load(savefile) != OK: push_error("couldn't load %s" % savefile); return
+	if not f.get_value("", "spawned_items", false):
+		for n in range(1024):
+			server.items.spawn_item(["square_fragment", "triangle_fragment", "widesquare_fragment"].pick_random(), 1, Vector2(randi_range(100, 600), randi_range(-100, 100)))
+		f.set_value("", "spawned_items", true)
+		f.save(savefile)
+		print("spawned overworld items")
+	multiplayer_spawner.spawn_function = func(_data): multiplayer_spawner.spawn_function = Callable(); return overworld_scene.instantiate()
+	multiplayer_spawner.spawn("overworld")
+	var new_squareenemy = squareenemy_scene.instantiate()
+	new_squareenemy.healthpoints = 20.0
+	new_squareenemy.healthpoints_max = 20.0
+	new_squareenemy.position = Vector2(-200 ,0)
+	multiplayer_spawner.spawn_function = func(_data): multiplayer_spawner.spawn_function = Callable(); return new_squareenemy
+	multiplayer_spawner.spawn("squareenemy")
+	
+	print("spawned overworld")
+	
 

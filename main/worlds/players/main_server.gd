@@ -2,7 +2,7 @@ extends Node
 
 
 # REQUIRED
-@export var server: Window
+@export var server: Node
 
 @onready var savefile = server.world_dir_path.path_join("players.cfg")
 @export var multiplayer_spawner: MultiplayerSpawner
@@ -17,7 +17,7 @@ func _ready():
 	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
-	server.save_queued.connect(func():
+	server.world_saving.connect(func():
 		for p in players.values():
 			_save_player(p)
 	)

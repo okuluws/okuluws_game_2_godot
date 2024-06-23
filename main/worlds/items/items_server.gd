@@ -2,7 +2,7 @@ extends Node
 
 
 # REQUIRED
-@export var server: Window
+@export var server: Node
 
 @onready var savefile = server.world_dir_path.path_join("items.cfg")
 @export var config: Node
@@ -13,8 +13,8 @@ var items = []
 
 func _ready():
 	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
-	server.load_queued.connect(_load_items)
-	server.save_queued.connect(_save_items)
+	server.world_saving.connect(_save_items)
+	_load_items()
 
 
 func spawn_item(item_id, stack, position):

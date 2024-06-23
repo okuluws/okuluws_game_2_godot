@@ -2,7 +2,7 @@ extends Node
 
 
 # REQUIRED
-@export var client: Window
+@export var client: Node
 
 @export var multiplayer_spawner: MultiplayerSpawner
 @export var player_scene: PackedScene

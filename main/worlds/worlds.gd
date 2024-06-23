@@ -4,14 +4,14 @@ extends Node
 # REQUIRED
 @export var main: Node
 
-#@export var client_world_scene: PackedScene
-#@export var server_world_scene: PackedScene
+@export var scene_client_world: PackedScene
+@export var scene_server_world: PackedScene
 @onready var func_u = main.modules.func_u
 var worlds_dir_path = "user://worlds"
 var worlds_config = ConfigFile.new()
 var worlds_config_file_path = worlds_dir_path.path_join("worlds.cfg")
-var remote_worlds_config = ConfigFile.new()
-var remote_worlds_config_file_path = worlds_dir_path.path_join("remote_worlds.cfg")
+var clients_config = ConfigFile.new()
+var clients_config_file_path = worlds_dir_path.path_join("clients.cfg")
 #var world_config_dir_name = "world.cfg"
 #var clients = {}
 #var servers = {}
@@ -30,18 +30,18 @@ func _ready():
 		err = func_u.ConfigFile_load(worlds_config, worlds_config_file_path)
 		if err != null: func_u.unreachable(err)
 	
-	if not FileAccess.file_exists(remote_worlds_config_file_path):
+	if not FileAccess.file_exists(clients_config_file_path):
 		err = _save_worlds_config()
 		if err != null: func_u.unreachable(err)
 	else:
-		err = func_u.ConfigFile_load(remote_worlds_config, remote_worlds_config_file_path)
+		err = func_u.ConfigFile_load(clients_config, clients_config_file_path)
 		if err != null: func_u.unreachable(err)
 
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_save_worlds_config()
-		_save_remote_worlds_config()
+		_save_clients_config()
 
 
 func create_world(display_name: String):
@@ -63,23 +63,23 @@ func create_world(display_name: String):
 	return { "err": null, "ret": world_id }
 
 
-func add_remote_world(display_name: String, ip: String, port: int):
-	var remote_world_id = display_name.to_snake_case() + "_" + str(Time.get_unix_time_from_system())
+func add_client_config(display_name: String, ip: String, port: int):
+	var client_world_id = display_name.to_snake_case() + "_" + str(Time.get_unix_time_from_system())
 	
-	remote_worlds_config.set_value(remote_world_id, "display_name", display_name)
-	remote_worlds_config.set_value(remote_world_id, "ip", ip)
-	remote_worlds_config.set_value(remote_world_id, "port", port)
+	clients_config.set_value(client_world_id, "display_name", display_name)
+	clients_config.set_value(client_world_id, "ip", ip)
+	clients_config.set_value(client_world_id, "port", port)
 	
-	var err = _save_remote_worlds_config()
+	var err = _save_clients_config()
 	if err != null:
 		return { "err": err, "ret": null }
 	
-	return { "err": null, "ret": remote_world_id }
+	return { "err": null, "ret": client_world_id }
 
 
-func remove_remote_world(id: String):
-	remote_worlds_config.erase_section(id)
-	return _save_remote_worlds_config()
+func remove_client_config(id: String):
+	clients_config.erase_section(id)
+	return _save_clients_config()
 
 
 func unlink_world(id: String):
@@ -88,9 +88,11 @@ func unlink_world(id: String):
 
 
 func delete_world(id: String):
-	var err = func_u.trash_recursive(worlds_config.get_value(id, "path"))
-	if err != null:
-		return err
+	match OS.get_name(): # TODO: support more platforms
+		"Windows":
+			OS.execute("CMD.exe", ["/C", 'rd /s /q "%s"' % ProjectSettings.globalize_path(worlds_config.get_value(id, "path"))])
+		_:
+			return "only for windows yet"
 	
 	return unlink_world(id)
 
@@ -99,8 +101,26 @@ func _save_worlds_config():
 	return func_u.ConfigFile_save(worlds_config, worlds_config_file_path)
 
 
-func _save_remote_worlds_config():
-	return func_u.ConfigFile_save(remote_worlds_config, remote_worlds_config_file_path)
+func _save_clients_config():
+	return func_u.ConfigFile_save(clients_config, clients_config_file_path)
+
+
+func start_server(world_id: String):
+	var new_server = scene_server_world.instantiate()
+	new_server.worlds = self
+	new_server.world_dir_path = worlds_config.get_value(world_id, "path")
+	new_server.ip = "127.0.0.1"
+	new_server.port = 0
+	add_child(new_server)
+	return new_server
+
+
+func start_client(id: String): pass
+func start_client_local(server_node: Node):
+	var new_client = scene_client_world.instantiate()
+	new_client.server_node = server_node
+	add_child(new_client)
+
 
 #func create_world_folder(world_dir_path, world_name):
 	#var worlds_dir = DirAccess.open(worlds_dir_path)

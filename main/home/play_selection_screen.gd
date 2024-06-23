@@ -11,7 +11,7 @@ extends Control
 @export var world_deletion_confirmation_window: ConfirmationDialog
 @onready var main = home.main
 @onready var worlds_config: ConfigFile = main.modules.worlds.worlds_config
-@onready var servers_config: ConfigFile = main.modules.worlds.remote_worlds_config
+@onready var clients_config: ConfigFile = main.modules.worlds.clients_config
 var selected_world
 var selected_server
 
@@ -37,8 +37,8 @@ func load_server_list():
 	for c in vbox_server_list.get_children():
 		c.queue_free()
 	
-	for s in servers_config.get_sections():
-		var display_name = servers_config.get_value(s, "display_name")
+	for s in clients_config.get_sections():
+		var display_name = clients_config.get_value(s, "display_name")
 		var new_server_display = scene_server_display.instantiate()
 		new_server_display.label_display_name.text = display_name
 		new_server_display.pressed.connect(func(): selected_server = s)
@@ -61,7 +61,7 @@ func _on_btn_remove_server_pressed():
 	if selected_server == null:
 		return
 	
-	main.modules.worlds.remove_remote_world(selected_server)
+	main.modules.worlds.remove_client_config(selected_server)
 	load_server_list()
 
 
@@ -74,8 +74,9 @@ func _on_btn_delete_world_pressed():
 		main.modules.worlds.delete_world(selected_world)
 		selected_world = null
 		load_world_list()
-	)
+	, Object.CONNECT_ONE_SHOT)
 
 
 func _on_btn_start_world_pressed():
-	pass # Replace with function body.
+	main.modules.worlds.start_client_local(main.modules.worlds.start_server(selected_world))
+	

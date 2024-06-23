@@ -12,7 +12,7 @@ extends Control
 func _on_btn_add_pressed():
 	var ip = ledit_server_address.text.get_slice(":", 0)
 	var port = int(ledit_server_address.text.get_slice(":", 1))
-	main.modules.worlds.add_remote_world(ledit_server_name.text, ip, port)
+	main.modules.worlds.add_client_config(ledit_server_name.text, ip, port)
 	home.show_menu("play_selection_screen")
 
 

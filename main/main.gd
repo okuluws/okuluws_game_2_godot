@@ -5,28 +5,24 @@ extends Node
 @export var home: Node
 @export var worlds: Node
 @export var func_u: Node
-
+var modules
 #var options_file_path = "user://options.cfg"
 #var options_file = ConfigFile.new()
 #var options_hash
-var modules
 
 
-
-func _enter_tree():
+func _on_tree_entered():
 	modules = {
-		"pocketbase": pb,
-		"home": home,
-		"worlds": worlds,
 		"func_u": func_u,
+		"pocketbase": pb,
+		"worlds": worlds,
+		"home": home,
 	}
 
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		get_tree().quit()
-
-
 
 
 #func _process(_delta):

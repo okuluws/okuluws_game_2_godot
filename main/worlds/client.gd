@@ -6,58 +6,58 @@ extends Window
 
 # REQUIRED
 var worlds
-var server_ip
-var server_port
 
 @export var players: Node
 @export var items: Node
+@export var overworld: Node
 @export var client_ui_scene: PackedScene
 @onready var main = worlds.main
-var ticket_key 
-var ticket_id
-var enet = ENetMultiplayerPeer.new()
+var modules
+var server_ip
+var server_port
+var server_node
 var smapi = SceneMultiplayer.new()
 
 
-func _enter_tree():
+func _on_tree_entered():
+	modules = {
+		"players": players,
+		"items": items,
+		"overworld": overworld,
+	}
+	smapi.peer_authenticating.connect(func(p):
+		smapi.complete_auth(p)
+		if server_node != null:
+			server_node.smapi.complete_auth(smapi.get_unique_id())
+			server_node.peers[smapi.get_unique_id()] = { "user_id": main.modules.pocketbase.user_id, "username": main.modules.pocketbase.username }
+		else:
+			smapi.send_auth(p, JSON.stringify({ "action": "create_ticket", "user_id": main.pb.user_id }).to_utf8_buffer())
+	)
+	smapi.set_auth_callback(func(p, raw_data):
+		var data = JSON.parse_string(raw_data.get_string_from_utf8())
+		if data.err != null:
+			smapi.disconnect_peer(p)
+		else:
+			var ticket_id = data.ret
+			var res = await main.pb.api_GET("collections/server_tickets/records/%s" % ticket_id, true)
+			if res.response_code != 200:
+				smapi.disconnect_peer(p)
+			else:
+				smapi.send_auth(p, JSON.stringify({ "action": "redeem_ticket", "ticket_id": ticket_id, "ticket_key": res.body.key }).to_utf8_buffer())
+	)
+	smapi.connected_to_server.connect(_on_connected_to_server)
+	smapi.server_disconnected.connect(_on_server_disconnected)
 	get_tree().set_multiplayer(smapi, get_path())
-
-
-func _exit_tree():
-	smapi.multiplayer_peer = null
-	get_tree().set_multiplayer(MultiplayerAPI.create_default_interface(), get_path())
-	main.home.show_main_menu()
-	print("client shutdown")
 
 
 func _ready():
 	print("starting client")
-	
-	smapi.peer_authenticating.connect(func(p):
-		if ticket_key == null or ticket_id == null:
-			smapi.send_auth(p, JSON.stringify({ "user_id": main.pb.user_id }).to_utf8_buffer())
-		else:
-			smapi.send_auth(p, JSON.stringify({ "ticket_id": ticket_id, "ticket_key": ticket_key }).to_utf8_buffer())
-			smapi.complete_auth(p)
-	)
-	smapi.set_auth_callback(func(p, data):
-		ticket_id = data.get_string_from_utf8()
-		var res = await main.pb.api_GET("collections/server_tickets/records/%s" % ticket_id, true)
-		if res.response_code != 200:
-			push_error("couldnt get ticket with id %s" % ticket_id);
-			worlds.shutdown_client(self)
-			return
-		
-		ticket_key = res.body.token
-		smapi.send_auth(p, JSON.stringify({ "ticket_id": ticket_id, "ticket_key": ticket_key }).to_utf8_buffer())
-		smapi.complete_auth(p)
-	)
-	
-	enet.create_client(server_ip, server_port)
+	var enet = ENetMultiplayerPeer.new()
+	if server_node != null:
+		enet.create_client("127.0.0.1", server_node.port)
+	else:
+		enet.create_client(server_ip, server_port)
 	smapi.multiplayer_peer = enet
-	smapi.connected_to_server.connect(_on_connected_to_server)
-	smapi.server_disconnected.connect(_on_server_disconnected)
-	get_tree().set_multiplayer(smapi, get_path())
 
 
 func _on_connected_to_server():
@@ -74,5 +74,4 @@ func _on_server_disconnected():
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		worlds.close_client(self)
-
+		queue_free()
