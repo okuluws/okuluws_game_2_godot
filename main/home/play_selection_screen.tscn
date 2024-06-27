@@ -15,28 +15,25 @@ grow_vertical = 2
 script = ExtResource("1_gnf1m")
 scene_world_display = ExtResource("2_vn0pu")
 scene_server_display = ExtResource("3_fx401")
-vbox_world_list = NodePath("HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
-vbox_server_list = NodePath("HBoxContainer/VBoxContainer2/ScrollContainer/MarginContainer/VBoxContainer")
-world_deletion_confirmation_window = NodePath("ConfirmationDialog")
+vbox_world_list = NodePath("TabContainer/Local/VBoxContainer/HBoxContainer2/ScrollContainer/MarginContainer/VBoxContainer")
+vbox_server_list = NodePath("TabContainer/Remote/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
+world_deletion_confirmation_window = NodePath("DeleteLocalWorldConfirmationDialog")
 
 [node name="BtnBackArrow" type="Button" parent="."]
 layout_mode = 0
-offset_left = 46.0
-offset_top = 60.0
-offset_right = 104.0
-offset_bottom = 122.0
+offset_left = 36.0
+offset_top = 23.0
+offset_right = 85.0
+offset_bottom = 83.0
 mouse_default_cursor_shape = 2
 flat = true
 metadata/_edit_group_ = true
 
 [node name="Label" type="Label" parent="BtnBackArrow"]
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -30.0
-offset_bottom = 30.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"HeaderLarge"
@@ -48,119 +45,173 @@ node = NodePath("../..")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 120.0
-offset_top = 60.0
-offset_right = 492.0
-offset_bottom = 120.0
+offset_left = 101.0
+offset_top = 23.0
+offset_right = 473.0
+offset_bottom = 83.0
 theme_type_variation = &"HeaderLarge"
 text = "Select World"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="TabContainer" type="TabContainer" parent="."]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -456.0
-offset_top = 178.0
-offset_right = 543.0
-offset_bottom = -35.0
+offset_left = -524.0
+offset_top = 96.0
+offset_right = 525.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="Local" type="MarginContainer" parent="TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Local"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_type_variation = &"HeaderMedium"
-text = "Local"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Local/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="BtnImportWorld" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="BtnImportWorld" type="Button" parent="TabContainer/Local/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Import"
 
-[node name="BtnCreateWorld" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="BtnCreateWorld" type="Button" parent="TabContainer/Local/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Create"
 
-[node name="BtnEditWorld" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Local/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+placeholder_text = "Search"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="TabContainer/Local/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Local/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Local/VBoxContainer/HBoxContainer2/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Local/VBoxContainer/HBoxContainer2/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="TabContainer/Local/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Local/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BtnStartWorld" type="Button" parent="TabContainer/Local/VBoxContainer/HBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Start"
+
+[node name="BtnEditWorld" type="Button" parent="TabContainer/Local/VBoxContainer/HBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Edit"
 
-[node name="BtnDeleteWorld" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="BtnCopyWorld" type="Button" parent="TabContainer/Local/VBoxContainer/HBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "Copy"
+
+[node name="BtnDeleteWorld" type="Button" parent="TabContainer/Local/VBoxContainer/HBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Delete"
 
-[node name="BtnStartWorld" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="Remote" type="MarginContainer" parent="TabContainer"]
+visible = false
 layout_mode = 2
-text = "Start"
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Remote"]
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Remote/VBoxContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Remote/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+placeholder_text = "Search"
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2"]
+[node name="BtnAddServer" type="Button" parent="TabContainer/Remote/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
-theme_type_variation = &"HeaderMedium"
-text = "Remote"
+size_flags_horizontal = 8
+text = "Add Server"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Remote/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer2/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Remote/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer2/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Remote/VBoxContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="TabContainer/Remote/VBoxContainer"]
 layout_mode = 2
 
-[node name="BtnAddServer" type="Button" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Add"
-
-[node name="BtnEditServer" type="Button" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Edit"
-
-[node name="BtnRemoveServer" type="Button" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="BtnRemoveServer" type="Button" parent="TabContainer/Remote/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Remove"
 
-[node name="BtnJoinServer" type="Button" parent="HBoxContainer/VBoxContainer2"]
+[node name="BtnEditServer" type="Button" parent="TabContainer/Remote/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_horizontal = 3
+text = "Edit"
+
+[node name="BtnJoinServer" type="Button" parent="TabContainer/Remote/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Join"
 
-[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+[node name="Active" type="MarginContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="DeleteLocalWorldConfirmationDialog" type="ConfirmationDialog" parent="."]
 initial_position = 2
 size = Vector2i(500, 160)
 ok_button_text = "Continue"
@@ -168,43 +219,11 @@ dialog_text = "This deletion is PERMANENT.
 Are you sure?"
 cancel_button_text = "Cancel!!!1!!11!"
 
-[node name="BtnViewActiveInstances" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -354.0
-offset_top = 65.0
-offset_right = -20.0
-offset_bottom = 120.0
-grow_horizontal = 0
-mouse_default_cursor_shape = 2
-flat = true
-metadata/_edit_group_ = true
-
-[node name="Label" type="Label" parent="BtnViewActiveInstances"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -148.0
-offset_top = -20.0
-offset_right = 148.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_type_variation = &"HeaderMedium"
-text = "View active (0)"
-
-[node name="Underline" parent="BtnViewActiveInstances/Label" node_paths=PackedStringArray("node") instance=ExtResource("2_siudc")]
-layout_mode = 0
-node = NodePath("../..")
-
 [connection signal="pressed" from="BtnBackArrow" to="." method="_on_btn_back_arrow_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/HBoxContainer/BtnCreateWorld" to="." method="_on_btn_create_world_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/HBoxContainer/BtnDeleteWorld" to="." method="_on_btn_delete_world_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/BtnStartWorld" to="." method="_on_btn_start_world_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer2/HBoxContainer/BtnAddServer" to="." method="_on_btn_add_server_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer2/HBoxContainer/BtnRemoveServer" to="." method="_on_btn_remove_server_pressed"]
+[connection signal="pressed" from="TabContainer/Local/VBoxContainer/HBoxContainer/BtnCreateWorld" to="." method="_on_btn_create_world_pressed"]
+[connection signal="pressed" from="TabContainer/Local/VBoxContainer/HBoxContainer2/VBoxContainer/BtnStartWorld" to="." method="_on_btn_start_world_pressed"]
+[connection signal="pressed" from="TabContainer/Local/VBoxContainer/HBoxContainer2/VBoxContainer/BtnEditWorld" to="." method="_on_btn_edit_world_pressed"]
+[connection signal="pressed" from="TabContainer/Local/VBoxContainer/HBoxContainer2/VBoxContainer/BtnDeleteWorld" to="." method="_on_btn_delete_world_pressed"]
+[connection signal="pressed" from="TabContainer/Remote/VBoxContainer/HBoxContainer/BtnAddServer" to="." method="_on_btn_add_server_pressed"]
+[connection signal="pressed" from="TabContainer/Remote/VBoxContainer/HBoxContainer2/BtnRemoveServer" to="." method="_on_btn_remove_server_pressed"]
+[connection signal="confirmed" from="DeleteLocalWorldConfirmationDialog" to="." method="_on_delete_local_world_confirmation_dialog_confirmed"]

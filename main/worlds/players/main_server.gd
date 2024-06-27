@@ -27,8 +27,8 @@ func _on_peer_connected(peer_id):
 	var new_player = player_scene.instantiate()
 	new_player.players = self
 	new_player.peer_owner = peer_id
-	new_player.username = server.peer_users[peer_id].username
-	new_player.user_id = server.peer_users[peer_id].user_id
+	new_player.username = server.peers[peer_id].username
+	new_player.user_id = server.peers[peer_id].user_id
 	_load_player_save(new_player)
 	multiplayer_spawner.spawn_function = func(_data): multiplayer_spawner.spawn_function = Callable(); return new_player
 	players[peer_id] = multiplayer_spawner.spawn("player")

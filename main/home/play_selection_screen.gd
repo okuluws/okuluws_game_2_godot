@@ -46,15 +46,18 @@ func load_server_list():
 
 
 func _on_btn_create_world_pressed():
-	home.show_menu("create_world_screen")
+	home.show_create_world_screen()
+	queue_free()
 
 
 func _on_btn_back_arrow_pressed():
-	home.show_menu("title_screen")
+	home.show_title_screen()
+	queue_free()
 
 
 func _on_btn_add_server_pressed():
-	home.show_menu("add_server_screen")
+	home.show_add_server_screen()
+	queue_free()
 
 
 func _on_btn_remove_server_pressed():
@@ -70,13 +73,25 @@ func _on_btn_delete_world_pressed():
 		return
 	
 	world_deletion_confirmation_window.visible = true
-	world_deletion_confirmation_window.confirmed.connect(func():
-		main.modules.worlds.delete_world(selected_world)
-		selected_world = null
-		load_world_list()
-	, Object.CONNECT_ONE_SHOT)
+
+
+func _on_delete_local_world_confirmation_dialog_confirmed():
+	if selected_world == null:
+		return
+	
+	main.modules.worlds.delete_world(selected_world)
+	selected_world = null
+	load_world_list()
 
 
 func _on_btn_start_world_pressed():
-	main.modules.worlds.start_client_local(main.modules.worlds.start_server(selected_world))
+	if selected_world == null:
+		return
 	
+	main.modules.worlds.start_client_local(main.modules.worlds.start_server(selected_world))
+
+
+func _on_btn_edit_world_pressed():
+	pass # Replace with function body.
+
+

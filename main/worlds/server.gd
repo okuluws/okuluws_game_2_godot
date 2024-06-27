@@ -34,7 +34,7 @@ func _on_tree_entered():
 		var data = JSON.parse_string(raw_data.get_string_from_utf8())
 		match data.action:
 			"create_ticket":
-				var res = await main.pb.api_POST("myapp/create_server_ticket", { "user_id": data.user_id })
+				var res = await main.modules.pocketbase.api_POST("myapp/create_server_ticket", { "user_id": data.user_id })
 				if res.response_code != 200:
 					push_warning("couldnt create server ticket for %s" % data.user_id);
 					smapi.send_auth(p, JSON.stringify({ "err": "failed idk", "ret": null }).to_utf8_buffer())
@@ -68,26 +68,25 @@ func _on_tree_entered():
 
 func _ready():
 	print("starting server with bind=%s port=%d" % [ip, port])
+	match OS.get_name():
+		"Web":
+			# NOTE: doesnt work 
+			var mpeer = WebSocketMultiplayerPeer.new()
+			mpeer.create_server(port)
+			smapi.multiplayer_peer = mpeer
+		_:
+			var enet = ENetMultiplayerPeer.new()
+			enet.set_bind_ip(ip)
+			enet.create_server(port)
+			smapi.multiplayer_peer = enet
 	
-	var enet = ENetMultiplayerPeer.new()
-	enet.set_bind_ip(ip)
-	enet.create_server(port)
-	port = enet.host.get_local_port()
-	smapi.multiplayer_peer = enet
-
-#
-#func create_ticket(user_id: String, username: String) -> Dictionary:
-	## technically this can collide🤓 - it's 512 bits brotha
-	#var ticket_id = Marshalls.raw_to_base64(Crypto.new().generate_random_bytes(64))
-	#
-	## maybe thats not secure enough...
-	#var key = Marshalls.raw_to_base64(Crypto.new().generate_random_bytes(2048))
-	#
-	#tickets[ticket_id] = { "user_id": user_id, "username": username, "key": key, "created": Time.get_unix_time_from_system() }
-	#return { "id": ticket_id, "key": key }
 
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		world_saving.emit()
+		#(func(): smapi.multiplayer_peer = null).call_deferred()
 		queue_free()
+
+
+

@@ -8,29 +8,43 @@ extends Node
 @export var scene_play_selection_screen: PackedScene
 @export var scene_create_world_screen: PackedScene
 @export var scene_add_server_screen: PackedScene
-
-
-@onready var scenes_menu = {
-	"title_screen": scene_title_screen,
-	"play_selection_screen": scene_play_selection_screen,
-	"create_world_screen": scene_create_world_screen,
-	"add_server_screen": scene_add_server_screen,
-}
-var node_current_menu
+@export var scene_local_world_config_screen: PackedScene
 
 
 func _ready():
-	show_main_menu()
+	show_title_screen()
 
 
-func show_menu(id):
-	var new_menu = scenes_menu[id].instantiate()
-	new_menu.home = self
-	if node_current_menu != null:
-		node_current_menu.queue_free()
-	node_current_menu = new_menu
-	add_child(new_menu)
+func show_title_screen():
+	var n = scene_title_screen.instantiate()
+	n.home = self
+	add_child(n)
 
 
-func show_main_menu():
-	show_menu("title_screen")
+func show_play_selection_screen():
+	var n = scene_play_selection_screen.instantiate()
+	n.home = self
+	add_child(n)
+
+
+func show_create_world_screen():
+	var n = scene_create_world_screen.instantiate()
+	n.home = self
+	add_child(n)
+
+
+func show_add_server_screen():
+	var n = scene_add_server_screen.instantiate()
+	n.home = self
+	add_child(n)
+
+
+func show_local_world_config_screen():
+	var n = scene_local_world_config_screen.instantiate()
+	n.home = self
+	n.world_dir = ""
+	add_child(n)
+	
+	
+
+

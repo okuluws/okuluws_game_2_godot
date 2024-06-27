@@ -10,9 +10,11 @@ extends Control
 
 func _on_btn_create_pressed():
 	main.modules.worlds.create_world(ledit_world_name.text)
-	home.show_menu("play_selection_screen")
+	home.show_play_selection_screen()
+	queue_free()
 
 
 func _on_btn_cancel_pressed():
-	home.show_menu("play_selection_screen")
+	home.show_play_selection_screen()
+	queue_free()
 

@@ -55,6 +55,8 @@ func create_world(display_name: String):
 	
 	worlds_config.set_value(world_id, "path", new_world_dir_path)
 	worlds_config.set_value(world_id, "display_name", display_name)
+	worlds_config.set_value(world_id, "ip", "127.0.0.1")
+	worlds_config.set_value(world_id, "port", 20070)
 	
 	err = _save_worlds_config()
 	if err != null:
@@ -88,12 +90,7 @@ func unlink_world(id: String):
 
 
 func delete_world(id: String):
-	match OS.get_name(): # TODO: support more platforms
-		"Windows":
-			OS.execute("CMD.exe", ["/C", 'rd /s /q "%s"' % ProjectSettings.globalize_path(worlds_config.get_value(id, "path"))])
-		_:
-			return "only for windows yet"
-	
+	func_u.delete_recursively(worlds_config.get_value(id, "path"))
 	return unlink_world(id)
 
 
@@ -109,15 +106,16 @@ func start_server(world_id: String):
 	var new_server = scene_server_world.instantiate()
 	new_server.worlds = self
 	new_server.world_dir_path = worlds_config.get_value(world_id, "path")
-	new_server.ip = "127.0.0.1"
-	new_server.port = 0
+	new_server.ip = worlds_config.get_value(world_id, "ip")
+	new_server.port = worlds_config.get_value(world_id, "port")
 	add_child(new_server)
 	return new_server
 
 
-func start_client(id: String): pass
+func start_client(_id: String): pass
 func start_client_local(server_node: Node):
 	var new_client = scene_client_world.instantiate()
+	new_client.worlds = self
 	new_client.server_node = server_node
 	add_child(new_client)
 

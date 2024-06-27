@@ -27,7 +27,8 @@ func _ready():
 		else:
 			inventory_ui.add_child(new_item_slot)
 	
-	if not main.get_virtual_joystick():
+	#if not main.get_virtual_joystick():
+	if false:
 		movement_joypad_spawn_area.disabled = true
 		movement_joypad_spawn_area.mouse_filter = Control.MOUSE_FILTER_IGNORE
 

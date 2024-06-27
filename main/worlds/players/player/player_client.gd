@@ -25,7 +25,7 @@ func _ready():
 	camera.enabled = true
 	var new_player_ui = players.player_ui_scene.instantiate()
 	new_player_ui.player = self
-	players.add_child(new_player_ui)
+	add_child(new_player_ui)
 
 
 func _process(_delta):

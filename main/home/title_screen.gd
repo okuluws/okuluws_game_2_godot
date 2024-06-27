@@ -6,7 +6,8 @@ extends Control
 
 
 func _on_play_pressed():
-	home.show_menu("play_selection_screen")
+	home.show_play_selection_screen()
+	queue_free()
 
 
 func _on_settings_pressed():
