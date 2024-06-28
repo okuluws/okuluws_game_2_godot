@@ -6,17 +6,18 @@ extends Window
 # REQUIRED
 var worlds
 var world_dir_path
-var ip
-var port
 
-@export var players: Node
-@export var items: Node
-@export var inventories: Node
-@export var overworld: Node
-var modules
 
-@onready var main = worlds.main
 signal world_saving
+@export var _players: Node
+@export var _items: Node
+@export var _inventories: Node
+@export var _overworld: Node
+@onready var main = worlds.main
+var modules
+var world_config = ConfigFile.new()
+var bind_ip
+var port
 var smapi = SceneMultiplayer.new()
 var tickets = {}
 var peers = {}
@@ -25,10 +26,10 @@ var _crypto = Crypto.new()
 
 func _on_tree_entered():
 	modules = {
-		"players": players,
-		"items": items,
-		"inventories": inventories,
-		"overworld": overworld,
+		"players": _players,
+		"items": _items,
+		"inventories": _inventories,
+		"overworld": _overworld,
 	}
 	smapi.set_auth_callback(func(p, raw_data):
 		var data = JSON.parse_string(raw_data.get_string_from_utf8())
@@ -67,16 +68,26 @@ func _on_tree_entered():
 
 
 func _ready():
-	print("starting server with bind=%s port=%d" % [ip, port])
+	var err = main.modules.func_u.ConfigFile_load(world_config, world_dir_path.path_join("world.cfg"))
+	if err != null:
+		push_error(err)
+		push_error("couldn't start world %s" % world_dir_path)
+		queue_free()
+		return
+	
+	bind_ip = world_config.get_value("network", "bind_ip")
+	port = world_config.get_value("network", "port")
+	
+	print("starting server with bind=%s port=%d" % [bind_ip, port])
 	match OS.get_name():
 		"Web":
-			# NOTE: doesnt work 
+			# NOTE: doesnt work on web yet
 			var mpeer = WebSocketMultiplayerPeer.new()
 			mpeer.create_server(port)
 			smapi.multiplayer_peer = mpeer
 		_:
 			var enet = ENetMultiplayerPeer.new()
-			enet.set_bind_ip(ip)
+			enet.set_bind_ip(bind_ip)
 			enet.create_server(port)
 			smapi.multiplayer_peer = enet
 	
@@ -85,7 +96,6 @@ func _ready():
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		world_saving.emit()
-		#(func(): smapi.multiplayer_peer = null).call_deferred()
 		queue_free()
 
 

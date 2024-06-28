@@ -4,8 +4,8 @@ extends CharacterBody2D
 # REQUIRED
 var players
 
-@onready var inventories = players.server.inventories
-@onready var items = players.server.items
+@onready var inventories = players.server.modules.inventories
+@onready var items = players.server.modules.items
 @onready var multiplayer_spawner = players.multiplayer_spawner
 @export var idle_timer: Timer
 @export var collision_shape: CollisionShape2D

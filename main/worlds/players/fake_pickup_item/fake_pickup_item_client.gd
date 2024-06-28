@@ -8,4 +8,4 @@ var item_id
 
 
 func _ready():
-	sprite_frames = players.client.items.config.item_sprite_frames[item_id]
+	sprite_frames = players.client.modules.items.config.item_sprite_frames[item_id]

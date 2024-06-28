@@ -7,12 +7,12 @@ extends Window
 # REQUIRED
 var worlds
 
-@export var players: Node
-@export var items: Node
-@export var overworld: Node
+@export var _players: Node
+@export var _items: Node
+@export var _overworld: Node
+var modules
 @export var client_ui_scene: PackedScene
 @onready var main = worlds.main
-var modules
 var server_ip
 var server_port
 var server_node
@@ -21,9 +21,9 @@ var smapi = SceneMultiplayer.new()
 
 func _on_tree_entered():
 	modules = {
-		"players": players,
-		"items": items,
-		"overworld": overworld,
+		"players": _players,
+		"items": _items,
+		"overworld": _overworld,
 	}
 	smapi.peer_authenticating.connect(func(p):
 		smapi.complete_auth(p)

@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bxh3hu0rayil5" path="res://main/home/world_display.tscn" id="2_vn0pu"]
 [ext_resource type="PackedScene" uid="uid://b16xrjs6ew5gl" path="res://main/home/server_display.tscn" id="3_fx401"]
 
-[node name="PlaySelectionScreen" type="Control" node_paths=PackedStringArray("vbox_world_list", "vbox_server_list", "world_deletion_confirmation_window")]
+[node name="PlaySelectionScreen" type="Control" node_paths=PackedStringArray("vbox_world_list", "vbox_server_list", "vbox_active_servers_list", "world_deletion_confirmation_window")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,6 +17,7 @@ scene_world_display = ExtResource("2_vn0pu")
 scene_server_display = ExtResource("3_fx401")
 vbox_world_list = NodePath("TabContainer/Local/VBoxContainer/HBoxContainer2/ScrollContainer/MarginContainer/VBoxContainer")
 vbox_server_list = NodePath("TabContainer/Remote/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
+vbox_active_servers_list = NodePath("TabContainer/Active/VBoxContainer/ScrollContainer/VBoxContainer")
 world_deletion_confirmation_window = NodePath("DeleteLocalWorldConfirmationDialog")
 
 [node name="BtnBackArrow" type="Button" parent="."]
@@ -210,6 +211,23 @@ theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Active"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Active/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+placeholder_text = "Search"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Active/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Active/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="DeleteLocalWorldConfirmationDialog" type="ConfirmationDialog" parent="."]
 initial_position = 2

@@ -39,10 +39,10 @@ func show_add_server_screen():
 	add_child(n)
 
 
-func show_local_world_config_screen():
+func show_local_world_config_screen(world_dir_path: String):
 	var n = scene_local_world_config_screen.instantiate()
 	n.home = self
-	n.world_dir = ""
+	n.world_dir_path = world_dir_path
 	add_child(n)
 	
 	

@@ -6,14 +6,14 @@
 [ext_resource type="PackedScene" uid="uid://d0odjmlystmb3" path="res://main/worlds/inventories/main_server.tscn" id="4_7mk84"]
 [ext_resource type="PackedScene" uid="uid://bn3a8m5cg1baf" path="res://main/worlds/overworld/main_server.tscn" id="5_ok8bo"]
 
-[node name="Server" type="Window" node_paths=PackedStringArray("players", "items", "inventories", "overworld")]
+[node name="Server" type="Window" node_paths=PackedStringArray("_players", "_items", "_inventories", "_overworld")]
 initial_position = 2
 size = Vector2i(1152, 648)
 script = ExtResource("1_123at")
-players = NodePath("Players")
-items = NodePath("Items")
-inventories = NodePath("Inventories")
-overworld = NodePath("Overworld")
+_players = NodePath("Players")
+_items = NodePath("Items")
+_inventories = NodePath("Inventories")
+_overworld = NodePath("Overworld")
 
 [node name="Players" parent="." node_paths=PackedStringArray("server") instance=ExtResource("2_pg0jm")]
 server = NodePath("..")

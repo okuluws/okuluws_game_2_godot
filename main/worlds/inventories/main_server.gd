@@ -5,7 +5,7 @@ extends Node
 @export var server: Node
 
 @onready var savefile = server.world_dir_path.path_join("inventories.cfg")
-@onready var items_config = server.items.config
+@onready var items_config = server.modules.items.config
 var inventories = {}
 
 
@@ -74,7 +74,7 @@ func push_item_to_slot(item: Node, inventory_id: String, slot_id: String):
 		if s.item_id == null: s.item_id = item.id; s.stack = 0
 		s.stack += pushable_count
 		item.stack -= pushable_count
-		if item.stack <= 0: server.items.despawn_item(item)
+		if item.stack <= 0: server.modules.items.despawn_item(item)
 	return pushable_count
 
 
