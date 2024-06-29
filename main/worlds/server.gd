@@ -71,12 +71,11 @@ func _ready():
 	var err = main.modules.func_u.ConfigFile_load(world_config, world_dir_path.path_join("world.cfg"))
 	if err != null:
 		push_error(err)
-		push_error("couldn't start world %s" % world_dir_path)
 		queue_free()
 		return
 	
-	bind_ip = world_config.get_value("network", "bind_ip")
-	port = world_config.get_value("network", "port")
+	bind_ip = world_config.get_value("", "bind_ip")
+	port = world_config.get_value("", "port")
 	
 	print("starting server with bind=%s port=%d" % [bind_ip, port])
 	match OS.get_name():
@@ -90,7 +89,6 @@ func _ready():
 			enet.set_bind_ip(bind_ip)
 			enet.create_server(port)
 			smapi.multiplayer_peer = enet
-	
 
 
 func _notification(what: int) -> void:

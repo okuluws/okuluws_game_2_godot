@@ -4,8 +4,10 @@
 extends Window
 
 
-# REQUIRED
+# PARAM
 var worlds
+var world_dir_path
+var server_node
 
 @export var _players: Node
 @export var _items: Node
@@ -13,9 +15,9 @@ var worlds
 var modules
 @export var client_ui_scene: PackedScene
 @onready var main = worlds.main
+var world_config = ConfigFile.new()
 var server_ip
 var server_port
-var server_node
 var smapi = SceneMultiplayer.new()
 
 
@@ -52,10 +54,20 @@ func _on_tree_entered():
 
 
 func _ready():
-	if server_node != null:
+	var err = main.modules.func_u.ConfigFile_load(world_config, world_dir_path.path_join("world.cfg"))
+	if err != null:
+		push_error(err)
+		queue_free()
+		return
+	
+	if server_node == null:
+		server_ip = world_config.get_value("", "server_ip")
+	else:
+		server_port = world_config.get_value("", "server_port")
 		server_ip = "127.0.0.1"
 		server_port = server_node.port
 	
+	print("starting client %s %d" % [server_ip, server_port])
 	match OS.get_name():
 		"Web":
 			var mpeer = WebSocketMultiplayerPeer.new()
@@ -65,8 +77,6 @@ func _ready():
 			var enet = ENetMultiplayerPeer.new()
 			enet.create_client(server_ip, server_port)
 			smapi.multiplayer_peer = enet
-	
-	print("starting client")
 
 
 func _on_connected_to_server():

@@ -19,6 +19,12 @@ func ConfigFile_load(o: ConfigFile, path: String):
 	return null
 
 
+func ConfigFile_copy(o: ConfigFile, other: ConfigFile):
+	if o.parse(other.encode_to_text()) != OK:
+		return "how?"
+	return null
+
+
 func unreachable(message: String = ""):
 	push_error(message)
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)

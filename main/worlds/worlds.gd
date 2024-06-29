@@ -6,7 +6,12 @@ extends Node
 
 @export var scene_server_world: PackedScene
 @export var scene_client_world: PackedScene
+# why the fuck is there no text ressource - 28.06.2024
+@export_file var default_server_config_path
+@export_file var default_client_config_path
 @onready var func_u = main.modules.func_u
+var default_server_config = ConfigFile.new()
+var default_client_config = ConfigFile.new()
 var worlds_dir_path = "user://worlds"
 var servers_config = ConfigFile.new()
 var servers_config_file_path = worlds_dir_path.path_join("server_worlds.cfg")
@@ -18,6 +23,12 @@ var active_clients = {}
 
 func _ready():
 	var err
+	
+	err = func_u.ConfigFile_load(default_server_config, default_server_config_path)
+	if err != null: func_u.unreachable(err)
+	err = func_u.ConfigFile_load(default_client_config, default_client_config_path)
+	if err != null: func_u.unreachable(err)
+	
 	if not DirAccess.dir_exists_absolute(worlds_dir_path):
 		err = func_u.DirAccess_make_dir_absolute(worlds_dir_path)
 		if err != null: func_u.unreachable(err)
@@ -57,9 +68,11 @@ func create_world(display_name: String):
 		return { "err": err, "ret": null }
 	
 	var new_world_config = ConfigFile.new()
-	new_world_config.set_value("general", "name", display_name)
-	new_world_config.set_value("network", "bind_ip", "127.0.0.1")
-	new_world_config.set_value("network", "port", 20070)
+	err = func_u.ConfigFile_copy(new_world_config, default_server_config)
+	if err != null:
+		return { "err": err, "ret": null }
+	
+	new_world_config.set_value("", "name", display_name)
 	err = func_u.ConfigFile_save(new_world_config, new_world_dir_path.path_join("world.cfg"))
 	if err != null:
 		return { "err": err, "ret": null }
@@ -67,18 +80,33 @@ func create_world(display_name: String):
 	return { "err": null, "ret": new_world_dir_path }
 
 
-func add_client_config(display_name: String, ip: String, port: int):
-	var client_id = display_name.to_snake_case() + "_" + str(Time.get_unix_time_from_system())
-	
-	clients_config.set_value(client_id, "general/name", display_name)
-	clients_config.set_value(client_id, "network/server_ip", ip)
-	clients_config.set_value(client_id, "network/server_port", port)
-	
-	var err = _save_clients_config()
+func create_client_config(display_name: String, ip: String, port: int):
+	var err
+	var new_world_dir_path = worlds_dir_path.path_join(display_name.to_snake_case() + "_" + str(Time.get_unix_time_from_system()))
+	err = func_u.DirAccess_make_dir_absolute(new_world_dir_path)
 	if err != null:
 		return { "err": err, "ret": null }
 	
-	return { "err": null, "ret": client_id }
+	clients_config.set_value(new_world_dir_path, "hidden", false)
+	
+	err = _save_clients_config()
+	if err != null:
+		return { "err": err, "ret": null }
+	
+	var new_world_config = ConfigFile.new()
+	err = func_u.ConfigFile_copy(new_world_config, default_client_config)
+	if err != null:
+		return { "err": err, "ret": null }
+	
+	new_world_config.set_value("", "name", display_name)
+	new_world_config.set_value("", "server_ip", ip)
+	new_world_config.set_value("", "server_port", port)
+	err = func_u.ConfigFile_save(new_world_config, new_world_dir_path.path_join("world.cfg"))
+	if err != null:
+		return { "err": err, "ret": null }
+	
+	return { "err": null, "ret": new_world_dir_path }
+
 
 
 func remove_client_config(id: String):
@@ -116,11 +144,12 @@ func start_server(world_dir_path: String):
 	return new_server
 
 
-func start_client(id: String):
+func start_client(world_dir_path: String):
 	var new_client = scene_client_world.instantiate()
 	new_client.worlds = self
-	new_client.server_ip = clients_config.get_value(id, "network/server_ip")
-	new_client.server_port = clients_config.get_value(id, "network/server_port")
+	new_client.world_dir_path = world_dir_path
+	#new_client.server_ip = clients_config.get_value(id, "network/server_ip")
+	#new_client.server_port = clients_config.get_value(id, "network/server_port")
 	add_child(new_client)
 	active_clients[new_client] = {}
 	new_client.tree_exited.connect(func():
