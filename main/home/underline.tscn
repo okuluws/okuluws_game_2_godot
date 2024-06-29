@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://8x0br77dsy7v"]
+
+[ext_resource type="Script" path="res://main/home/underline.gd" id="1_4bk7c"]
+
+[node name="Underline" type="ColorRect"]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_4bk7c")

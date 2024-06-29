@@ -1,0 +1,8 @@
+[configuration]
+
+compatibility_minimum = "4.2.2"
+entry_symbol = "my_extension_init"
+
+[libraries]
+
+windows.debug.x86_64 = "res://bin/example.dll"

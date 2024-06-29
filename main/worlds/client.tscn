@@ -6,13 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://bjutk26pi1nl3" path="res://main/worlds/items/items_client.tscn" id="4_oj4au"]
 [ext_resource type="PackedScene" uid="uid://dm1tixrgasd1m" path="res://main/worlds/overworld/main_client.tscn" id="5_fx3jw"]
 
-[node name="Client" type="Window" node_paths=PackedStringArray("players", "items")]
-disable_3d = true
+[node name="Client" type="Window" node_paths=PackedStringArray("_players", "_items", "_overworld")]
 initial_position = 2
 size = Vector2i(1152, 648)
 script = ExtResource("1_qjnue")
-players = NodePath("Players")
-items = NodePath("Items")
+_players = NodePath("Players")
+_items = NodePath("Items")
+_overworld = NodePath("Overworld")
 client_ui_scene = ExtResource("2_j03o5")
 
 [node name="Players" parent="." node_paths=PackedStringArray("client") instance=ExtResource("3_i5m82")]
@@ -22,3 +22,5 @@ client = NodePath("..")
 client = NodePath("..")
 
 [node name="Overworld" parent="." instance=ExtResource("5_fx3jw")]
+
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered" flags=6]

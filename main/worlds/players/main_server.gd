@@ -2,7 +2,7 @@ extends Node
 
 
 # REQUIRED
-@export var server: Window
+@export var server: Node
 
 @onready var savefile = server.world_dir_path.path_join("players.cfg")
 @export var multiplayer_spawner: MultiplayerSpawner
@@ -17,7 +17,7 @@ func _ready():
 	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
-	server.save_queued.connect(func():
+	server.world_saving.connect(func():
 		for p in players.values():
 			_save_player(p)
 	)
@@ -27,8 +27,8 @@ func _on_peer_connected(peer_id):
 	var new_player = player_scene.instantiate()
 	new_player.players = self
 	new_player.peer_owner = peer_id
-	new_player.username = server.peer_users[peer_id].username
-	new_player.user_id = server.peer_users[peer_id].user_id
+	new_player.username = server.peers[peer_id].username
+	new_player.user_id = server.peers[peer_id].user_id
 	_load_player_save(new_player)
 	multiplayer_spawner.spawn_function = func(_data): multiplayer_spawner.spawn_function = Callable(); return new_player
 	players[peer_id] = multiplayer_spawner.spawn("player")
@@ -58,6 +58,6 @@ func _load_player_save(player):
 	if cfg.load(savefile) != OK: push_error("couldnt load file %s" % savefile); return FAILED
 	player.position = cfg.get_value(player.user_id, "position", Vector2.ZERO)
 	player.player_type = cfg.get_value(player.user_id, "player_type", ["square", "triangle", "widesquare"].pick_random())
-	player.inventory_id = cfg.get_value(player.user_id, "inventory_id") if cfg.has_section_key(player.user_id, "inventory_id") else server.inventories.create_default_inventory(40)
+	player.inventory_id = cfg.get_value(player.user_id, "inventory_id") if cfg.has_section_key(player.user_id, "inventory_id") else server.modules.inventories.create_default_inventory(40)
 	print("loaded player save for %s" % player.username)
 	return OK

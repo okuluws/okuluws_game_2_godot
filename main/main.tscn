@@ -1,20 +1,26 @@
-[gd_scene load_steps=5 format=3 uid="uid://cegssjy7r8gx7"]
+[gd_scene load_steps=6 format=3 uid="uid://cegssjy7r8gx7"]
 
 [ext_resource type="Script" path="res://main/main.gd" id="1_3puvd"]
 [ext_resource type="PackedScene" uid="uid://dug2d3hft7e68" path="res://main/home/main.tscn" id="2_2owiu"]
 [ext_resource type="PackedScene" uid="uid://b84wfqxggchwj" path="res://main/worlds/worlds.tscn" id="3_rbro1"]
 [ext_resource type="PackedScene" uid="uid://dfnr236wev2ir" path="res://main/pocketbase/pocketbase.tscn" id="4_4sqoh"]
+[ext_resource type="PackedScene" uid="uid://1c16i7lw63w4" path="res://main/func_u/func_u.tscn" id="5_fdtlp"]
 
-[node name="Main" type="Node" node_paths=PackedStringArray("pb", "home", "worlds")]
+[node name="Main" type="Node" node_paths=PackedStringArray("pb", "home", "worlds", "func_u")]
 script = ExtResource("1_3puvd")
 pb = NodePath("Pocketbase")
 home = NodePath("Home")
 worlds = NodePath("Worlds")
+func_u = NodePath("FuncU")
+
+[node name="FuncU" parent="." instance=ExtResource("5_fdtlp")]
 
 [node name="Pocketbase" parent="." instance=ExtResource("4_4sqoh")]
+
+[node name="Worlds" parent="." node_paths=PackedStringArray("main") instance=ExtResource("3_rbro1")]
+main = NodePath("..")
 
 [node name="Home" parent="." node_paths=PackedStringArray("main") instance=ExtResource("2_2owiu")]
 main = NodePath("..")
 
-[node name="Worlds" parent="." node_paths=PackedStringArray("main") instance=ExtResource("3_rbro1")]
-main = NodePath("..")
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered" flags=6]

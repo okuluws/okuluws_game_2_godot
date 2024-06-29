@@ -9,4 +9,4 @@ var stack
 
 
 func _ready():
-	sprite_frames = client.items.config.item_sprite_frames[id]
+	sprite_frames = client.modules.items.config.item_sprite_frames[id]

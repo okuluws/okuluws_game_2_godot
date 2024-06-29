@@ -1,4 +1,4 @@
 extends Button
 
 
-@export var server_name_label: Label
+@export var label_display_name: Label

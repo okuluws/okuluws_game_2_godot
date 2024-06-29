@@ -2,17 +2,17 @@ extends Node
 
 
 # REQUIRED
-@export var server: Window
+@export var server: Node
 
 @onready var savefile = server.world_dir_path.path_join("inventories.cfg")
-@onready var items_config = server.items.config
+@onready var items_config = server.modules.items.config
 var inventories = {}
 
 
 func _ready():
 	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
-	server.load_queued.connect(_load_inventories)
-	server.save_queued.connect(_save_inventories)
+	server.world_saving.connect(_save_inventories)
+	_load_inventories()
 
 
 func _save_inventories():
@@ -74,7 +74,7 @@ func push_item_to_slot(item: Node, inventory_id: String, slot_id: String):
 		if s.item_id == null: s.item_id = item.id; s.stack = 0
 		s.stack += pushable_count
 		item.stack -= pushable_count
-		if item.stack <= 0: server.items.despawn_item(item)
+		if item.stack <= 0: server.modules.items.despawn_item(item)
 	return pushable_count
 
 

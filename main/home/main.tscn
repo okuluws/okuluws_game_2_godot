@@ -1,20 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://dug2d3hft7e68"]
+[gd_scene load_steps=7 format=3 uid="uid://dug2d3hft7e68"]
 
 [ext_resource type="Script" path="res://main/home/main.gd" id="1_hxnvk"]
-[ext_resource type="PackedScene" uid="uid://bqtr7tqdd75x5" path="res://main/home/title_screen.tscn" id="2_rt3tw"]
-[ext_resource type="PackedScene" uid="uid://bu5sofg6f5shv" path="res://main/home/server_selection.tscn" id="3_vadlk"]
-[ext_resource type="PackedScene" uid="uid://bus6e712ij5qc" path="res://main/home/world_selection.tscn" id="4_m0wmy"]
-[ext_resource type="PackedScene" uid="uid://cjt0tkkrfpo4n" path="res://main/home/game_options.tscn" id="5_j651l"]
-[ext_resource type="PackedScene" uid="uid://b16xrjs6ew5gl" path="res://main/home/server_display.tscn" id="6_7giyb"]
-[ext_resource type="PackedScene" uid="uid://c4by3skeseg0c" path="res://main/home/world_edit.tscn" id="7_blrit"]
-[ext_resource type="PackedScene" uid="uid://b75h5pk7slpam" path="res://main/home/world_display.tscn" id="8_o1k7c"]
+[ext_resource type="PackedScene" uid="uid://cku8qosfmuio" path="res://main/home/title_screen.tscn" id="2_rt3tw"]
+[ext_resource type="PackedScene" uid="uid://n5rgvf8dvpaw" path="res://main/home/create_world_screen.tscn" id="4_2tpk7"]
+[ext_resource type="PackedScene" uid="uid://bdt5ga0qui0dg" path="res://main/home/add_server_screen.tscn" id="5_dlrrc"]
+[ext_resource type="PackedScene" uid="uid://u5j7jhdlykby" path="res://main/home/local_world_config_screen.tscn" id="6_3chry"]
+[ext_resource type="PackedScene" uid="uid://dhn7h7v87cdq8" path="res://main/home/play_selection_screen.tscn" id="9_21ni0"]
 
 [node name="Home" type="Node"]
 script = ExtResource("1_hxnvk")
-title_screen_scene = ExtResource("2_rt3tw")
-server_selection_scene = ExtResource("3_vadlk")
-world_selection_scene = ExtResource("4_m0wmy")
-game_options_scene = ExtResource("5_j651l")
-server_display_scene = ExtResource("6_7giyb")
-world_edit_scene = ExtResource("7_blrit")
-world_display_scene = ExtResource("8_o1k7c")
+scene_title_screen = ExtResource("2_rt3tw")
+scene_play_selection_screen = ExtResource("9_21ni0")
+scene_create_world_screen = ExtResource("4_2tpk7")
+scene_add_server_screen = ExtResource("5_dlrrc")
+scene_local_world_config_screen = ExtResource("6_3chry")
