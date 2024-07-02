@@ -22,5 +22,3 @@ client = NodePath("..")
 client = NodePath("..")
 
 [node name="Overworld" parent="." instance=ExtResource("5_fx3jw")]
-
-[connection signal="tree_entered" from="." to="." method="_on_tree_entered" flags=6]

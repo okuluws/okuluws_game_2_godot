@@ -1,15 +1,15 @@
 [gd_scene load_steps=2 format=3 uid="uid://bdt5ga0qui0dg"]
 
-[ext_resource type="Script" path="res://main/home/add_server_screen.gd" id="1_3y0uf"]
+[ext_resource type="Script" path="res://main/home/client_creation_screen.gd" id="1_ve6gj"]
 
-[node name="AddServerScreen" type="Control" node_paths=PackedStringArray("ledit_server_name", "ledit_server_address")]
+[node name="ClientCreationScreen" type="Control" node_paths=PackedStringArray("ledit_server_name", "ledit_server_address")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_3y0uf")
+script = ExtResource("1_ve6gj")
 ledit_server_name = NodePath("LEditServerName")
 ledit_server_address = NodePath("LEditServerAddress")
 

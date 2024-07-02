@@ -9,7 +9,7 @@ extends Control
 
 
 func _on_btn_create_pressed():
-	main.modules.worlds.create_world(ledit_world_name.text)
+	main.modules.worlds.create_server_world(ledit_world_name.text)
 	home.show_play_selection_screen()
 	queue_free()
 

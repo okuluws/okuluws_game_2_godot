@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://main/home/play_selection_screen.gd" id="1_gnf1m"]
 [ext_resource type="PackedScene" uid="uid://8x0br77dsy7v" path="res://main/home/underline.tscn" id="2_siudc"]
-[ext_resource type="PackedScene" uid="uid://bxh3hu0rayil5" path="res://main/home/world_display.tscn" id="2_vn0pu"]
-[ext_resource type="PackedScene" uid="uid://b16xrjs6ew5gl" path="res://main/home/server_display.tscn" id="3_fx401"]
+[ext_resource type="PackedScene" uid="uid://bxh3hu0rayil5" path="res://main/home/server_display.tscn" id="2_vn0pu"]
+[ext_resource type="PackedScene" uid="uid://b16xrjs6ew5gl" path="res://main/home/client_display.tscn" id="3_fx401"]
 
 [node name="PlaySelectionScreen" type="Control" node_paths=PackedStringArray("vbox_world_list", "vbox_server_list", "vbox_active_servers_list", "world_deletion_confirmation_window")]
 layout_mode = 3
@@ -78,6 +78,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Local/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
 [node name="BtnImportWorld" type="Button" parent="TabContainer/Local/VBoxContainer/HBoxContainer"]

@@ -26,5 +26,3 @@ server = NodePath("..")
 
 [node name="Overworld" parent="." node_paths=PackedStringArray("server") instance=ExtResource("5_ok8bo")]
 server = NodePath("..")
-
-[connection signal="tree_entered" from="." to="." method="_on_tree_entered" flags=6]

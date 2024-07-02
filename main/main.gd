@@ -11,14 +11,14 @@ var modules
 #var options_hash
 
 
-func _on_tree_entered():
+func _enter_tree():
+	print("project version: %s" % ProjectSettings.get_setting_with_override("application/config/version"))
 	modules = {
 		"func_u": func_u,
 		"pocketbase": pb,
 		"worlds": worlds,
 		"home": home,
 	}
-	
 
 
 func _notification(what):

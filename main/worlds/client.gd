@@ -15,13 +15,14 @@ var server_node
 var modules
 @export var client_ui_scene: PackedScene
 @onready var main = worlds.main
+@onready var func_u = main.modules_func_u
 var world_config = ConfigFile.new()
 var server_ip
 var server_port
 var smapi = SceneMultiplayer.new()
 
 
-func _on_tree_entered():
+func _enter_tree():
 	modules = {
 		"players": _players,
 		"items": _items,
@@ -53,17 +54,20 @@ func _on_tree_entered():
 	get_tree().set_multiplayer(smapi, get_path())
 
 
+func _exit_tree():
+	if smapi.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		smapi.disconnect_peer(1)
+	queue_free()
+
+
 func _ready():
 	var err = main.modules.func_u.ConfigFile_load(world_config, world_dir_path.path_join("world.cfg"))
-	if err != null:
-		push_error(err)
-		queue_free()
-		return
+	if err != null: func_u.unreacheable(err)
 	
 	if server_node == null:
-		server_ip = world_config.get_value("", "server_ip")
+		server_ip = world_config.get_value("general", "server_ip")
+		server_port = world_config.get_value("general", "server_port")
 	else:
-		server_port = world_config.get_value("", "server_port")
 		server_ip = "127.0.0.1"
 		server_port = server_node.port
 	
@@ -92,8 +96,3 @@ func _on_server_disconnected():
 	queue_free()
 
 
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		if smapi.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
-			smapi.disconnect_peer(1)
-		queue_free()

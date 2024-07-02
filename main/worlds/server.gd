@@ -24,7 +24,7 @@ var peers = {}
 var _crypto = Crypto.new()
 
 
-func _on_tree_entered():
+func _enter_tree():
 	modules = {
 		"players": _players,
 		"items": _items,
@@ -67,6 +67,11 @@ func _on_tree_entered():
 	get_tree().set_multiplayer(smapi, get_path())
 
 
+func _exit_tree():
+	world_saving.emit()
+	queue_free()
+
+
 func _ready():
 	var err = main.modules.func_u.ConfigFile_load(world_config, world_dir_path.path_join("world.cfg"))
 	if err != null:
@@ -74,8 +79,8 @@ func _ready():
 		queue_free()
 		return
 	
-	bind_ip = world_config.get_value("", "bind_ip")
-	port = world_config.get_value("", "port")
+	bind_ip = world_config.get_value("general", "bind_ip")
+	port = world_config.get_value("general", "port")
 	
 	print("starting server with bind=%s port=%d" % [bind_ip, port])
 	match OS.get_name():
@@ -90,11 +95,6 @@ func _ready():
 			enet.create_server(port)
 			smapi.multiplayer_peer = enet
 
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		world_saving.emit()
-		queue_free()
 
 
 

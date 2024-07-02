@@ -26,8 +26,10 @@ func ConfigFile_copy(o: ConfigFile, other: ConfigFile):
 
 
 func unreachable(message: String = ""):
-	push_error(message)
-	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+	push_error("reached unreachable code")
+	if message != "":
+		push_error("custom message: %s" % message)
+	get_tree().quit()
 
 
 func delete_recursively(path: String):

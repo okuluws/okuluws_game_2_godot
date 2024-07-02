@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://u5j7jhdlykby"]
 
-[ext_resource type="Script" path="res://main/home/local_world_config_screen.gd" id="1_8dbms"]
+[ext_resource type="Script" path="res://main/home/server_config_screen.gd" id="1_8dbms"]
 [ext_resource type="PackedScene" uid="uid://8x0br77dsy7v" path="res://main/home/underline.tscn" id="2_pg72d"]
 
-[node name="LocalWorldConfigScreen" type="Control" node_paths=PackedStringArray("node_world_name", "node_port", "node_bind_ip")]
+[node name="ServerConfigScreen" type="Control" node_paths=PackedStringArray("node_world_name", "node_port", "node_bind_ip")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

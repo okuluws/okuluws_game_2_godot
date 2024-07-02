@@ -1,15 +1,15 @@
 [gd_scene load_steps=2 format=3 uid="uid://n5rgvf8dvpaw"]
 
-[ext_resource type="Script" path="res://main/home/create_world_screen.gd" id="1_5lnx2"]
+[ext_resource type="Script" path="res://main/home/server_creation_screen.gd" id="1_k0v87"]
 
-[node name="CreateWorldScreen" type="Control" node_paths=PackedStringArray("ledit_world_name")]
+[node name="ServerCreationScreen" type="Control" node_paths=PackedStringArray("ledit_world_name")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_5lnx2")
+script = ExtResource("1_k0v87")
 ledit_world_name = NodePath("LEditWorldName")
 
 [node name="LEditWorldName" type="LineEdit" parent="."]

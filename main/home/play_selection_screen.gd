@@ -12,47 +12,46 @@ extends Control
 @export var vbox_active_servers_list: VBoxContainer
 @export var world_deletion_confirmation_window: ConfirmationDialog
 @onready var main = home.main
-@onready var worlds_config: ConfigFile = main.modules.worlds.servers_config
+@onready var func_u = main.modules.func_u
+@onready var servers_config: ConfigFile = main.modules.worlds.servers_config
 @onready var clients_config: ConfigFile = main.modules.worlds.clients_config
-var selected_world
-var selected_server
+var selected_server_world
+var selected_client_world
 
 
 func _ready():
-	load_world_list()
 	load_server_list()
-	load_active_servers_list()
-
-
-func load_world_list():
-	for c in vbox_world_list.get_children():
-		c.queue_free()
-	
-	var c = ConfigFile.new()
-	var err
-	for s in worlds_config.get_sections():
-		err = main.modules.func_u.ConfigFile_load(c, s.path_join("world.cfg"))
-		if err != null:
-			push_error(err)
-			push_error("couldn't load world config for %s" % s)
-			continue
-		
-		var display_name = c.get_value("general", "name")
-		var new_world_display = scene_world_display.instantiate()
-		new_world_display.label_display_name.text = display_name
-		new_world_display.pressed.connect(func(): selected_world = s)
-		vbox_world_list.add_child(new_world_display)
+	load_client_list()
 
 
 func load_server_list():
-	for c in vbox_server_list.get_children():
-		c.queue_free()
+	for n in vbox_world_list.get_children():
+		n.queue_free()
+	
+	var err
+	var cfg = ConfigFile.new()
+	for s in servers_config.get_sections():
+		err = func_u.ConfigFile_load(cfg, s.path_join("world.cfg"))
+		if err != null:
+			push_error(err)
+			continue
+		
+		var display_name = cfg.get_value("general", "name")
+		var new_world_display = scene_world_display.instantiate()
+		new_world_display.label_display_name.text = display_name
+		new_world_display.pressed.connect(func(): selected_server_world = s)
+		vbox_world_list.add_child(new_world_display)
+
+
+func load_client_list():
+	for n in vbox_server_list.get_children():
+		n.queue_free()
 	
 	for s in clients_config.get_sections():
 		var display_name = clients_config.get_value(s, "general/name")
 		var new_server_display = scene_server_display.instantiate()
 		new_server_display.label_display_name.text = display_name
-		new_server_display.pressed.connect(func(): selected_server = s)
+		new_server_display.pressed.connect(func(): selected_client_world = s)
 		vbox_server_list.add_child(new_server_display)
 
 
@@ -68,7 +67,7 @@ func load_active_servers_list():
 
 
 func _on_btn_create_world_pressed():
-	home.show_create_world_screen()
+	home.show_server_creation_screen()
 	queue_free()
 
 
@@ -78,46 +77,47 @@ func _on_btn_back_arrow_pressed():
 
 
 func _on_btn_add_server_pressed():
-	home.show_add_server_screen()
+	home.show_client_creation_screen()
 	queue_free()
 
 
 func _on_btn_remove_server_pressed():
-	if selected_server == null:
+	if selected_client_world == null:
 		return
 	
-	main.modules.worlds.remove_client_config(selected_server)
-	load_server_list()
+	main.modules.worlds.delete_client_world(selected_client_world)
+	load_client_list()
 
 
 func _on_btn_delete_world_pressed():
-	if selected_world == null:
+	if selected_server_world == null:
 		return
 	
 	world_deletion_confirmation_window.visible = true
 
 
 func _on_delete_local_world_confirmation_dialog_confirmed():
-	if selected_world == null:
+	if selected_server_world == null:
 		return
 	
-	main.modules.worlds.delete_world(selected_world)
-	selected_world = null
-	load_world_list()
+	main.modules.worlds.delete_server_world(selected_server_world)
+	selected_server_world = null
+	load_server_list()
 
 
 func _on_btn_start_world_pressed():
-	if selected_world == null:
+	if selected_server_world == null:
 		return
 	
-	main.modules.worlds.start_client_local(main.modules.worlds.start_server(selected_world))
+	#main.modules.worlds.start_client(main.modules.worlds.start_server(selected_server_world))
+	main.modules.worlds.start_server(selected_server_world)
 
 
 func _on_btn_edit_world_pressed():
-	if selected_world == null:
+	if selected_server_world == null:
 		return
 	
-	home.show_local_world_config_screen(selected_world)
+	home.show_server_config_screen(selected_server_world)
 	queue_free()
 
 

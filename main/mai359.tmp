@@ -22,3 +22,5 @@ main = NodePath("..")
 
 [node name="Home" parent="." node_paths=PackedStringArray("main") instance=ExtResource("2_2owiu")]
 main = NodePath("..")
+
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered" flags=6]

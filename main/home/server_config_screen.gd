@@ -24,14 +24,14 @@ func _ready():
 		c.set_value("general", "name", text)
 	)
 	
-	node_bind_ip.text = c.get_value("network", "bind_ip")
+	node_bind_ip.text = c.get_value("general", "bind_ip")
 	node_bind_ip.text_changed.connect(func(text):
-		c.set_value("network", "bind_ip", text)
+		c.set_value("general", "bind_ip", text)
 	)
 	
-	node_port.value = c.get_value("network", "port")
+	node_port.value = c.get_value("general", "port")
 	node_port.value_changed.connect(func(val):
-		c.set_value("network", "port", val)
+		c.set_value("general", "port", val)
 	)
 
 
