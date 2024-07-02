@@ -51,4 +51,3 @@ func _delete_recursively_fallback(path: String):
 		DirAccess.remove_absolute(path.path_join(file))
 	DirAccess.remove_absolute(path)
 
-

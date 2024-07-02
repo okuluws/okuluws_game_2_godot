@@ -4,12 +4,12 @@ extends Control
 # REQUIRED
 @export var home: Node
 
-@export var scene_world_display: PackedScene
 @export var scene_server_display: PackedScene
+@export var scene_client_display: PackedScene
 @export var scene_active_server_display: PackedScene
-@export var vbox_world_list: VBoxContainer
 @export var vbox_server_list: VBoxContainer
-@export var vbox_active_servers_list: VBoxContainer
+@export var vbox_client_list: VBoxContainer
+@export var vbox_active_server_list: VBoxContainer
 @export var world_deletion_confirmation_window: ConfirmationDialog
 @onready var main = home.main
 @onready var func_u = main.modules.func_u
@@ -25,44 +25,47 @@ func _ready():
 
 
 func load_server_list():
-	for n in vbox_world_list.get_children():
+	for n in vbox_server_list.get_children():
 		n.queue_free()
 	
-	var err
-	var cfg = ConfigFile.new()
 	for s in servers_config.get_sections():
-		err = func_u.ConfigFile_load(cfg, s.path_join("world.cfg"))
+		var cfg = ConfigFile.new()
+		var err = func_u.ConfigFile_load(cfg, s.path_join("world.cfg"))
 		if err != null:
 			push_error(err)
 			continue
 		
-		var display_name = cfg.get_value("general", "name")
-		var new_world_display = scene_world_display.instantiate()
-		new_world_display.label_display_name.text = display_name
+		var new_world_display = scene_server_display.instantiate()
+		new_world_display.label_display_name.text = cfg.get_value("general", "name")
 		new_world_display.pressed.connect(func(): selected_server_world = s)
-		vbox_world_list.add_child(new_world_display)
+		vbox_server_list.add_child(new_world_display)
 
 
 func load_client_list():
-	for n in vbox_server_list.get_children():
+	for n in vbox_client_list.get_children():
 		n.queue_free()
 	
 	for s in clients_config.get_sections():
-		var display_name = clients_config.get_value(s, "general/name")
-		var new_server_display = scene_server_display.instantiate()
-		new_server_display.label_display_name.text = display_name
+		var cfg = ConfigFile.new()
+		var err = func_u.ConfigFile_load(cfg, s.path_join("world.cfg"))
+		if err != null:
+			push_error(err)
+			continue
+		
+		var new_server_display = scene_client_display.instantiate()
+		new_server_display.label_display_name.text = cfg.get_value("general", "name")
 		new_server_display.pressed.connect(func(): selected_client_world = s)
-		vbox_server_list.add_child(new_server_display)
+		vbox_client_list.add_child(new_server_display)
 
 
 func load_active_servers_list():
-	for c in vbox_active_servers_list.get_children():
+	for c in vbox_active_server_list.get_children():
 		c.queue_free()
 	
 	for s in main.modules.worlds.active_servers.keys():
 		var new_active_server_display = scene_active_server_display.instantiate()
 		new_active_server_display.server_name_label.text = s.world_dir_path
-		vbox_active_servers_list.add_child(new_active_server_display)
+		vbox_active_server_list.add_child(new_active_server_display)
 	
 
 
@@ -121,3 +124,8 @@ func _on_btn_edit_world_pressed():
 	queue_free()
 
 
+func _on_btn_join_server_pressed():
+	if selected_client_world == null:
+		return
+	
+	main.modules.worlds.start_client(selected_client_world)

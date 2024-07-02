@@ -1,11 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://dhn7h7v87cdq8"]
+[gd_scene load_steps=6 format=3 uid="uid://dhn7h7v87cdq8"]
 
 [ext_resource type="Script" path="res://main/home/play_selection_screen.gd" id="1_gnf1m"]
 [ext_resource type="PackedScene" uid="uid://8x0br77dsy7v" path="res://main/home/underline.tscn" id="2_siudc"]
 [ext_resource type="PackedScene" uid="uid://bxh3hu0rayil5" path="res://main/home/server_display.tscn" id="2_vn0pu"]
 [ext_resource type="PackedScene" uid="uid://b16xrjs6ew5gl" path="res://main/home/client_display.tscn" id="3_fx401"]
+[ext_resource type="PackedScene" uid="uid://b8wnf12r6oe0" path="res://main/home/active_server_display.tscn" id="4_x3cyh"]
 
-[node name="PlaySelectionScreen" type="Control" node_paths=PackedStringArray("vbox_world_list", "vbox_server_list", "vbox_active_servers_list", "world_deletion_confirmation_window")]
+[node name="PlaySelectionScreen" type="Control" node_paths=PackedStringArray("vbox_server_list", "vbox_client_list", "vbox_active_server_list", "world_deletion_confirmation_window")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,11 +14,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gnf1m")
-scene_world_display = ExtResource("2_vn0pu")
-scene_server_display = ExtResource("3_fx401")
-vbox_world_list = NodePath("TabContainer/Local/VBoxContainer/HBoxContainer2/ScrollContainer/MarginContainer/VBoxContainer")
-vbox_server_list = NodePath("TabContainer/Remote/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
-vbox_active_servers_list = NodePath("TabContainer/Active/VBoxContainer/ScrollContainer/VBoxContainer")
+scene_server_display = ExtResource("2_vn0pu")
+scene_client_display = ExtResource("3_fx401")
+scene_active_server_display = ExtResource("4_x3cyh")
+vbox_server_list = NodePath("TabContainer/Local/VBoxContainer/HBoxContainer2/ScrollContainer/MarginContainer/VBoxContainer")
+vbox_client_list = NodePath("TabContainer/Remote/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
+vbox_active_server_list = NodePath("TabContainer/Active/VBoxContainer/ScrollContainer/VBoxContainer")
 world_deletion_confirmation_window = NodePath("DeleteLocalWorldConfirmationDialog")
 
 [node name="BtnBackArrow" type="Button" parent="."]
@@ -25,7 +27,7 @@ layout_mode = 0
 offset_left = 36.0
 offset_top = 23.0
 offset_right = 85.0
-offset_bottom = 83.0
+offset_bottom = 73.0
 mouse_default_cursor_shape = 2
 flat = true
 metadata/_edit_group_ = true
@@ -49,7 +51,7 @@ layout_mode = 0
 offset_left = 101.0
 offset_top = 23.0
 offset_right = 473.0
-offset_bottom = 83.0
+offset_bottom = 73.0
 theme_type_variation = &"HeaderLarge"
 text = "Select World"
 
@@ -180,6 +182,10 @@ size_flags_vertical = 3
 [node name="MarginContainer" type="MarginContainer" parent="TabContainer/Remote/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Remote/VBoxContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
@@ -245,4 +251,5 @@ cancel_button_text = "Cancel!!!1!!11!"
 [connection signal="pressed" from="TabContainer/Local/VBoxContainer/HBoxContainer2/VBoxContainer/BtnDeleteWorld" to="." method="_on_btn_delete_world_pressed"]
 [connection signal="pressed" from="TabContainer/Remote/VBoxContainer/HBoxContainer/BtnAddServer" to="." method="_on_btn_add_server_pressed"]
 [connection signal="pressed" from="TabContainer/Remote/VBoxContainer/HBoxContainer2/BtnRemoveServer" to="." method="_on_btn_remove_server_pressed"]
+[connection signal="pressed" from="TabContainer/Remote/VBoxContainer/HBoxContainer2/BtnJoinServer" to="." method="_on_btn_join_server_pressed"]
 [connection signal="confirmed" from="DeleteLocalWorldConfirmationDialog" to="." method="_on_delete_local_world_confirmation_dialog_confirmed"]

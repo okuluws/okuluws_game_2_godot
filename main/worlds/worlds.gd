@@ -48,10 +48,9 @@ func _ready():
 		if err != null: func_u.unreachable(err)
 
 
-func _notification(what):
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		_save_servers_config()
-		_save_clients_config()
+func _exit_tree():
+	_save_servers_config()
+	_save_clients_config()
 
 
 func create_server_world(display_name: String):
@@ -77,13 +76,13 @@ func create_server_world(display_name: String):
 	return { "err": null, "ret": new_world_dir_path }
 
 
-func create_client_world(display_name: String, ip: String, port: int):
+func create_client_world(display_name: String, options: Dictionary):
 	var err
 	var new_world_dir_path = worlds_dir_path.path_join("client_" + display_name.to_snake_case() + "_" + str(Time.get_unix_time_from_system()))
 	err = func_u.DirAccess_make_dir_absolute(new_world_dir_path)
 	if err != null: return { "err": err, "ret": null }
 	
-	clients_config.set_value(new_world_dir_path, "hidden", false)
+	clients_config.set_value(new_world_dir_path, "hidden", options.has("server_world_dir_path"))
 	
 	err = _save_clients_config()
 	if err != null: return { "err": err, "ret": null }
@@ -93,8 +92,11 @@ func create_client_world(display_name: String, ip: String, port: int):
 	if err != null: return { "err": err, "ret": null }
 	
 	new_world_config.set_value("general", "name", display_name)
-	new_world_config.set_value("general", "server_ip", ip)
-	new_world_config.set_value("general", "server_port", port)
+	if options.has("server_world_dir_path"):
+		new_world_config.set_value("general", "server_world_dir_path", options.server_world_dir_path)
+	else:
+		new_world_config.set_value("general", "server_ip", options.ip)
+		new_world_config.set_value("general", "server_port", options.port)
 	
 	err = func_u.ConfigFile_save(new_world_config, new_world_dir_path.path_join("world.cfg"))
 	if err != null: return { "err": err, "ret": null }

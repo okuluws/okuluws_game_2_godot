@@ -6,4 +6,5 @@
 visible = false
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 script = ExtResource("1_4bk7c")

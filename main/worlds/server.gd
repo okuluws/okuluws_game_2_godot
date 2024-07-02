@@ -13,7 +13,7 @@ signal world_saving
 @export var _items: Node
 @export var _inventories: Node
 @export var _overworld: Node
-@onready var main = worlds.main
+var main
 var modules
 var world_config = ConfigFile.new()
 var bind_ip
@@ -25,6 +25,7 @@ var _crypto = Crypto.new()
 
 
 func _enter_tree():
+	main = worlds.main
 	modules = {
 		"players": _players,
 		"items": _items,
@@ -68,8 +69,10 @@ func _enter_tree():
 
 
 func _exit_tree():
+	for p in smapi.get_peers():
+		smapi.disconnect_peer(p)
 	world_saving.emit()
-	queue_free()
+	print("closing server")
 
 
 func _ready():
@@ -82,7 +85,7 @@ func _ready():
 	bind_ip = world_config.get_value("general", "bind_ip")
 	port = world_config.get_value("general", "port")
 	
-	print("starting server with bind=%s port=%d" % [bind_ip, port])
+	print("starting server %s %d" % [bind_ip, port])
 	match OS.get_name():
 		"Web":
 			# NOTE: doesnt work on web yet
@@ -96,5 +99,7 @@ func _ready():
 			smapi.multiplayer_peer = enet
 
 
-
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		queue_free()
 

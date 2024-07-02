@@ -7,33 +7,36 @@ extends Window
 # PARAM
 var worlds
 var world_dir_path
-var server_node
 
 @export var _players: Node
 @export var _items: Node
 @export var _overworld: Node
-var modules
 @export var client_ui_scene: PackedScene
-@onready var main = worlds.main
-@onready var func_u = main.modules_func_u
+var main
+var func_u
+var modules
 var world_config = ConfigFile.new()
 var server_ip
 var server_port
+var server_node
 var smapi = SceneMultiplayer.new()
 
 
 func _enter_tree():
+	main = worlds.main
+	func_u = main.modules.func_u
 	modules = {
 		"players": _players,
 		"items": _items,
 		"overworld": _overworld,
 	}
+	
 	smapi.peer_authenticating.connect(func(p):
-		smapi.complete_auth(p)
 		if server_node != null:
 			while not smapi.get_unique_id() in server_node.smapi.get_authenticating_peers(): await get_tree().process_frame
 			server_node.peers[smapi.get_unique_id()] = { "user_id": "-1", "username": "Local Player" }
 			server_node.smapi.complete_auth(smapi.get_unique_id())
+			smapi.complete_auth(p)
 		else:
 			smapi.send_auth(p, JSON.stringify({ "action": "create_ticket", "user_id": main.modules.pocketbase.user_id }).to_utf8_buffer())
 	)
@@ -48,6 +51,7 @@ func _enter_tree():
 				smapi.disconnect_peer(p)
 			else:
 				smapi.send_auth(p, JSON.stringify({ "action": "redeem_ticket", "ticket_id": ticket_id, "ticket_key": res.body.key }).to_utf8_buffer())
+				smapi.complete_auth(p)
 	)
 	smapi.connected_to_server.connect(_on_connected_to_server)
 	smapi.server_disconnected.connect(_on_server_disconnected)
@@ -57,19 +61,26 @@ func _enter_tree():
 func _exit_tree():
 	if smapi.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 		smapi.disconnect_peer(1)
-	queue_free()
+	print("closing client")
 
 
 func _ready():
-	var err = main.modules.func_u.ConfigFile_load(world_config, world_dir_path.path_join("world.cfg"))
+	var err = func_u.ConfigFile_load(world_config, world_dir_path.path_join("world.cfg"))
 	if err != null: func_u.unreacheable(err)
 	
-	if server_node == null:
-		server_ip = world_config.get_value("general", "server_ip")
-		server_port = world_config.get_value("general", "server_port")
-	else:
+	if world_config.has_section_key("general", "server_world_dir_path"):
+		var arr = worlds.active_servers.keys().filter(func(n): return n.world_dir_path == world_config.get_value("general", "server_world_dir_path"))
+		if arr.is_empty():
+			push_error("couldn't find local running server for world %s" % world_config.get_value("general", "server_world_dir_path"))
+			queue_free()
+			return
+		
+		server_node = arr[0]
 		server_ip = "127.0.0.1"
 		server_port = server_node.port
+	else:
+		server_ip = world_config.get_value("general", "server_ip")
+		server_port = world_config.get_value("general", "server_port")
 	
 	print("starting client %s %d" % [server_ip, server_port])
 	match OS.get_name():
@@ -83,6 +94,11 @@ func _ready():
 			smapi.multiplayer_peer = enet
 
 
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		queue_free()
+
+
 func _on_connected_to_server():
 	print("connected to server %s with port %s" % [server_ip, server_port])
 	var new_client_ui = client_ui_scene.instantiate()
@@ -92,7 +108,6 @@ func _on_connected_to_server():
 
 func _on_server_disconnected():
 	print("disconnected from server")
-	smapi.multiplayer_peer = null
 	queue_free()
 
 

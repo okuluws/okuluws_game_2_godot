@@ -9,7 +9,8 @@ extends Control
 
 
 func _on_btn_create_pressed():
-	main.modules.worlds.create_server_world(ledit_world_name.text)
+	var result = main.modules.worlds.create_server_world(ledit_world_name.text)
+	main.modules.worlds.create_client_world(ledit_world_name.text, { "server_world_dir_path": result.ret })
 	home.show_play_selection_screen()
 	queue_free()
 
