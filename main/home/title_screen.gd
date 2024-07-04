@@ -11,7 +11,8 @@ func _on_play_pressed():
 
 
 func _on_settings_pressed():
-	pass
+	home.show_game_settings_screen()
+	queue_free()
 
 
 func _on_quit_pressed():

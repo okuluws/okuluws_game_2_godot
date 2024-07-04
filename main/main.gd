@@ -10,7 +10,6 @@ var modules
 #var options_file = ConfigFile.new()
 #var options_hash
 
-
 func _enter_tree():
 	print("project version: %s" % ProjectSettings.get_setting_with_override("application/config/version"))
 	modules = {

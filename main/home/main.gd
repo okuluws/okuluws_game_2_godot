@@ -9,6 +9,7 @@ extends Node
 @export var scene_server_creation_screen: PackedScene
 @export var scene_client_creation_screen: PackedScene
 @export var scene_server_config_screen: PackedScene
+@export var scene_game_settings_screen: PackedScene
 
 
 func _ready():
@@ -44,7 +45,11 @@ func show_server_config_screen(world_dir_path: String):
 	n.home = self
 	n.world_dir_path = world_dir_path
 	add_child(n)
-	
-	
+
+
+func show_game_settings_screen():
+	var n = scene_game_settings_screen.instantiate()
+	n.home = self
+	add_child(n)
 
 

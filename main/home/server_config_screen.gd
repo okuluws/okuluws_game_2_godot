@@ -37,7 +37,6 @@ func _ready():
 
 func _on_btn_back_arrow_pressed():
 	var err = main.modules.func_u.ConfigFile_save(c, world_dir_path.path_join("world.cfg"))
-	if err != null:
-		push_error(err)
+	if err != null: push_error(err)
 	home.show_play_selection_screen()
 	queue_free()

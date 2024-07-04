@@ -3,11 +3,10 @@
 [ext_resource type="Script" path="res://main/home/client_display.gd" id="1_fnisl"]
 
 [node name="ClientDisplay" type="Button" node_paths=PackedStringArray("label_display_name")]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(0, 80)
 offset_right = 381.0
 offset_bottom = 70.0
 size_flags_horizontal = 3
-flat = true
 script = ExtResource("1_fnisl")
 label_display_name = NodePath("Label")
 

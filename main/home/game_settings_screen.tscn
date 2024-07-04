@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://cr2lffgbcue78"]
+
+[ext_resource type="Script" path="res://main/home/game_settings_screen.gd" id="1_a36bj"]
+[ext_resource type="PackedScene" uid="uid://8x0br77dsy7v" path="res://main/home/underline.tscn" id="1_aleje"]
+
+[node name="GameSettingsScreen" type="CanvasLayer"]
+script = ExtResource("1_a36bj")
+
+[node name="Back" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -546.0
+offset_top = 31.0
+offset_right = -505.0
+offset_bottom = 81.0
+grow_horizontal = 2
+mouse_default_cursor_shape = 2
+flat = true
+metadata/_edit_group_ = true
+
+[node name="Label" type="Label" parent="Back"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderLarge"
+text = "<"
+
+[node name="Underline" parent="Back/Label" node_paths=PackedStringArray("node") instance=ExtResource("1_aleje")]
+layout_mode = 0
+node = NodePath("../..")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -488.0
+offset_top = 31.0
+offset_right = -288.0
+offset_bottom = 81.0
+grow_horizontal = 2
+theme_type_variation = &"HeaderLarge"
+text = "Settings"
+
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

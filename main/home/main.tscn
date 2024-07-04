@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://dug2d3hft7e68"]
+[gd_scene load_steps=8 format=3 uid="uid://dug2d3hft7e68"]
 
 [ext_resource type="Script" path="res://main/home/main.gd" id="1_hxnvk"]
 [ext_resource type="PackedScene" uid="uid://cku8qosfmuio" path="res://main/home/title_screen.tscn" id="2_rt3tw"]
 [ext_resource type="PackedScene" uid="uid://n5rgvf8dvpaw" path="res://main/home/server_creation_screen.tscn" id="4_2tpk7"]
 [ext_resource type="PackedScene" uid="uid://bdt5ga0qui0dg" path="res://main/home/client_creation_screen.tscn" id="5_dlrrc"]
 [ext_resource type="PackedScene" uid="uid://u5j7jhdlykby" path="res://main/home/server_config_screen.tscn" id="6_3chry"]
+[ext_resource type="PackedScene" uid="uid://cr2lffgbcue78" path="res://main/home/game_settings_screen.tscn" id="7_3a8u2"]
 [ext_resource type="PackedScene" uid="uid://dhn7h7v87cdq8" path="res://main/home/play_selection_screen.tscn" id="9_21ni0"]
 
 [node name="Home" type="Node"]
@@ -14,3 +15,4 @@ scene_play_selection_screen = ExtResource("9_21ni0")
 scene_server_creation_screen = ExtResource("4_2tpk7")
 scene_client_creation_screen = ExtResource("5_dlrrc")
 scene_server_config_screen = ExtResource("6_3chry")
+scene_game_settings_screen = ExtResource("7_3a8u2")
