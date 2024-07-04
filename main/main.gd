@@ -18,6 +18,7 @@ func _enter_tree():
 		"worlds": worlds,
 		"home": home,
 	}
+	$Node.start()
 
 
 func _notification(what):
