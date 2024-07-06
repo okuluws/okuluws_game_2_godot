@@ -3,13 +3,15 @@
 [ext_resource type="Script" path="res://main/home/game_settings_screen.gd" id="1_a36bj"]
 [ext_resource type="PackedScene" uid="uid://8x0br77dsy7v" path="res://main/home/underline.tscn" id="1_aleje"]
 
-[node name="GameSettingsScreen" type="CanvasLayer" node_paths=PackedStringArray("current_user_label", "login_username_edit", "login_password_edit", "register_username_edit", "register_password_edit")]
+[node name="GameSettingsScreen" type="CanvasLayer" node_paths=PackedStringArray("current_user_label", "login_username_edit", "login_password_edit", "login_request_status_label", "register_username_edit", "register_password_edit", "register_request_status_label")]
 script = ExtResource("1_a36bj")
 current_user_label = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/VBoxContainer/Label")
 login_username_edit = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/LineEdit")
 login_password_edit = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/LineEdit2")
+login_request_status_label = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/RichTextLabel")
 register_username_edit = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2/LineEdit")
 register_password_edit = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2/LineEdit2")
+register_request_status_label = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2/RichTextLabel")
 
 [node name="Back" type="Button" parent="."]
 anchors_preset = 5
@@ -82,7 +84,7 @@ custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-text = "Current User: okuluws22"
+text = "hello there asdasd"
 autowrap_mode = 3
 
 [node name="Button" type="Button" parent="TabContainer/Account/VBoxContainer/HBoxContainer/VBoxContainer"]
@@ -112,6 +114,12 @@ secret = true
 layout_mode = 2
 text = "Login"
 
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"SmallRichTextLabel"
+bbcode_enabled = true
+fit_content = true
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -129,6 +137,12 @@ secret = true
 [node name="Button" type="Button" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 text = "Register"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_type_variation = &"SmallRichTextLabel"
+bbcode_enabled = true
+fit_content = true
 
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="TabContainer/Account/VBoxContainer/HBoxContainer/VBoxContainer/Button" to="." method="_on_logout_button_pressed"]
