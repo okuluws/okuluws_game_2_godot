@@ -1,12 +1,11 @@
 extends Node
 
 
-# REQUIRED
-@export var client: Node
-
+const Client = preload("../worlds.gd").ClientWorld
 @export var item_spawner: MultiplayerSpawner
 @export var config: Node
-@export var item_scene: PackedScene
+@onready var client: Client = $"../"
+var item_scene: PackedScene = load("item_client.tscn")
 
 
 func _ready():

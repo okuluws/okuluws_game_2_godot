@@ -4,32 +4,38 @@
 extends Window
 
 
-# PARAM
-var worlds
-var world_dir_path
+# REQUIRED
+var worlds: Worlds
+var world_dir_path: String
 
+const Worlds = preload("worlds.gd")
+const GameMain = Worlds.GameMain
 @export var _players: Node
 @export var _items: Node
 @export var _overworld: Node
-@export var client_ui_scene: PackedScene
-var main
-var func_u
-var modules
+@export var client_ui_scene: PackedScene 
+@onready var main: GameMain = worlds.main
+@onready var func_u := main.func_u
 var world_config = ConfigFile.new()
 var server_ip
 var server_port
 var server_node
 var smapi = SceneMultiplayer.new()
 
+class Modules:
+	const Players = preload("players/main_client.gd")
+	var players: Players
+	const Items = preload("items/items_client.gd")
+	var items: Items
+	const Overworld = preload("overworld/main_client.gd")
+	var overworld: Overworld
+var modules: Modules = Modules.new()
+
 
 func _enter_tree():
-	main = worlds.main
-	func_u = main.modules.func_u
-	modules = {
-		"players": _players,
-		"items": _items,
-		"overworld": _overworld,
-	}
+	modules.players = _players
+	modules.items = _items
+	modules.overworld = _overworld
 	
 	smapi.peer_authenticating.connect(func(p):
 		if server_node != null:

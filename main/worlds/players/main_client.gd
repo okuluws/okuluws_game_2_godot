@@ -1,9 +1,7 @@
 extends Node
 
 
-# REQUIRED
-@export var client: Node
-
+const Client = preload("../worlds.gd").ClientWorld
 @export var multiplayer_spawner: MultiplayerSpawner
 @export var player_scene: PackedScene
 @export var punch_scene : PackedScene
@@ -11,6 +9,7 @@ extends Node
 @export var player_ui_scene: PackedScene
 @export var item_slot_scene: PackedScene
 @export var config: Node
+@onready var client: Client = $"../"
 
 
 func _ready():

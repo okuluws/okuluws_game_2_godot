@@ -1,20 +1,20 @@
-# TODO: support web export (maybe learn WebRTC)
+# TODO: support web export (maybe learn WebRTC) see NOTES
 
 extends Window
 
 
 # REQUIRED
-var worlds
-var world_dir_path
+var worlds: Worlds
+var world_dir_path: String
 
-
+const Worlds = preload("worlds.gd")
+const GameMain = Worlds.GameMain
 signal world_saving
 @export var _players: Node
 @export var _items: Node
 @export var _inventories: Node
 @export var _overworld: Node
-var main
-var modules
+@onready var main: GameMain = worlds.main
 var world_config = ConfigFile.new()
 var bind_ip
 var port
@@ -23,15 +23,23 @@ var tickets = {}
 var peers = {}
 var _crypto = Crypto.new()
 
+class Modules:
+	const Players = preload("players/main_server.gd")
+	var players: Players
+	const Items = preload("items/items_server.gd")
+	var items: Items
+	const Inventories = preload("inventories/main_server.gd")
+	var inventories: Inventories
+	const Overworld = preload("overworld/main_server.gd")
+	var overworld: Overworld
+var modules: Modules = Modules.new()
+
 
 func _enter_tree():
-	main = worlds.main
-	modules = {
-		"players": _players,
-		"items": _items,
-		"inventories": _inventories,
-		"overworld": _overworld,
-	}
+	modules.players = _players
+	modules.items = _items
+	modules.inventories = _inventories
+	modules.overworld = _overworld
 	smapi.set_auth_callback(func(p, raw_data):
 		var data = JSON.parse_string(raw_data.get_string_from_utf8())
 		match data.action:

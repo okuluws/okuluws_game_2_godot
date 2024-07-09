@@ -1,9 +1,8 @@
 extends Node
 
 
-# REQUIRED
-@export var server: Node
-
+const Server = preload("../worlds.gd").ServerWorld
+@onready var server: Server = $"../"
 @onready var savefile = server.world_dir_path.path_join("inventories.cfg")
 @onready var items_config = server.modules.items.config
 var inventories = {}

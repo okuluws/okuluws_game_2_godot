@@ -2,8 +2,9 @@ extends AnimatedSprite2D
 
 
 # REQUIRED
-var client
+var client: Client
 
+const Client = preload("../worlds.gd").ClientWorld
 var id
 var stack
 

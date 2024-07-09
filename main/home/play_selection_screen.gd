@@ -1,8 +1,11 @@
 extends Control
 
 
+const Home = preload("main.gd")
+const GameMain = Home.GameMain
+
 # REQUIRED
-@export var home: Node
+var home: Home
 
 @export var scene_server_display: PackedScene
 @export var scene_client_display: PackedScene
@@ -11,8 +14,8 @@ extends Control
 @export var vbox_client_list: VBoxContainer
 @export var vbox_active_server_list: VBoxContainer
 @export var world_deletion_confirmation_window: ConfirmationDialog
-@onready var main = home.main
-@onready var func_u = main.modules.func_u
+@onready var main: GameMain = home.main
+@onready var func_u: GameMain.Modules.FuncU = main.modules.func_u
 @onready var servers_config: ConfigFile = main.modules.worlds.servers_config
 @onready var clients_config: ConfigFile = main.modules.worlds.clients_config
 var selected_server_world

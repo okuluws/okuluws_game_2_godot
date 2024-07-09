@@ -2,8 +2,9 @@ extends TextureButton
 
 
 # REQUIRED
-var player
+var player: Player
 
+const Player = preload("player_client.gd")
 @export var animated_sprite: AnimatedSprite2D
 @export var overlay_texture_rect: TextureRect
 @export var item_count_label: Label

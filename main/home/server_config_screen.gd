@@ -1,14 +1,17 @@
 extends Control
 
 
+const Home = preload("main.gd")
+const GameMain = Home.GameMain
+
 # PARAM
-var home
+var home: Home
 var world_dir_path: String
 
 @export var node_world_name: LineEdit
 @export var node_port: SpinBox
 @export var node_bind_ip: LineEdit
-@onready var main = home.main
+var main: GameMain = home.main
 var c = ConfigFile.new()
 
 

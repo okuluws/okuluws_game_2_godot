@@ -1,7 +1,11 @@
 extends CanvasLayer
 
 
-var home
+const Home = preload("main.gd")
+const GameMain = Home.GameMain
+
+# REQUIRED
+var home: Home
 
 @export var current_user_label: Label
 @export var login_username_edit: LineEdit
@@ -10,8 +14,8 @@ var home
 @export var register_username_edit: LineEdit
 @export var register_password_edit: LineEdit
 @export var register_request_status_label: RichTextLabel
-@onready var main = home.main
-@onready var pocketbase = main.modules.pocketbase
+@onready var main: GameMain = home.main
+@onready var pocketbase: GameMain.Modules.Pocketbase = main.modules.pocketbase
 
 
 func _ready():

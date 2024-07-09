@@ -2,8 +2,9 @@ extends CharacterBody2D
 
 
 # REQUIRED
-var players
+var players: Players
 
+const Players = preload("../main_server.gd")
 @onready var inventories = players.server.modules.inventories
 @onready var items = players.server.modules.items
 @onready var multiplayer_spawner = players.multiplayer_spawner

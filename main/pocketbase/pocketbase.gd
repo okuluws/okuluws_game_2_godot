@@ -6,7 +6,7 @@ signal current_auth_updated
 var address = "192.168.178.214"
 var port = 20071
 
-var auth_save_path: String = "user://pocketbase_auth.cfg"
+var auth_save_path = "user://auth.cfg"
 # NOTE: maybe inefficient, but no care, no need
 var current_auth_collection_id:
 	get: return _auth_cfg.get_value("", "current_auth_collection_id")
@@ -16,7 +16,6 @@ var current_auth_record_id:
 	set(val): _auth_cfg.set_value("", "current_auth_record_id", val)
 
 var _auth_cfg = ConfigFile.new()
-
 
 func start() -> void:
 	var callback_lock = false
@@ -133,7 +132,7 @@ func unset_current_auth() -> void:
 	current_auth_updated.emit()
 
 
-func get_current_username():
+func get_current_auth_username():
 	return _auth_cfg.get_value(_get_auth_cfg_section(current_auth_collection_id, current_auth_record_id), "username")
 
 

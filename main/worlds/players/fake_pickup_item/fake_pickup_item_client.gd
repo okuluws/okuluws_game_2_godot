@@ -2,8 +2,9 @@ extends AnimatedSprite2D
 
 
 # REQUIRED
-var players
+var players: Players
 
+const Players = preload("../main_client.gd")
 var item_id
 
 

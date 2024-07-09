@@ -1,12 +1,15 @@
 extends Control
 
 
+const Home = preload("main.gd")
+const GameMain = Home.GameMain
+
 # REQUIRED
-@export var home: Node
+var home: Home
 
 @export var ledit_server_name: LineEdit
 @export var ledit_server_address: LineEdit
-@onready var main = home.main
+@onready var main: GameMain = home.main
 
 
 func _on_btn_add_pressed():

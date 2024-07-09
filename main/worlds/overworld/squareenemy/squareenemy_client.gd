@@ -1,6 +1,7 @@
 extends AnimatedSprite2D
 
 
+# REQUIRED
 var healthpoints
 var healthpoints_max
 

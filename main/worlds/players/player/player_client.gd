@@ -2,8 +2,9 @@ extends CharacterBody2D
 
 
 # REQUIRED
-var players
+var players: Players
 
+const Players = preload("../main_client.gd")
 @export var player_ui_scene: PackedScene
 @export var animated_sprite: AnimatedSprite2D
 @export var camera: Camera2D

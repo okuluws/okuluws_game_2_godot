@@ -15,14 +15,10 @@ _items = NodePath("Items")
 _inventories = NodePath("Inventories")
 _overworld = NodePath("Overworld")
 
-[node name="Players" parent="." node_paths=PackedStringArray("server") instance=ExtResource("2_pg0jm")]
-server = NodePath("..")
+[node name="Players" parent="." instance=ExtResource("2_pg0jm")]
 
-[node name="Items" parent="." node_paths=PackedStringArray("server") instance=ExtResource("3_8fduy")]
-server = NodePath("..")
+[node name="Items" parent="." instance=ExtResource("3_8fduy")]
 
-[node name="Inventories" parent="." node_paths=PackedStringArray("server") instance=ExtResource("4_7mk84")]
-server = NodePath("..")
+[node name="Inventories" parent="." instance=ExtResource("4_7mk84")]
 
-[node name="Overworld" parent="." node_paths=PackedStringArray("server") instance=ExtResource("5_ok8bo")]
-server = NodePath("..")
+[node name="Overworld" parent="." instance=ExtResource("5_ok8bo")]

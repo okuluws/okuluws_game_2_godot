@@ -2,8 +2,9 @@ extends CanvasLayer
 
 
 # REQUIRED
-var client: Node
+var client: Client
 
+const Client = preload("client.gd")
 @export var escape_panel: Panel
 
 

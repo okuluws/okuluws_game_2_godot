@@ -1,23 +1,29 @@
 extends Node
 
 
-@export var pb: Node
-@export var home: Node
-@export var worlds: Node
 @export var func_u: Node
-var modules
-#var options_file_path = "user://options.cfg"
-#var options_file = ConfigFile.new()
-#var options_hash
+@export var pb: Node
+@export var worlds: Node
+@export var home: Node
+
+class Modules:
+	const FuncU = preload("func_u/func_u.gd")
+	var func_u: FuncU
+	const Pocketbase = preload("pocketbase/pocketbase.gd")
+	var pocketbase: Pocketbase
+	const Worlds = preload("worlds/worlds.gd")
+	var worlds: Worlds
+	const Home = preload("home/main.gd")
+	var home: Home
+var modules: Modules = Modules.new()
+
 
 func _enter_tree():
+	modules.func_u = func_u
+	modules.pocketbase = pb
+	modules.worlds = worlds
+	modules.home = home
 	print("project version: %s" % ProjectSettings.get_setting_with_override("application/config/version"))
-	modules = {
-		"func_u": func_u,
-		"pocketbase": pb,
-		"worlds": worlds,
-		"home": home,
-	}
 
 
 func _notification(what):

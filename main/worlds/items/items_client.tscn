@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://bjutk26pi1nl3"]
+[gd_scene load_steps=7 format=3 uid="uid://bjutk26pi1nl3"]
 
 [ext_resource type="Script" path="res://main/worlds/items/items_client.gd" id="1_nwjrf"]
 [ext_resource type="Script" path="res://main/worlds/items/items_config_client.gd" id="2_1vtby"]
-[ext_resource type="PackedScene" uid="uid://csk8s84safsqy" path="res://main/worlds/items/item_client.tscn" id="2_rf2u7"]
 [ext_resource type="PackedScene" uid="uid://dx1cw73500ywm" path="res://main/worlds/items/items_config_syncer.tscn" id="3_uxiyp"]
 [ext_resource type="SpriteFrames" uid="uid://cdt5b3xen4rdv" path="res://main/worlds/items/square_fragment.tres" id="4_upfu8"]
 [ext_resource type="SpriteFrames" uid="uid://ccrgjybi7ujxf" path="res://main/worlds/items/triangle_fragment.tres" id="5_hwbjl"]
@@ -12,7 +11,6 @@
 script = ExtResource("1_nwjrf")
 item_spawner = NodePath("MultiplayerSpawner")
 config = NodePath("Config")
-item_scene = ExtResource("2_rf2u7")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 spawn_path = NodePath(".")

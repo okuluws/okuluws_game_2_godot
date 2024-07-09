@@ -1,13 +1,12 @@
 extends Node
 
 
-# REQUIRED
-@export var server: Node
-
-@onready var savefile = server.world_dir_path.path_join("items.cfg")
+const Server = preload("../worlds.gd").ServerWorld
 @export var config: Node
 @export var item_spawner: MultiplayerSpawner
 @export var item_scene: PackedScene
+@onready var server: Server = $"../"
+@onready var savefile = server.world_dir_path.path_join("items.cfg")
 var items = []
 
 

@@ -1,21 +1,22 @@
 extends Node
 
 
-# REQUIRED
-@export var main: Node
-
+const GameMain = preload("../main.gd")
+const ServerWorld = preload("server.gd")
+const ClientWorld = preload("client.gd")
 @export var scene_server_world: PackedScene
 @export var scene_client_world: PackedScene
 # why the fuck is there no text ressource - 28.06.2024
-@export_file var default_server_config_path
-@export_file var default_client_config_path
-@onready var func_u = main.modules.func_u
+@export_file var default_server_config_path: String
+@export_file var default_client_config_path: String
+@onready var main: GameMain = $"../"
+@onready var func_u: GameMain.Modules.FuncU = main.modules.func_u
+var worlds_dir_path = "user://worlds/"
 var default_server_config = ConfigFile.new()
 var default_client_config = ConfigFile.new()
-var worlds_dir_path = "user://worlds"
 var servers_config = ConfigFile.new()
-var servers_config_file_path = worlds_dir_path.path_join("server_worlds.cfg")
 var clients_config = ConfigFile.new()
+var servers_config_file_path = worlds_dir_path.path_join("server_worlds.cfg")
 var clients_config_file_path = worlds_dir_path.path_join("client_worlds.cfg")
 var active_servers = {}
 var active_clients = {}

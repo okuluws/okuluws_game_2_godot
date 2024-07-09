@@ -4,8 +4,9 @@ extends CanvasLayer
 
 
 # REQUIRED
-var player
+var player: Player
 
+const Player = preload("player_client.gd")
 @export var inventory_ui: GridContainer
 @export var hotbar_ui: HBoxContainer
 @export var movement_joypad_ring: Control

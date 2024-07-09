@@ -1,19 +1,21 @@
 extends Control
 
 
+const Home = preload("main.gd")
+
 # REQUIRED
-@export var home: Node
+var home: Home
 
 
-func _on_play_pressed():
+func _on_play_pressed() -> void:
 	home.show_play_selection_screen()
 	queue_free()
 
 
-func _on_settings_pressed():
+func _on_settings_pressed() -> void:
 	home.show_game_settings_screen()
 	queue_free()
 
 
-func _on_quit_pressed():
+func _on_quit_pressed() -> void:
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
