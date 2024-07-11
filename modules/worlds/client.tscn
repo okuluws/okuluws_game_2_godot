@@ -1,0 +1,22 @@
+[gd_scene load_steps=6 format=3 uid="uid://dde62wcnhs6gv"]
+
+[ext_resource type="Script" path="res://modules/worlds/client.gd" id="1_qjnue"]
+[ext_resource type="PackedScene" uid="uid://bueen1crlh8ea" path="res://modules/worlds/client_ui.tscn" id="2_2iewm"]
+[ext_resource type="PackedScene" uid="uid://e3dq207u8iq3" path="res://modules/worlds/modules/players/main_client.tscn" id="3_i5m82"]
+[ext_resource type="PackedScene" uid="uid://bjutk26pi1nl3" path="res://modules/worlds/modules/items/items_client.tscn" id="4_oj4au"]
+[ext_resource type="PackedScene" uid="uid://dm1tixrgasd1m" path="res://modules/worlds/modules/overworld/main_client.tscn" id="5_fx3jw"]
+
+[node name="Client" type="Window" node_paths=PackedStringArray("_players", "_items", "_overworld")]
+initial_position = 2
+size = Vector2i(1152, 648)
+script = ExtResource("1_qjnue")
+_players = NodePath("Players")
+_items = NodePath("Items")
+_overworld = NodePath("Overworld")
+client_ui_scene = ExtResource("2_2iewm")
+
+[node name="Players" parent="." instance=ExtResource("3_i5m82")]
+
+[node name="Items" parent="." instance=ExtResource("4_oj4au")]
+
+[node name="Overworld" parent="." instance=ExtResource("5_fx3jw")]

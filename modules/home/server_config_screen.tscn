@@ -1,0 +1,121 @@
+[gd_scene load_steps=3 format=3 uid="uid://u5j7jhdlykby"]
+
+[ext_resource type="Script" path="res://modules/home/server_config_screen.gd" id="1_8dbms"]
+[ext_resource type="PackedScene" uid="uid://8x0br77dsy7v" path="res://modules/home/underline.tscn" id="2_pg72d"]
+
+[node name="ServerConfigScreen" type="Control" node_paths=PackedStringArray("node_world_name", "node_port", "node_bind_ip")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8dbms")
+node_world_name = NodePath("ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/WorldName")
+node_port = NodePath("ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer2/Port")
+node_bind_ip = NodePath("ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3/BindIP")
+
+[node name="BtnBackArrow" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -539.0
+offset_top = 45.0
+offset_right = -496.0
+offset_bottom = 99.0
+grow_horizontal = 2
+mouse_default_cursor_shape = 2
+flat = true
+metadata/_edit_group_ = true
+
+[node name="Label" type="Label" parent="BtnBackArrow"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderLarge"
+text = "<"
+
+[node name="Underline" parent="BtnBackArrow/Label" node_paths=PackedStringArray("node") instance=ExtResource("2_pg72d")]
+layout_mode = 0
+node = NodePath("../..")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -490.0
+offset_top = 45.0
+offset_right = 50.0
+offset_bottom = 99.0
+grow_horizontal = 2
+theme_type_variation = &"HeaderLarge"
+text = "#world - Config"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -523.0
+offset_top = 107.0
+offset_right = 372.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "name"
+
+[node name="WorldName" type="LineEdit" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "port"
+
+[node name="Port" type="SpinBox" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 65535.0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "bind ip"
+
+[node name="BindIP" type="LineEdit" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="pressed" from="BtnBackArrow" to="." method="_on_btn_back_arrow_pressed"]

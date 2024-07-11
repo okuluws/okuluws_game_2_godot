@@ -1,0 +1,65 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdt5ga0qui0dg"]
+
+[ext_resource type="Script" path="res://modules/home/client_creation_screen.gd" id="1_ve6gj"]
+
+[node name="ClientCreationScreen" type="Control" node_paths=PackedStringArray("ledit_server_name", "ledit_server_address")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ve6gj")
+ledit_server_name = NodePath("LEditServerName")
+ledit_server_address = NodePath("LEditServerAddress")
+
+[node name="LEditServerName" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -223.0
+offset_top = 60.0
+offset_right = 223.0
+offset_bottom = 120.0
+grow_horizontal = 2
+placeholder_text = "Server Name"
+
+[node name="LEditServerAddress" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -223.0
+offset_top = 129.0
+offset_right = 223.0
+offset_bottom = 189.0
+grow_horizontal = 2
+placeholder_text = "Server Address"
+
+[node name="BtnAdd" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -223.0
+offset_top = 532.0
+offset_right = -5.0
+offset_bottom = 592.0
+grow_horizontal = 2
+text = "Add"
+
+[node name="BtnCancel" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 5.0
+offset_top = 532.0
+offset_right = 223.0
+offset_bottom = 592.0
+grow_horizontal = 2
+text = "Cancel"
+
+[connection signal="pressed" from="BtnAdd" to="." method="_on_btn_add_pressed"]
+[connection signal="pressed" from="BtnCancel" to="." method="_on_btn_cancel_pressed"]

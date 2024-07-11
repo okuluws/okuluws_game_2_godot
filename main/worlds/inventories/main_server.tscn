@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0odjmlystmb3"]
-
-[ext_resource type="Script" path="res://main/worlds/inventories/main_server.gd" id="1_243m5"]
-
-[node name="Inventories" type="Node"]
-script = ExtResource("1_243m5")

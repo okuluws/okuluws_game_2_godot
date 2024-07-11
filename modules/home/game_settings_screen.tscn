@@ -1,0 +1,150 @@
+[gd_scene load_steps=3 format=3 uid="uid://cr2lffgbcue78"]
+
+[ext_resource type="Script" path="res://modules/home/game_settings_screen.gd" id="1_a36bj"]
+[ext_resource type="PackedScene" uid="uid://8x0br77dsy7v" path="res://modules/home/underline.tscn" id="1_aleje"]
+
+[node name="GameSettingsScreen" type="CanvasLayer" node_paths=PackedStringArray("current_user_label", "login_username_edit", "login_password_edit", "login_request_status_label", "register_username_edit", "register_password_edit", "register_request_status_label")]
+script = ExtResource("1_a36bj")
+current_user_label = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/VBoxContainer/Label")
+login_username_edit = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/LineEdit")
+login_password_edit = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/LineEdit2")
+login_request_status_label = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/RichTextLabel")
+register_username_edit = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2/LineEdit")
+register_password_edit = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2/LineEdit2")
+register_request_status_label = NodePath("TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2/RichTextLabel")
+
+[node name="Back" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -546.0
+offset_top = 31.0
+offset_right = -505.0
+offset_bottom = 81.0
+grow_horizontal = 2
+mouse_default_cursor_shape = 2
+flat = true
+metadata/_edit_group_ = true
+
+[node name="Label" type="Label" parent="Back"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderLarge"
+text = "<"
+
+[node name="Underline" parent="Back/Label" node_paths=PackedStringArray("node") instance=ExtResource("1_aleje")]
+layout_mode = 0
+node = NodePath("../..")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -488.0
+offset_top = 31.0
+offset_right = -288.0
+offset_bottom = 81.0
+grow_horizontal = 2
+theme_type_variation = &"HeaderLarge"
+text = "Settings"
+
+[node name="TabContainer" type="TabContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -488.0
+offset_top = 98.0
+offset_right = 488.0
+offset_bottom = 610.0
+grow_horizontal = 2
+
+[node name="Account" type="MarginContainer" parent="TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Account"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Account/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Account/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Account/VBoxContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "hello there asdasd"
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="TabContainer/Account/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Logout"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Account/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Username"
+
+[node name="LineEdit2" type="LineEdit" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Password"
+secret = true
+
+[node name="Button" type="Button" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Login"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"SmallRichTextLabel"
+bbcode_enabled = true
+fit_content = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+placeholder_text = "Username or Email"
+
+[node name="LineEdit2" type="LineEdit" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+placeholder_text = "Password"
+secret = true
+
+[node name="Button" type="Button" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Register"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_type_variation = &"SmallRichTextLabel"
+bbcode_enabled = true
+fit_content = true
+
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="TabContainer/Account/VBoxContainer/HBoxContainer/VBoxContainer/Button" to="." method="_on_logout_button_pressed"]
+[connection signal="pressed" from="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/Button" to="." method="_on_login_button_pressed"]
+[connection signal="pressed" from="TabContainer/Account/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer2/Button" to="." method="_on_register_button_pressed"]

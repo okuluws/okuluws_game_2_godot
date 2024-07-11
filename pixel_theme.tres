@@ -1,0 +1,138 @@
+[gd_resource type="Theme" load_steps=15 format=3 uid="uid://b0by7hlhq1qlj"]
+
+[ext_resource type="FontFile" uid="uid://bg618v7rmq6n1" path="res://MinecraftRegular-Bmg3.otf" id="1_4upxg"]
+[ext_resource type="FontFile" uid="uid://dl82wi6y643fg" path="res://MinecraftBold-nMK1.otf" id="1_bb221"]
+[ext_resource type="FontFile" uid="uid://d1x02e0c4f3ep" path="res://MinecraftBoldItalic-1y1e.otf" id="2_38w2f"]
+[ext_resource type="FontFile" uid="uid://bhsh6icenjb45" path="res://MinecraftItalic-R8Mo.otf" id="3_mudb3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ajsyn"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f1s8v"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8oblu"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.225, 0.225, 0.225, 0.6)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uc2vm"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g6fvg"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.6)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_afte3"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hbep3"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.6)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_321yu"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.3)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o44be"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yyyuv"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+
+[resource]
+default_font = ExtResource("1_4upxg")
+default_font_size = 30
+Button/styles/disabled = SubResource("StyleBoxFlat_ajsyn")
+Button/styles/focus = SubResource("StyleBoxFlat_f1s8v")
+Button/styles/hover = SubResource("StyleBoxFlat_8oblu")
+Button/styles/normal = SubResource("StyleBoxFlat_uc2vm")
+Button/styles/pressed = SubResource("StyleBoxFlat_g6fvg")
+HeaderLarge/font_sizes/font_size = 50
+HeaderMedium/font_sizes/font_size = 40
+HeaderSmall/font_sizes/font_size = 20
+LineEdit/styles/focus = SubResource("StyleBoxFlat_afte3")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_hbep3")
+LineEdit/styles/read_only = SubResource("StyleBoxFlat_321yu")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_o44be")
+RichTextLabel/fonts/bold_font = ExtResource("1_bb221")
+RichTextLabel/fonts/bold_italics_font = ExtResource("2_38w2f")
+RichTextLabel/fonts/italics_font = ExtResource("3_mudb3")
+SmallRichTextLabel/base_type = &"RichTextLabel"
+SmallRichTextLabel/font_sizes/bold_font_size = 20
+SmallRichTextLabel/font_sizes/bold_italics_font_size = 20
+SmallRichTextLabel/font_sizes/italics_font_size = 20
+SmallRichTextLabel/font_sizes/mono_font_size = 20
+SmallRichTextLabel/font_sizes/normal_font_size = 20
+TabContainer/constants/side_margin = 0
+TabContainer/styles/panel = SubResource("StyleBoxFlat_yyyuv")

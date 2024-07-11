@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://d030v3fi71op6"]
+
+[ext_resource type="Texture2D" uid="uid://c32brgefmkhb5" path="res://modules/worlds/modules/overworld/squareenemy/squareenemy.png" id="1_w5gkl"]
+[ext_resource type="PackedScene" uid="uid://bgii108pfe4g7" path="res://modules/worlds/modules/overworld/squareenemy/squareenemy_sync.tscn" id="2_6ai2t"]
+[ext_resource type="Script" path="res://modules/worlds/modules/overworld/squareenemy/squareenemy_client.gd" id="2_l2wf6"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_leusy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_w5gkl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Squareenemy" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_leusy")
+script = ExtResource("2_l2wf6")
+
+[node name="HealthLabel" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -118.0
+offset_top = -148.0
+offset_right = -10.0
+offset_bottom = -108.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+fit_content = true
+autowrap_mode = 0
+
+[node name="MultiplayerSynchronizer" parent="." instance=ExtResource("2_6ai2t")]

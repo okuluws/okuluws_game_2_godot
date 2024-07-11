@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxh3hu0rayil5"]
+
+[ext_resource type="Script" path="res://modules/home/server_display.gd" id="1_541gy"]
+
+[node name="ServerDisplay" type="Button" node_paths=PackedStringArray("label_display_name")]
+custom_minimum_size = Vector2(0, 80)
+offset_right = 359.0
+offset_bottom = 70.0
+size_flags_horizontal = 3
+script = ExtResource("1_541gy")
+label_display_name = NodePath("Label")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 30.0
+text = "Unknown"
