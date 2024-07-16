@@ -2,6 +2,7 @@ extends Node
 
 
 const GameMain = preload("res://main.gd")
+const FuncU = preload("res://modules/func_u/func_u.gd")
 const ServerWorld = preload("server.gd")
 const ClientWorld = preload("client.gd")
 @export var scene_server_world: PackedScene
@@ -9,8 +10,8 @@ const ClientWorld = preload("client.gd")
 # why the fuck is there no text ressource - 28.06.2024
 @export_file var default_server_config_path: String
 @export_file var default_client_config_path: String
-@onready var main: GameMain = $"/root/Main"
-@onready var func_u: GameMain.Modules.FuncU = main.modules.func_u
+var main: GameMain
+var func_u: FuncU
 var worlds_dir_path = "user://worlds/"
 var default_server_config = ConfigFile.new()
 var default_client_config = ConfigFile.new()
@@ -20,11 +21,21 @@ var servers_config_file_path = worlds_dir_path.path_join("server_worlds.cfg")
 var clients_config_file_path = worlds_dir_path.path_join("client_worlds.cfg")
 var active_servers = {}
 var active_clients = {}
+var modules = {}
+
+
+func init(game_main: GameMain):
+	main = game_main
+	func_u = main.modules.func_u
 
 
 func _ready():
-	var err
+	for dirname in DirAccess.get_directories_at("res://modules/worlds/modules/"):
+		print("loading world module dirname")
+		load("res://modules/worlds/modules/%s/module.gd" % dirname).new(self)
+	print("loaded all world modules")
 	
+	var err
 	err = func_u.ConfigFile_load(default_server_config, default_server_config_path)
 	if err != null: func_u.unreachable(err)
 	err = func_u.ConfigFile_load(default_client_config, default_client_config_path)

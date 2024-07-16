@@ -2,9 +2,11 @@ extends Control
 
 
 const Home = preload("main.gd")
-
-# REQUIRED
 var home: Home
+
+
+func init(p_home: Home):
+	home = p_home
 
 
 func _on_play_pressed() -> void:

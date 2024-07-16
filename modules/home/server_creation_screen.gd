@@ -2,22 +2,19 @@ extends Control
 
 
 const Home = preload("main.gd")
-const GameMain = Home.GameMain
-
-# REQUIRED
-var home: Home
-
 @export var ledit_world_name: LineEdit
-var main: GameMain
+var home: Home
+var game_main: Home.GameMain
 
 
-func _enter_tree():
-	main = home.main
+func init(p_home: Home):
+	home = p_home
+	game_main = home.game_main
 
 
 func _on_btn_create_pressed():
-	var result = main.modules.worlds.create_server_world(ledit_world_name.text)
-	main.modules.worlds.create_client_world(ledit_world_name.text, { "server_world_dir_path": result.ret })
+	var result = game_main.modules.worlds.create_server_world(ledit_world_name.text)
+	game_main.modules.worlds.create_client_world(ledit_world_name.text, { "server_world_dir_path": result.ret })
 	home.show_play_selection_screen()
 	queue_free()
 
@@ -25,4 +22,3 @@ func _on_btn_create_pressed():
 func _on_btn_cancel_pressed():
 	home.show_play_selection_screen()
 	queue_free()
-

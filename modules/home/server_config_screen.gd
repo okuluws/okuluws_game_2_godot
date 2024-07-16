@@ -1,22 +1,24 @@
 extends Control
 
 
+
 const Home = preload("main.gd")
-const GameMain = Home.GameMain
-
-# PARAM
-var home: Home
-var world_dir_path: String
-
 @export var node_world_name: LineEdit
 @export var node_port: SpinBox
 @export var node_bind_ip: LineEdit
-var main: GameMain = home.main
+var home: Home
+var game_main: Home.GameMain
+var world_dir_path: String
 var c = ConfigFile.new()
 
 
+func init(p_home: Home):
+	home = p_home
+	game_main = home.game_main
+
+
 func _ready():
-	var err = main.modules.func_u.ConfigFile_load(c, world_dir_path.path_join("world.cfg"))
+	var err = game_main.modules.func_u.ConfigFile_load(c, world_dir_path.path_join("world.cfg"))
 	if err != null:
 		push_error(err)
 		queue_free()
@@ -39,7 +41,7 @@ func _ready():
 
 
 func _on_btn_back_arrow_pressed():
-	var err = main.modules.func_u.ConfigFile_save(c, world_dir_path.path_join("world.cfg"))
+	var err = game_main.modules.func_u.ConfigFile_save(c, world_dir_path.path_join("world.cfg"))
 	if err != null: push_error(err)
 	home.show_play_selection_screen()
 	queue_free()

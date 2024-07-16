@@ -1,35 +1,15 @@
 extends Node
 
 
-class Modules extends RefCounted:
-	const FuncU = preload("modules/func_u/func_u.gd")
-	var func_u: FuncU
-	const Pocketbase = preload("modules/pocketbase/pocketbase.gd")
-	var pocketbase: Pocketbase
-	const Worlds = preload("modules/worlds/worlds.gd")
-	var worlds: Worlds
-	const Home = preload("modules/home/main.gd")
-	var home: Home
-var modules: Modules = Modules.new()
-
+var modules = {}
 
 func _ready():
-	for dirname in DirAccess.get_directories_at("res://modules/"):
-		var dirpath = "res://modules/%s/" % dirname
-		var cfg = ConfigFile.new()
-		if cfg.load(dirpath.path_join("module.cfg")) != OK:
-			push_error("coudln't find module.cfg for module at %s" % dirpath)
-			continue
-		var module_id = cfg.get_value("", "id")
-		if cfg.has_section_key("", "scene"):
-			var node = load(dirpath.path_join(cfg.get_value("", "scene"))).instantiate()
-			add_child(node)
-			modules[module_id] = { "instance": node, "type": node.get_script() }
-		elif cfg.has_section_key("", "script"):
-			var script = load(dirpath.path_join(cfg.get_value("", "script")))
-			modules[module_id] = { "instance": script.new(), "type": script }
-	
 	print("project version: %s" % ProjectSettings.get_setting_with_override("application/config/version"))
+	for dirname in DirAccess.get_directories_at("res://modules/"):
+		print("loading module dirname")
+		load("res://modules/%s/module.gd" % dirname).new(self)
+	print("loaded all modules")
+	
 
 
 

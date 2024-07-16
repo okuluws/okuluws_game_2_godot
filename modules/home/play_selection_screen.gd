@@ -2,11 +2,7 @@ extends Control
 
 
 const Home = preload("main.gd")
-const GameMain = Home.GameMain
-
-# REQUIRED
-var home: Home
-
+const FuncU = preload("res://modules/func_u/func_u.gd")
 @export var scene_server_display: PackedScene
 @export var scene_client_display: PackedScene
 @export var scene_active_server_display: PackedScene
@@ -14,12 +10,21 @@ var home: Home
 @export var vbox_client_list: VBoxContainer
 @export var vbox_active_server_list: VBoxContainer
 @export var world_deletion_confirmation_window: ConfirmationDialog
-@onready var main: GameMain = home.main
-@onready var func_u: GameMain.Modules.FuncU = main.modules.func_u
-@onready var servers_config: ConfigFile = main.modules.worlds.servers_config
-@onready var clients_config: ConfigFile = main.modules.worlds.clients_config
+var home: Home
+var game_main: Home.GameMain
+var func_u: FuncU
+var servers_config: ConfigFile
+var clients_config: ConfigFile
 var selected_server_world
 var selected_client_world
+
+
+func init(p_home: Home):
+	home = p_home
+	game_main = home.game_main
+	func_u = game_main.modules.pocketbase
+	servers_config = game_main.modules.worlds.servers_config
+	clients_config = game_main.modules.worlds.clients_config
 
 
 func _ready():
@@ -65,7 +70,7 @@ func load_active_servers_list():
 	for c in vbox_active_server_list.get_children():
 		c.queue_free()
 	
-	for s in main.modules.worlds.active_servers.keys():
+	for s in game_main.modules.worlds.active_servers.keys():
 		var new_active_server_display = scene_active_server_display.instantiate()
 		new_active_server_display.server_name_label.text = s.world_dir_path
 		vbox_active_server_list.add_child(new_active_server_display)
@@ -91,7 +96,7 @@ func _on_btn_remove_server_pressed():
 	if selected_client_world == null:
 		return
 	
-	main.modules.worlds.delete_client_world(selected_client_world)
+	game_main.modules.worlds.delete_client_world(selected_client_world)
 	load_client_list()
 
 
@@ -106,7 +111,7 @@ func _on_delete_local_world_confirmation_dialog_confirmed():
 	if selected_server_world == null:
 		return
 	
-	main.modules.worlds.delete_server_world(selected_server_world)
+	game_main.modules.worlds.delete_server_world(selected_server_world)
 	selected_server_world = null
 	load_server_list()
 
@@ -115,8 +120,8 @@ func _on_btn_start_world_pressed():
 	if selected_server_world == null:
 		return
 	
-	#main.modules.worlds.start_client(main.modules.worlds.start_server(selected_server_world))
-	main.modules.worlds.start_server(selected_server_world)
+	#game_main.modules.worlds.start_client(game_main.modules.worlds.start_server(selected_server_world))
+	game_main.modules.worlds.start_server(selected_server_world)
 
 
 func _on_btn_edit_world_pressed():
@@ -131,4 +136,4 @@ func _on_btn_join_server_pressed():
 	if selected_client_world == null:
 		return
 	
-	main.modules.worlds.start_client(selected_client_world)
+	game_main.modules.worlds.start_client(selected_client_world)

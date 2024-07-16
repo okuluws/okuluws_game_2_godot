@@ -2,11 +2,7 @@ extends CanvasLayer
 
 
 const Home = preload("main.gd")
-const GameMain = Home.GameMain
-
-# REQUIRED
-var home: Home
-
+const Pocketbase = preload("res://modules/pocketbase/pocketbase.gd")
 @export var current_user_label: Label
 @export var login_username_edit: LineEdit
 @export var login_password_edit: LineEdit
@@ -14,8 +10,13 @@ var home: Home
 @export var register_username_edit: LineEdit
 @export var register_password_edit: LineEdit
 @export var register_request_status_label: RichTextLabel
-@onready var main: GameMain = home.main
-@onready var pocketbase: GameMain.Modules.Pocketbase = main.modules.pocketbase
+var home: Home
+var pocketbase: Pocketbase
+
+
+func init(p_home: Home):
+	home = p_home
+	pocketbase = home.game_main.modules.pocketbase
 
 
 func _ready():

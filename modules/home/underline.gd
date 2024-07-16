@@ -25,4 +25,3 @@ func _ready():
 		if not _is_mouse_inside:
 			visible = false
 	)
-
