@@ -1,72 +1,23 @@
 extends Node
 
 
-var modules = {}
+const FuncU = preload("res://func_u/func_u.gd")
+const Pocketbase = preload("res://pocketbase/pocketbase.gd")
+const Worlds = preload("res://worlds/worlds.gd")
+const Home = preload("res://home/main.gd")
+@export var func_u: FuncU
+@export var pocketbase: Pocketbase
+@export var worlds: Worlds
+@export var home: Home
+
 
 func _ready():
 	print("project version: %s" % ProjectSettings.get_setting_with_override("application/config/version"))
-	for dirname in DirAccess.get_directories_at("res://modules/"):
-		print("loading module dirname")
-		load("res://modules/%s/module.gd" % dirname).new(self)
-	print("loaded all modules")
-	
-
+	pocketbase.init()
+	worlds.init(self)
+	home.init(self)
 
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		get_tree().quit()
-
-
-#func _process(_delta):
-	#stretch_auto()
-#
-#
-#
-#
-#func load_config():
-	#if options_file.load(options_file_path) != OK:
-		#push_error()
-		#return
-	#apply_changes()
-	#options_hash = options_file.encode_to_text().hash()
-#
-#
-#func apply_changes():
-	#get_tree().root.content_scale_factor = get_content_scale_factor()
-#
-#
-#func save_config():
-	#if options_file.save(options_file_path) != OK:
-		#push_error()
-		#return
-	#options_hash = options_file.encode_to_text().hash()
-#
-#
-#func reset_config():
-	#options_file.clear()
-	#set_content_scale_factor(1.0)
-	#set_virtual_joystick(OS.has_feature("mobile"))
-	#apply_changes()
-	#save_config()
-#
-#
-#func config_has_changes():
-	#return options_file.encode_to_text().hash() != options_hash
-#
-#
-#func set_content_scale_factor(val):
-	#options_file.set_value("video", "content_scale_factor", val)
-#
-#
-#func get_content_scale_factor():
-	#return options_file.get_value("video", "content_scale_factor")
-#
-#
-#func set_virtual_joystick(val):
-	#options_file.set_value("gameplay", "virtual_joystick", val)
-#
-#
-#func get_virtual_joystick():
-	#return options_file.get_value("gameplay", "virtual_joystick")
-#

@@ -1,0 +1,32 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://bl4r81w7lpulx"]
+
+[ext_resource type="Texture2D" uid="uid://b0gv64wvajret" path="res://worlds/players/player_type_sprite_frames/square.png" id="1_kwku3"]
+[ext_resource type="Texture2D" uid="uid://cgosb5qdc24n" path="res://worlds/players/player_type_sprite_frames/square_left.png" id="2_y7f8q"]
+[ext_resource type="Texture2D" uid="uid://baqgbnh3ctcgy" path="res://worlds/players/player_type_sprite_frames/square_right.png" id="3_k63y1"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_kwku3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_y7f8q")
+}],
+"loop": true,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_k63y1")
+}],
+"loop": true,
+"name": &"right",
+"speed": 5.0
+}]

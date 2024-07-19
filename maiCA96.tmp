@@ -1,0 +1,100 @@
+[gd_scene load_steps=6 format=3 uid="uid://cegssjy7r8gx7"]
+
+[ext_resource type="PackedScene" uid="uid://1c16i7lw63w4" path="res://func_u/func_u.tscn" id="1_fs4vn"]
+[ext_resource type="PackedScene" uid="uid://dfnr236wev2ir" path="res://pocketbase/pocketbase.tscn" id="2_meyew"]
+[ext_resource type="PackedScene" uid="uid://b84wfqxggchwj" path="res://worlds/worlds.tscn" id="3_0q78k"]
+[ext_resource type="PackedScene" uid="uid://dug2d3hft7e68" path="res://home/main.tscn" id="4_vduqm"]
+
+[sub_resource type="GDScript" id="GDScript_a3vfh"]
+script/source = "extends Node
+
+
+const FuncU = preload(\"func_u/func_u.gd\")
+const Pocketbase = preload(\"pocketbase/pocketbase.gd\")
+const Worlds = preload(\"worlds/worlds.gd\")
+const Home = preload(\"home/main.gd\")
+var func_u: FuncU
+var pocketbase: Pocketbase
+var worlds: Worlds
+var home: Home
+
+
+func _ready():
+	print(\"project version: %s\" % ProjectSettings.get_setting_with_override(\"application/config/version\"))
+	for dirname in DirAccess.get_directories_at(\"res://\"):
+		print(\"loading module %s\" % dirname)
+		load(\"res://%s/module.gd\" % dirname).new(self)
+	print(\"loaded all modules\")
+	
+
+
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		get_tree().quit()
+
+
+#func _process(_delta):
+	#stretch_auto()
+#
+#
+#
+#
+#func load_config():
+	#if options_file.load(options_file_path) != OK:
+		#push_error()
+		#return
+	#apply_changes()
+	#options_hash = options_file.encode_to_text().hash()
+#
+#
+#func apply_changes():
+	#get_tree().root.content_scale_factor = get_content_scale_factor()
+#
+#
+#func save_config():
+	#if options_file.save(options_file_path) != OK:
+		#push_error()
+		#return
+	#options_hash = options_file.encode_to_text().hash()
+#
+#
+#func reset_config():
+	#options_file.clear()
+	#set_content_scale_factor(1.0)
+	#set_virtual_joystick(OS.has_feature(\"mobile\"))
+	#apply_changes()
+	#save_config()
+#
+#
+#func config_has_changes():
+	#return options_file.encode_to_text().hash() != options_hash
+#
+#
+#func set_content_scale_factor(val):
+	#options_file.set_value(\"video\", \"content_scale_factor\", val)
+#
+#
+#func get_content_scale_factor():
+	#return options_file.get_value(\"video\", \"content_scale_factor\")
+#
+#
+#func set_virtual_joystick(val):
+	#options_file.set_value(\"gameplay\", \"virtual_joystick\", val)
+#
+#
+#func get_virtual_joystick():
+	#return options_file.get_value(\"gameplay\", \"virtual_joystick\")
+#
+"
+
+[node name="Main" type="Node"]
+script = SubResource("GDScript_a3vfh")
+
+[node name="FuncU" parent="." instance=ExtResource("1_fs4vn")]
+
+[node name="Pocketbase" parent="." instance=ExtResource("2_meyew")]
+
+[node name="Worlds" parent="." instance=ExtResource("3_0q78k")]
+
+[node name="Home" parent="." instance=ExtResource("4_vduqm")]

@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://rqhsrune2um3"]
+
+[ext_resource type="Script" path="res://worlds/players/fake_pickup_item/fake_pickup_item_client.gd" id="1_p3t3s"]
+[ext_resource type="PackedScene" uid="uid://dckk4sln7h2gc" path="res://worlds/players/fake_pickup_item/fake_pickup_item_syncer.tscn" id="2_obbrs"]
+
+[node name="FakePickupItem" type="AnimatedSprite2D"]
+script = ExtResource("1_p3t3s")
+
+[node name="MultiplayerSynchronizer" parent="." instance=ExtResource("2_obbrs")]

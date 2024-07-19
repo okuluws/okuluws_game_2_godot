@@ -1,0 +1,59 @@
+[gd_scene load_steps=4 format=3 uid="uid://cocglstkbohxi"]
+
+[ext_resource type="Script" path="res://worlds/players/player/player_client.gd" id="1_kylph"]
+[ext_resource type="PackedScene" uid="uid://bxvyedtgh5oup" path="res://worlds/players/player/player_ui.tscn" id="2_dcvf0"]
+[ext_resource type="PackedScene" uid="uid://l656i6ffv5hp" path="res://worlds/players/player/player_syncer.tscn" id="13_f18d8"]
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("animated_sprite", "camera", "display_label_top", "display_label_bottom", "collision_shape")]
+collision_layer = 2
+motion_mode = 1
+script = ExtResource("1_kylph")
+player_ui_scene = ExtResource("2_dcvf0")
+animated_sprite = NodePath("AnimatedSprite2D")
+camera = NodePath("Camera2D")
+display_label_top = NodePath("DisplayLabelTop")
+display_label_bottom = NodePath("DisplayLabelBottom")
+collision_shape = NodePath("CollisionShape2D")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+enabled = false
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="DisplayLabelTop" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -93.0
+offset_top = -112.0
+offset_right = 93.0
+offset_bottom = -72.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+fit_content = true
+autowrap_mode = 0
+
+[node name="DisplayLabelBottom" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -83.0
+offset_right = 45.0
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+fit_content = true
+autowrap_mode = 0
+
+[node name="MultiplayerSynchronizer" parent="." instance=ExtResource("13_f18d8")]

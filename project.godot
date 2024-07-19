@@ -26,6 +26,10 @@ buses/default_bus_layout=""
 window/subwindows/embed_subwindows=false
 window/handheld/orientation=4
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/project_time_tracker/plugin.cfg")
+
 [gui]
 
 theme/custom="res://pixel_theme.tres"

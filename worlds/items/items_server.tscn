@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwv1t6e7fqjaa"]
+
+[ext_resource type="Script" path="res://worlds/items/items_server.gd" id="1_vma6o"]
+[ext_resource type="PackedScene" uid="uid://c71dx7v8uh4rk" path="res://worlds/items/item_server.tscn" id="2_e0ymb"]
+[ext_resource type="Script" path="res://worlds/items/items_config_server.gd" id="2_mra2y"]
+[ext_resource type="PackedScene" uid="uid://dx1cw73500ywm" path="res://worlds/items/items_config_syncer.tscn" id="3_53srs"]
+
+[node name="Items" type="Node" node_paths=PackedStringArray("config", "item_spawner")]
+script = ExtResource("1_vma6o")
+config = NodePath("Config")
+item_spawner = NodePath("MultiplayerSpawner")
+item_scene = ExtResource("2_e0ymb")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath(".")
+
+[node name="Config" type="Node" parent="."]
+script = ExtResource("2_mra2y")
+
+[node name="ItemsConfigSyncer" parent="Config" instance=ExtResource("3_53srs")]

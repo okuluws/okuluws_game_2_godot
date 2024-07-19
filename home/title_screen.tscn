@@ -1,0 +1,107 @@
+[gd_scene load_steps=3 format=3 uid="uid://cku8qosfmuio"]
+
+[ext_resource type="Script" path="res://home/title_screen.gd" id="1_44pfs"]
+[ext_resource type="PackedScene" uid="uid://8x0br77dsy7v" path="res://home/underline.tscn" id="2_4fm56"]
+
+[node name="TitleScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_44pfs")
+
+[node name="Titel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 62.0
+offset_right = 549.0
+offset_bottom = 122.0
+theme_type_variation = &"HeaderLarge"
+text = "okuluws game 2"
+
+[node name="Play" type="Button" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 157.0
+offset_right = 386.0
+offset_bottom = 217.0
+mouse_default_cursor_shape = 2
+flat = true
+metadata/_edit_group_ = true
+
+[node name="Label" type="Label" parent="Play"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderMedium"
+text = "Play"
+
+[node name="Underline" parent="Play/Label" node_paths=PackedStringArray("node") instance=ExtResource("2_4fm56")]
+layout_mode = 0
+node = NodePath("../..")
+
+[node name="Settings" type="Button" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 217.0
+offset_right = 386.0
+offset_bottom = 277.0
+mouse_default_cursor_shape = 2
+flat = true
+metadata/_edit_group_ = true
+
+[node name="Label" type="Label" parent="Settings"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderMedium"
+text = "Settings"
+
+[node name="Underline" parent="Settings/Label" node_paths=PackedStringArray("node") instance=ExtResource("2_4fm56")]
+layout_mode = 0
+node = NodePath("../..")
+
+[node name="Quit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 277.0
+offset_right = 386.0
+offset_bottom = 337.0
+mouse_default_cursor_shape = 2
+flat = true
+metadata/_edit_group_ = true
+
+[node name="Label" type="Label" parent="Quit"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderMedium"
+text = "Quit"
+
+[node name="Underline" parent="Quit/Label" node_paths=PackedStringArray("node") instance=ExtResource("2_4fm56")]
+layout_mode = 0
+node = NodePath("../..")
+
+[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
