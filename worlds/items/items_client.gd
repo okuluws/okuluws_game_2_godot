@@ -2,8 +2,8 @@ extends Node
 
 
 const GameMain = preload("res://main.gd")
-const src_dirpath = GameMain.Worlds.src_dirpath + "items/"
-const Config = preload(src_dirpath + "items_config_client.gd")
+const source_directory = GameMain.Worlds.source_directory + "items/"
+const Config = preload(source_directory + "items_config_client.gd")
 @export var item_scene: PackedScene
 @export var item_spawner: MultiplayerSpawner
 @export var config: Config

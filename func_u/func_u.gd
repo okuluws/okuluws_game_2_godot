@@ -3,33 +3,34 @@
 extends Node
 
 
-func DirAccess_make_dir_absolute(path: String) -> Variant:
+func panic(message: String):
+	push_error("PANIC PANIC PANIC PANIC:\n%s" % message)
+	get_tree().quit(1)
+
+
+func create_directory(path: String) -> void:
 	if DirAccess.make_dir_absolute(path) != OK:
-		return "couldn't make dir %s" % path
-	return null
+		panic("couldn't create directory %s" % path)
 
 
-func ConfigFile_save(o: ConfigFile, path: String) -> Variant:
+func create_file(path: String) -> void:
+	if FileAccess.open(path, FileAccess.WRITE) == null:
+		panic("couldn't create file %s" % path)
+
+
+func copy_file(source_path: String, target_path: String) -> void:
+	if DirAccess.copy_absolute(source_path, target_path) != OK:
+		panic("couldn't copy file %s to %s" % [source_path, target_path])
+
+
+func save_config_file(o: ConfigFile, path: String) -> void:
 	if o.save(path) != OK:
-		return "couldn't save config file %s" % path
-	return null
+		panic("couldn't save config file %s" % path)
 
 
-func ConfigFile_load(o: ConfigFile, path: String) -> Variant:
+func load_config_file(o: ConfigFile, path: String) -> void:
 	if o.load(path) != OK:
-		return "couldn't load config file %s" % path
-	return null
-
-
-func ConfigFile_copy(o: ConfigFile, other: ConfigFile) -> Variant:
-	if o.parse(other.encode_to_text()) != OK:
-		return "how?"
-	return null
-
-
-func unreachable(message: String = "") -> void:
-	push_error("reached unreachable code, message:\n%s" % message)
-	get_tree().quit()
+		panic("couldn't load config file %s" % path)
 
 
 # TODO: handle errors
@@ -46,10 +47,22 @@ func delete_recursively(path: String) -> Variant:
 
 
 # TODO: handle errors
-func _delete_recursively_fallback(path: String):
+func _delete_recursively_fallback(path: String) -> void:
 	for dir in DirAccess.get_directories_at(path):
 		_delete_recursively_fallback(path.path_join(dir))
 	
 	for file in DirAccess.get_files_at(path):
 		DirAccess.remove_absolute(path.path_join(file))
 	DirAccess.remove_absolute(path)
+
+
+class OptionalString extends RefCounted:
+	var val: String
+	func _init(p_val: String) -> void:
+		val = p_val
+
+
+class OptionalDictionary extends RefCounted:
+	var val: Dictionary
+	func _init(p_val: Dictionary) -> void:
+		val = p_val

@@ -2,20 +2,19 @@ extends Node
 
 
 const GameMain = preload("res://main.gd")
-const src_dirpath = GameMain.Worlds.src_dirpath + "items/"
-const Config = preload(src_dirpath + "items_config_server.gd")
+const source_directory = GameMain.Worlds.source_directory + "items/"
+const Config = preload(source_directory + "items_config_server.gd")
 @export var config: Config
 @export var item_spawner: MultiplayerSpawner
 @export var item_scene: PackedScene
 var server: GameMain.Worlds.Server
-var savefile
+var save_file: String
 var items = []
 
 
 func init(p_server: GameMain.Worlds.Server):
 	server = p_server
-	savefile = server.world_dirpath.path_join("items.cfg")
-	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)
+	save_file = server.world_dirpath.path_join("items.cfg")
 	server.saving.connect(_save_items)
 	_load_items()
 
@@ -40,7 +39,7 @@ func _save_items():
 		f.set_value(i.name, "id", i.id)
 		f.set_value(i.name, "stack", i.stack)
 		f.set_value(i.name, "position", i.position)
-	if f.save(savefile) != OK: push_error("couldn't save %s" % savefile); return
+	if f.save(save_file) != OK: push_error("couldn't save %s" % save_file); return
 	print("saved items")
 
 
@@ -49,8 +48,8 @@ func _load_items():
 		push_error("items is not empty")
 		return
 	var f = ConfigFile.new()
-	if f.load(savefile) != OK:
-		push_error("couldn't load %s" % savefile)
+	if f.load(save_file) != OK:
+		push_error("couldn't load %s" % save_file)
 		return
 	for section in f.get_sections():
 		spawn_item(f.get_value(section, "id"), f.get_value(section, "stack"), f.get_value(section, "position"))

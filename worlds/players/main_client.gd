@@ -2,8 +2,8 @@ extends Node
 
 
 const GameMain = preload("res://main.gd")
-const src_dirpath = GameMain.Worlds.src_dirpath + "players/"
-const Player = preload(src_dirpath + "player/player_client.gd")
+const source_directory = GameMain.Worlds.source_directory + "players/"
+const Player = preload(source_directory + "player/player_client.gd")
 @export var multiplayer_spawner: MultiplayerSpawner
 @export var player_scene: PackedScene
 @export var punch_scene : PackedScene
@@ -11,10 +11,10 @@ const Player = preload(src_dirpath + "player/player_client.gd")
 @export var player_ui_scene: PackedScene
 @export var item_slot_scene: PackedScene
 @export var config: Node
-var client: GameMain.Worlds.Server.Players
+var client: GameMain.Worlds.Client
 
 
-func init(p_client: GameMain.Worlds.Server.Players) -> void:
+func init(p_client: GameMain.Worlds.Client) -> void:
 	client = p_client
 	multiplayer_spawner.spawn_function = func(data):
 		match data:

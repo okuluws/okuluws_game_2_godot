@@ -1,185 +1,129 @@
 extends Node
 
 
+const GameMain = preload("res://main.gd")
+const OptionalString = GameMain.FuncU.OptionalString
+const OptionalDictionary = GameMain.FuncU.OptionalDictionary
+const address = "192.168.178.214"
+const port = 20071
+const _auth_config_file = "user://auth.cfg"
 signal current_auth_updated
-
-var address = "192.168.178.214"
-var port = 20071
-
-var auth_save_path = "user://auth.cfg"
+var func_u: GameMain.FuncU
 # NOTE: maybe inefficient, but no care, no need
 var current_auth_collection_id:
-	get: return _auth_cfg.get_value("", "current_auth_collection_id")
-	set(val): _auth_cfg.set_value("", "current_auth_collection_id", val)
+	get: return _auth_config.get_value("", "current_auth_collection_id")
+	set(val): _auth_config.set_value("", "current_auth_collection_id", val)
 var current_auth_record_id:
-	get: return _auth_cfg.get_value("", "current_auth_record_id")
-	set(val): _auth_cfg.set_value("", "current_auth_record_id", val)
+	get: return _auth_config.get_value("", "current_auth_record_id")
+	set(val): _auth_config.set_value("", "current_auth_record_id", val)
+var _auth_config = ConfigFile.new()
 
-var _auth_cfg = ConfigFile.new()
 
-func init() -> void:
-	if FileAccess.file_exists(auth_save_path):
-		_auth_cfg_load()
-	else:
-		_auth_cfg_save()
-	
-	var t_start = Time.get_ticks_msec()
-	api_health_check(func(res):
-		if res.err != null: push_error("pocketbase server doesnt want me ;(")
-		else: print("pocketbase api response time: %dms" % (Time.get_ticks_msec() - t_start))
+func init(p_game_main: GameMain) -> void:
+	func_u = p_game_main.func_u
+	if not FileAccess.file_exists(_auth_config_file):
+		_save_auth_config()
+	_load_auth_config()
+
+
+func create_record(collection_id: String, data: Dictionary, should_authorize: bool) -> Signal:
+	return request_api("/collections/%s/records" % collection_id, HTTPClient.METHOD_POST, data, OptionalString.new(get_authtoken()) if should_authorize else null, 200)
+
+
+func delete_record(collection_id: String, record_id: String, should_authorize: bool) -> Signal:
+	return request_api("/collections/%s/records/%s" % [collection_id, record_id], HTTPClient.METHOD_DELETE, {}, OptionalString.new(get_authtoken()) if should_authorize else null, 204)
+
+
+func update_record(collection_id: String, record_id: String, data: Dictionary, should_authorize: bool) -> Signal:
+	return request_api("/collections/%s/records/%s" % [collection_id, record_id], HTTPClient.METHOD_PATCH, data, OptionalString.new(get_authtoken()) if should_authorize else null, 200)
+
+
+func view_record(collection_id: String, record_id: String, should_authorize: bool) -> Signal:
+	return request_api("/collections/%s/records/%s" % [collection_id, record_id], HTTPClient.METHOD_GET, {}, OptionalString.new(get_authtoken()) if should_authorize else null, 200)
+
+
+func auth_with_password(auth_collection_id: String, identity: String, password: String) -> Signal:
+	var sgnl = request_api("/collections/%s/auth-refresh" % auth_collection_id, HTTPClient.METHOD_POST, { "identity": identity, "password": password }, null, 200)
+	sgnl.connect(func(err: OptionalString, result: OptionalDictionary):
+		if err == null:
+			var section = var_to_str({ "collection_id": result.val.record.collectionId, "record_id": result.val.record.id })
+			_auth_config.set_value(section, "authtoken", result.val.token)
+			_auth_config.set_value(section, "username", result.val.record.username)
+			current_auth_collection_id = result.val.record.collectionId
+			current_auth_record_id = result.val.record.id
+			_save_auth_config()
+			current_auth_updated.emit()
 	)
-	if has_current_auth():
-		refresh_current_auth(func(res):
-			if res.err != null or res.code != 200: push_error("couldn't refresh auth")
-		)
-	
-	_start_realtime()
+	return sgnl
 
 
-func api_health_check(callback: Callable) -> void:
-	_request(_get_base_url() + "/api/health", func(res):
-			if res.err != null or res.code != 200:
-				callback.call({ "err": "idk" })
-			else:
-				callback.call({ "err": null }),
-		"", HTTPClient.METHOD_GET, ["content-type:application/json"])
+func refresh_auth() -> Signal:
+	var sgnl = request_api("/collections/%s/auth-refresh" % current_auth_collection_id, HTTPClient.METHOD_POST, {}, OptionalString.new(get_authtoken()), 200)
+	sgnl.connect(func(err: OptionalString, result: OptionalDictionary):
+		if err == null:
+			var section = var_to_str({ "collection_id": result.val.record.collectionId, "record_id": result.val.record.id })
+			_auth_config.set_value(section, "authtoken", result.val.token)
+			_auth_config.set_value(section, "username", result.val.record.username)
+			current_auth_collection_id = result.val.record.collectionId
+			current_auth_record_id = result.val.record.id
+			_save_auth_config()
+			current_auth_updated.emit()
+	)
+	return sgnl
 
 
-func create_record(collection_id: String, data: Dictionary, callback: Callable, use_auth_header: bool = false) -> void:
-	_request(_get_collection_url(collection_id) + "/records", func(res):
-			if res.err != null or res.code != 200:
-				callback.call({ "err": "idk" })
-			else:
-				callback.call({ "err": null, "record": JSON.parse_string(res.body.get_string_from_utf8()) }),
-		JSON.stringify(data), HTTPClient.METHOD_POST, ["content-type:application/json"] + ["Authorization: %s" % _get_current_authtoken()] if use_auth_header else [])
+func is_authed() -> bool:
+	return _auth_config.has_section_key("", "current_auth_collection_id") and _auth_config.has_section_key("", "current_auth_record_id")
 
 
-func delete_record(collection_id: String, record_id: String, callback: Callable, use_auth_header: bool = false) -> void:
-	_request(_get_record_url(collection_id, record_id), func(res):
-			if res.err != null or res.code != 204:
-				callback.call({ "err": "idk" })
-			else:
-				callback.call({ "err": null }),
-		"", HTTPClient.METHOD_DELETE, ["content-type:application/json"] + ["Authorization: %s" % _get_current_authtoken()] if use_auth_header else [])
-
-
-func update_record(collection_id: String, record_id: String, data: Dictionary, callback: Callable, use_auth_header: bool = false) -> void:
-	_request(_get_record_url(collection_id, record_id), func(res):
-			if res.err != null or res.code != 200:
-				callback.call({ "err": "idk" })
-			else:
-				callback.call({ "err": null, "record": JSON.parse_string(res.body.get_string_from_utf8()) }),
-		JSON.stringify(data), HTTPClient.METHOD_PATCH, ["content-type:application/json"] + ["Authorization: %s" % _get_current_authtoken()] if use_auth_header else [])
-
-
-func get_single_record(collection_id: String, record_id: String, callback: Callable, use_auth_header: bool = false) -> void:
-	_request(_get_record_url(collection_id, record_id), func(res):
-			if res.err != null or res.code != 200:
-				callback.call({ "err": "idk" })
-			else:
-				callback.call({ "err": null, "record": JSON.parse_string(res.body.get_string_from_utf8()) }),
-		"", HTTPClient.METHOD_GET, ["content-type:application/json"] + ["Authorization: %s" % _get_current_authtoken()] if use_auth_header else [])
-
-
-func auth_with_password(auth_collection_id: String, identity: String, password: String, callback: Callable) -> void:
-	_request(_get_collection_url(auth_collection_id) + "/auth-with-password", func(res):
-			if res.err != null or res.code != 200:
-				callback.call({ "err": "idk" })
-			else:
-				var parsed_body = JSON.parse_string(res.body.get_string_from_utf8())
-				var section = var_to_str({ "collection_id": parsed_body.record.collectionId, "record_id": parsed_body.record.id })
-				_auth_cfg.set_value(section, "authtoken", parsed_body.token)
-				_auth_cfg.set_value(section, "username", parsed_body.record.username)
-				current_auth_collection_id = parsed_body.record.collectionId
-				current_auth_record_id = parsed_body.record.id
-				_auth_cfg_save()
-				current_auth_updated.emit()
-				callback.call({ "err": null, "record": parsed_body.record }),
-		JSON.stringify({ "identity": identity, "password": password }), HTTPClient.METHOD_POST, ["content-type:application/json"])
-
-
-func refresh_current_auth(callback: Callable) -> void:
-	_request(_get_collection_url(current_auth_collection_id) + "/auth-refresh", func(res):
-			if res.err != null or res.code != 200:
-				callback.call({ "err": "idk" })
-			else:
-				var parsed_body = JSON.parse_string(res.body.get_string_from_utf8())
-				var section = var_to_str({ "collection_id": parsed_body.record.collectionId, "record_id": parsed_body.record.id })
-				_auth_cfg.set_value(section, "authtoken", parsed_body.token)
-				_auth_cfg.set_value(section, "username", parsed_body.record.username)
-				_auth_cfg_save()
-				current_auth_updated.emit()
-				callback.call({ "err": null, "record": parsed_body.record }),
-	"", HTTPClient.METHOD_POST, ["content-type:application/json", "Authorization: %s" % _get_current_authtoken()])
-
-
-func has_current_auth() -> bool:
-	return _auth_cfg.has_section_key("", "current_auth_collection_id") and _auth_cfg.has_section_key("", "current_auth_record_id")
-
-
-func unset_current_auth() -> void:
+func unset_auth() -> void:
 	current_auth_collection_id = null
 	current_auth_record_id = null
-	_auth_cfg_save()
+	_save_auth_config()
 	current_auth_updated.emit()
 
 
-func get_current_auth_username():
-	return _auth_cfg.get_value(_get_auth_cfg_section(current_auth_collection_id, current_auth_record_id), "username")
+func get_username() -> String:
+	return _get_auth_config_value(current_auth_collection_id, current_auth_record_id, "username")
 
 
-#func subscribe(path: String, on_event: Callable, event_action: String = "*") -> void: pass
-#func unsubscribe(on_event: Callable) -> void: pass
+func get_authtoken() -> String:
+	return _get_auth_config_value(current_auth_collection_id, current_auth_record_id, "authtoken")
 
 
-func _get_base_url():
-	return "http://%s:%d" % [address, port]
-
-
-func _get_collection_url(collection_id):
-	return _get_base_url() + "/api/collections/%s" % collection_id
-
-
-func _get_record_url(collection_id, record_id):
-	return _get_collection_url(collection_id) + "/records/%s" % record_id
-
-
-func _get_current_authtoken():
-	return _auth_cfg.get_value(_get_auth_cfg_section(current_auth_collection_id, current_auth_record_id), "authtoken")
-
-
-func _get_auth_cfg_section(collection_id, record_id):
-	for section in _auth_cfg.get_sections():
-		if section.is_empty(): continue
+func _get_auth_config_value(collection_id: String, record_id: String, key: String) -> Variant:
+	for section in _auth_config.get_sections():
+		if section == "": continue
 		var parsed_section = str_to_var(section)
 		if parsed_section.collection_id == collection_id and parsed_section.record_id == record_id:
-			return section
+			_auth_config.get_value(section, key)
+	func_u.panic("coudln't find auth config for %s %s" % [collection_id, record_id])
+	return null
 
 
-func _auth_cfg_save():
-	if _auth_cfg.save(auth_save_path) != OK: push_error("couldn't save auth config")
+func _save_auth_config() -> void:
+	func_u.save_config_file(_auth_config, _auth_config_file)
 
 
-func _auth_cfg_load():
-	if _auth_cfg.load(auth_save_path) != OK: push_error("couldn't load auth config")
+func _load_auth_config() -> void:
+	func_u.load_config_file(_auth_config, _auth_config_file)
 
 
-func _request(url, on_request_completed, request_data, method, custom_headers):
-	var temp_http_node = HTTPRequest.new()
-	temp_http_node.timeout = 4
-	temp_http_node.request_completed.connect(func(result, response_code, headers, body):
-		if result != HTTPRequest.RESULT_SUCCESS:
-			on_request_completed.call({ "err": "couldn't request %s" % url })
-			temp_http_node.queue_free()
-			return
-		on_request_completed.call({ "err": null, "code": response_code, "body": body, "headers": headers })
-		temp_http_node.queue_free()
-	, Object.CONNECT_ONE_SHOT)
-	
-	add_child(temp_http_node)
-	if temp_http_node.request(url, PackedStringArray(custom_headers), method, request_data) != OK:
-		on_request_completed.call({ "err": "couldn't create request" })
-		temp_http_node.queue_free()
-
-
-func _start_realtime(): pass
+## return type: signal(err: OptionalString, result: OptionalDictionary)
+func request_api(url: String, method: HTTPClient.Method, data: Dictionary, authtoken: OptionalString, expected_response_code: int) -> Signal:
+	var node = HTTPRequest.new()
+	node.timeout = 16
+	node.add_user_signal("pocketbase_signal", [{ "name": "result", "type": TYPE_OBJECT }])
+	node.request_completed.connect(func(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray):
+		if result == HTTPRequest.RESULT_SUCCESS and response_code == expected_response_code:
+			node.pocketbase_signal.emit(null, OptionalDictionary.new(JSON.parse_string(body.get_string_from_utf8())))
+		else:
+			node.pocketbase_signal.emit(OptionalString.new("request failed %s" % url), null)
+	)
+	var headers = ["content-type:application/json"]
+	if authtoken != null:
+		headers.append(["Authorization: %s" % authtoken.val])
+	add_child(node)
+	if node.request("http://%s:%d/api%s" % [address, port, url], PackedStringArray(headers), method, JSON.stringify(data)) != OK:
+		node.pocketbase_signal.emit(OptionalString.new("couldn't create request %s" % url), null)
+	return node.pocketbase_signal

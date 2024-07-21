@@ -13,7 +13,7 @@ const Home = preload("res://home/main.gd")
 
 func _ready():
 	print("project version: %s" % ProjectSettings.get_setting_with_override("application/config/version"))
-	pocketbase.init()
+	pocketbase.init(self)
 	worlds.init(self)
 	home.init(self)
 

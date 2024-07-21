@@ -7,12 +7,12 @@ const GameMain = preload("res://main.gd")
 @export var punch_scene : PackedScene
 @export var fake_pickup_item_scene : PackedScene
 @export var config: Node
-var server: GameMain.Worlds.Server.Players
+var server: GameMain.Worlds.Server
 var savefile
 var players = {}
 
 
-func init(p_server: GameMain.Worlds.Server.Players) -> void:
+func init(p_server: GameMain.Worlds.Server) -> void:
 	server = p_server
 	savefile = server.world_dirpath.path_join("players.cfg")
 	if not FileAccess.file_exists(savefile): FileAccess.open(savefile, FileAccess.WRITE)

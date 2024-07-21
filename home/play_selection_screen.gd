@@ -40,10 +40,7 @@ func load_server_list():
 			continue
 		
 		var cfg = ConfigFile.new()
-		var err = func_u.ConfigFile_load(cfg, s.path_join("world.cfg"))
-		if err != null:
-			push_error(err)
-			continue
+		func_u.load_config_file(cfg, s.path_join("world.cfg"))
 		
 		var new_world_display = scene_server_display.instantiate()
 		new_world_display.label_display_name.text = cfg.get_value("general", "name")
@@ -60,10 +57,7 @@ func load_client_list():
 			continue
 		
 		var cfg = ConfigFile.new()
-		var err = func_u.ConfigFile_load(cfg, s.path_join("world.cfg"))
-		if err != null:
-			push_error(err)
-			continue
+		func_u.load_config_file(cfg, s.path_join("world.cfg"))
 		
 		var new_server_display = scene_client_display.instantiate()
 		new_server_display.label_display_name.text = cfg.get_value("general", "name")

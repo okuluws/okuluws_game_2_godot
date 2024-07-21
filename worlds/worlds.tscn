@@ -8,5 +8,3 @@
 script = ExtResource("1_l66np")
 scene_server_world = ExtResource("3_c5uqm")
 scene_client_world = ExtResource("2_iy5x8")
-default_server_config_path = "res://main/worlds/default_server_config.cfg"
-default_client_config_path = "res://main/worlds/default_client_config.cfg"

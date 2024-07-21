@@ -23,8 +23,8 @@ func _ready():
 
 
 func _update_auth_info_label():
-	if pocketbase.has_current_auth():
-		current_user_label.text = "Current user: %s" % pocketbase.get_current_username()
+	if pocketbase.is_authed():
+		current_user_label.text = "Current user: %s" % pocketbase.get_username()
 	else:
 		current_user_label.text = "Not logged in."
 	
@@ -36,14 +36,14 @@ func _on_back_pressed():
 
 
 func _on_logout_button_pressed():
-	if not pocketbase.has_current_auth(): return
-	pocketbase.unset_current_auth()
+	if not pocketbase.is_authed(): return
+	pocketbase.unset_auth()
 	_update_auth_info_label()
 
 
 func _on_login_button_pressed():
-	pocketbase.auth_with_password("users", login_username_edit.text, login_password_edit.text, func(res):
-		if res.err != null:
+	pocketbase.auth_with_password("users", login_username_edit.text, login_password_edit.text).connect(func(err, _result):
+		if err != null:
 			push_error("couldn't login")
 			login_request_status_label.text = "[color=red]something went wrong"
 		else:
@@ -53,8 +53,8 @@ func _on_login_button_pressed():
 
 
 func _on_register_button_pressed():
-	pocketbase.create_record("users", { "username": register_username_edit.text, "password": register_password_edit.text, "passwordConfirm": register_password_edit.text }, func(res):
-		if res.err != null:
+	pocketbase.create_record("users", { "username": register_username_edit.text, "password": register_password_edit.text, "passwordConfirm": register_password_edit.text }, false).connect(func(err, _result):
+		if err != null:
 			push_error("couldn't register")
 			register_request_status_label.text = "[color=red]something went wrong"
 		else:

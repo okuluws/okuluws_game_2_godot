@@ -20,6 +20,7 @@ var display_text
 
 
 func init(p_players: GameMain.Worlds.Client.Players) -> void:
+	players = p_players
 	if peer_owner != multiplayer.get_unique_id(): return
 	camera.enabled = true
 	var new_player_ui = players.player_ui_scene.instantiate()
